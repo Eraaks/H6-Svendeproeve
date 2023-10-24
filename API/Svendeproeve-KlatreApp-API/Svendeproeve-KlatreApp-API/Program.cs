@@ -1,4 +1,7 @@
 
+using Google.Cloud.Firestore;
+using Svendeproeve_KlatreApp_API.Services;
+
 namespace Svendeproeve_KlatreApp_API
 {
     public class Program
@@ -6,6 +9,12 @@ namespace Svendeproeve_KlatreApp_API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Eraaks\Downloads\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+
+            builder.Services.AddSingleton(s => new FirestoreService(
+            FirestoreDb.Create("h6-svendeproeve-klatreapp")
+            ));
 
             // Add services to the container.
 
