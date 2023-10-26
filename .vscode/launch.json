@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "svendeproeve_klatreapp",
+            "cwd": "App\\svendeproeve_klatreapp",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "svendeproeve_klatreapp (profile mode)",
+            "cwd": "App\\svendeproeve_klatreapp",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "svendeproeve_klatreapp (release mode)",
+            "cwd": "App\\svendeproeve_klatreapp",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
