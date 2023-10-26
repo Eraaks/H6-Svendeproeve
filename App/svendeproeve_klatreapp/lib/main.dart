@@ -4,10 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/widgets/authentication_wrapper.dart';
 import 'package:svendeproeve_klatreapp/models/user.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

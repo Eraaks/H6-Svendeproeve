@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "930960686314",
+    "firebase_url": "https://h6-svendeproeve-klatreapp-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "h6-svendeproeve-klatreapp",
+    "storage_bucket": "h6-svendeproeve-klatreapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930960686314:android:99fce7e7df81ffce27eb93",
+        "android_client_info": {
+          "package_name": "com.example.svendeproeve_klatreapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0YIR85r0ikptzbndjwDdx1LilQFr4N7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
