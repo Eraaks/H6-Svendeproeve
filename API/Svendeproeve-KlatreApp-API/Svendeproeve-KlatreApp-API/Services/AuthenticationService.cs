@@ -8,9 +8,9 @@ namespace Svendeproeve_KlatreApp_API.Services
 {
     public class AuthenticationService
     {
-        private readonly FirestoreService _fireStoreService;
+        private readonly FirebaseService _fireStoreService;
         private readonly IConfiguration _configuration;
-        public AuthenticationService(FirestoreService firestoreService, IConfiguration configuration)
+        public AuthenticationService(FirebaseService firestoreService, IConfiguration configuration)
         {
             _fireStoreService = firestoreService;
             _configuration = configuration;
@@ -23,8 +23,9 @@ namespace Svendeproeve_KlatreApp_API.Services
 
         public async Task<string> GenerateTokenAsync(string userUID)
         {
+            var isAdmin = (userUID == "zGxX1de6XxNYmQssKb9bmmFkTdm2" || userUID == "at4zrlcXuVNFsLLRMHOnO9oN0293") ? true : false;
             var isModerator = await _fireStoreService.CheckIfUserModerator(userUID);
-            var role = isModerator ? "Moderator" : "User";
+            var role = isAdmin ? "Admin" : isModerator ? "Moderator" : "User";
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
             var claims = new[]
@@ -40,6 +41,11 @@ namespace Svendeproeve_KlatreApp_API.Services
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public bool IsAdmin()
+        {
+            return true;
         }
     }
 }
