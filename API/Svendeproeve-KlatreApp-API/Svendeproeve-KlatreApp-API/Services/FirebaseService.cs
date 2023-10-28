@@ -13,12 +13,24 @@ namespace Svendeproeve_KlatreApp_API.Services
         private readonly KlatrecentreService _klatrecentreService;
         private readonly ModeratorService _moderatorService;
         private readonly LoginVerificationService _loginVerificationService;
-        public FirebaseService(ProfileDataService profileDataService, KlatrecentreService klatrecentreService, ModeratorService moderatorService, LoginVerificationService loginVerificationService)
+        private readonly GripsService _gripsService;
+        private readonly ExcerciseService _excerciseService;
+        private readonly WorkoutService _workoutService;
+        public FirebaseService(ProfileDataService profileDataService, 
+            KlatrecentreService klatrecentreService, 
+            ModeratorService moderatorService, 
+            LoginVerificationService loginVerificationService, 
+            GripsService gripsService,
+            ExcerciseService excerciseService,
+            WorkoutService workoutService)
         {
             _profileDataService = profileDataService;
             _klatrecentreService = klatrecentreService;
             _moderatorService = moderatorService;
             _loginVerificationService = loginVerificationService;
+            _gripsService = gripsService;
+            _excerciseService = excerciseService;
+            _workoutService = workoutService;
         }
 
         //public async Task<List<Shoe>> GetAll()
@@ -83,6 +95,36 @@ namespace Svendeproeve_KlatreApp_API.Services
         public async Task<bool> CompareSecretValues(string fireBaseSecret)
         {
             return await _loginVerificationService.CompareSecretValues(fireBaseSecret);
+        }
+
+        public async Task CreateNewGripsCollection(GripsDocument gripsService)
+        {
+            await _gripsService.CreateNewGripsCollection(gripsService);
+        }
+
+        public async Task<List<GripsDocument>> GetGrips()
+        {
+            return await _gripsService.GetGrips();
+        }
+
+        public async Task CreateNewExercise(ExerciseDocument excerciseDocument)
+        {
+            await _excerciseService.CreateNewExercise(excerciseDocument);
+        }
+
+        public async Task<List<ExerciseDocument>> GetExercises()
+        {
+            return await _excerciseService.GetExercises();
+        }
+
+        public async Task CreateNewWorkout(WorkoutDocument workoutDocument)
+        {
+            await _workoutService.CreateNewWorkout(workoutDocument);
+        }
+
+        public async Task<List<WorkoutDocument>> GetWorkouts()
+        {
+            return await _workoutService.GetWorkouts();
         }
     }
 }
