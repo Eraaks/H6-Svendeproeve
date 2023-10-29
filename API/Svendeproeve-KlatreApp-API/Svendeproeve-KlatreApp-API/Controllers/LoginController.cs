@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +20,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("/Login/{fireBaseSecret}&{userUID}")]
+        [HttpGet("/Login/{fireBaseSecret}&{userUID}")]
         public async Task<ActionResult> Login(string fireBaseSecret, string userUID)
         {
             var user = _authenticationService.Authenticate(fireBaseSecret).Result;
@@ -30,6 +31,12 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             }   
             
             return NotFound("AuthenticationService Failed");
+        }
+
+        [HttpGet("/IsAdmin/"), Authorize(Roles = "Admin")]
+        public bool IsAdmin()
+        {
+            return _authenticationService.IsAdmin();
         }
     }
 }

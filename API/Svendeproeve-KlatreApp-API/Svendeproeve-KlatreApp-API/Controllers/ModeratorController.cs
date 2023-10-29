@@ -11,8 +11,8 @@ namespace Svendeproeve_KlatreApp_API.Controllers
     [Authorize(Roles = "Moderator, Admin")]
     public class ModeratorController : ControllerBase
     {
-        private readonly FirestoreService _fireStoreService;
-        public ModeratorController(FirestoreService firestoreService)
+        private readonly FirebaseService _fireStoreService;
+        public ModeratorController(FirebaseService firestoreService)
         {
             _fireStoreService = firestoreService;
         }

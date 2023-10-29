@@ -12,9 +12,9 @@ namespace Svendeproeve_KlatreApp_API.Controllers
     [ApiController]
     public class FirebaseController : ControllerBase
     {
-        private readonly FirestoreService _fireStoreService;
+        private readonly FirebaseService _fireStoreService;
 
-        public FirebaseController(FirestoreService firestoreService)
+        public FirebaseController(FirebaseService firestoreService)
         {
             _fireStoreService = firestoreService;
         }
