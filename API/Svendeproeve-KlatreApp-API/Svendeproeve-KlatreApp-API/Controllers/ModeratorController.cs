@@ -20,7 +20,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         [HttpPost("/NewClimbingCenter/{climbingCenterName}&{description}&{location}&{defaultModerators}")]
         public async Task NewClimbingCenter(string climbingCenterName, string description, string location, string defaultModerators, List<Areas> areas)
         {
-            await _fireStoreService.AddAsync(new ClimbingCenterDocument
+            await _fireStoreService.AddClimbingCenter(new ClimbingCenterDocument
             {
                 CenterName = climbingCenterName,
                 Description = description,

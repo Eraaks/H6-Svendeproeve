@@ -14,14 +14,14 @@ namespace Svendeproeve_KlatreApp_API.Services
         private readonly ModeratorService _moderatorService;
         private readonly LoginVerificationService _loginVerificationService;
         private readonly GripsService _gripsService;
-        private readonly ExcerciseService _excerciseService;
+        private readonly ExerciseService _exerciseService;
         private readonly WorkoutService _workoutService;
         public FirebaseService(ProfileDataService profileDataService, 
             KlatrecentreService klatrecentreService, 
             ModeratorService moderatorService, 
             LoginVerificationService loginVerificationService, 
             GripsService gripsService,
-            ExcerciseService excerciseService,
+            ExerciseService exerciseService,
             WorkoutService workoutService)
         {
             _profileDataService = profileDataService;
@@ -29,7 +29,7 @@ namespace Svendeproeve_KlatreApp_API.Services
             _moderatorService = moderatorService;
             _loginVerificationService = loginVerificationService;
             _gripsService = gripsService;
-            _excerciseService = excerciseService;
+            _exerciseService = exerciseService;
             _workoutService = workoutService;
         }
 
@@ -67,14 +67,29 @@ namespace Svendeproeve_KlatreApp_API.Services
         //        Price = shoe.Price.ToString()
         //    };
         //}
-        public async Task AddAsync(ProfileDataDocument profileData)
+        public async Task AddProfileData(ProfileDataDocument profileData)
         {
-            await _profileDataService.AddAsync(profileData);
+            await _profileDataService.AddProfileData(profileData);
         }
 
-        public async Task AddAsync(ClimbingCenterDocument climbingCenter, string climbingCenterName)
+        public async Task<ProfileDataDocument> GetProfileData(string userUID)
         {
-            await _klatrecentreService.AddAsync(climbingCenter, climbingCenterName);
+            return await _profileDataService.GetProfileData(userUID);
+        }
+
+        public async Task RemoveProfileData(string userUID)
+        {
+            await _profileDataService.DeleteProfileData(userUID);
+        }
+
+        public async Task UpdateProfileData(ProfileDataDocument newProfile, string userUID)
+        {
+           await _profileDataService.UpdateProfileData(newProfile, userUID);
+        }
+
+        public async Task AddClimbingCenter(ClimbingCenterDocument climbingCenter, string climbingCenterName)
+        {
+            await _klatrecentreService.AddClimbingCenter(climbingCenter, climbingCenterName);
         }
 
         public async Task<bool> CheckIfUserModerator(string userUID)
@@ -102,19 +117,49 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _gripsService.CreateNewGripsCollection(gripsService);
         }
 
+        public async Task<GripsDocument> GetGrip(string gripName)
+        {
+            return await _gripsService.GetGrip(gripName);
+        }
+
         public async Task<List<GripsDocument>> GetGrips()
         {
             return await _gripsService.GetGrips();
         }
 
+        public async Task UpdateGrip(string gripName, string fieldToChange, string newValue)
+        {
+            await _gripsService.UpdateGrip(gripName, fieldToChange, newValue);
+        }
+
+        public async Task DeleteGrip(string gripName)
+        {
+            await _gripsService.DeleteGrip(gripName);
+        }
+
         public async Task CreateNewExercise(ExerciseDocument excerciseDocument)
         {
-            await _excerciseService.CreateNewExercise(excerciseDocument);
+            await _exerciseService.CreateNewExercise(excerciseDocument);
+        }
+
+        public async Task<ExerciseDocument> GetExercise(string exerciseName)
+        {
+            return await _exerciseService.GetExercise(exerciseName);
         }
 
         public async Task<List<ExerciseDocument>> GetExercises()
         {
-            return await _excerciseService.GetExercises();
+            return await _exerciseService.GetExercises();
+        }
+
+        public async Task UpdateExercise(ExerciseDocument newExercise, string exerciseName)
+        {
+            await _exerciseService.UpdateExercise(newExercise, exerciseName);
+        }
+
+        public async Task DeleteExercise(string exerciseName)
+        {
+            await _exerciseService.DeleteExercise(exerciseName);
         }
 
         public async Task CreateNewWorkout(WorkoutDocument workoutDocument)
@@ -122,9 +167,24 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _workoutService.CreateNewWorkout(workoutDocument);
         }
 
+        public async Task<WorkoutDocument> GetWorkout(string workoutID)
+        {
+            return await _workoutService.GetWorkout(workoutID);
+        }
+
         public async Task<List<WorkoutDocument>> GetWorkouts()
         {
             return await _workoutService.GetWorkouts();
+        }
+
+        public async Task UpdateWorkout(WorkoutDocument newWorkout, string workoutID)
+        {
+            await _workoutService.UpdateWorkout(newWorkout, workoutID);
+        }
+
+        public async Task DeleteWorkout(string workoutID)
+        {
+            await _workoutService.DeleteWorkout(workoutID);
         }
     }
 }

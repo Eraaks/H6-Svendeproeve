@@ -22,10 +22,28 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             await _firebaseService.CreateNewExercise(exerciseDocument);
         }
 
+        [HttpGet("/ExerciseController/GetExercise/{exerciseName}")]
+        public async Task<ExerciseDocument> GetExercise(string exerciseName)
+        {
+            return await _firebaseService.GetExercise(exerciseName);
+        }
+
         [HttpGet("/ExerciseController/GetExercises/")]
         public async Task<List<ExerciseDocument>> GetExercises()
         {
             return await _firebaseService.GetExercises();
+        }
+
+        [HttpPatch("/ExerciseController/UpdateExercise/{exerciseName}")]
+        public async Task UpdateExercise(ExerciseDocument newExercise, string exerciseName)
+        {
+            await _firebaseService.UpdateExercise(newExercise, exerciseName);
+        }
+
+        [HttpDelete("/ExerciseController/DeleteExercise/{exerciseName}")]
+        public async Task DeleteExercise(string exerciseName)
+        {
+            await _firebaseService.DeleteExercise(exerciseName);
         }
     }
 }

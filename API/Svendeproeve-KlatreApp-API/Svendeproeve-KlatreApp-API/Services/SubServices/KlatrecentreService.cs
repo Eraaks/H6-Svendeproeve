@@ -11,7 +11,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             _firestoreDb = firestoreDb;
         }
 
-        public async Task AddAsync(ClimbingCenterDocument climbingCenter, string climbingCenterName)
+        public async Task AddClimbingCenter(ClimbingCenterDocument climbingCenter, string climbingCenterName)
         {
             var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName);
             await collection.SetAsync(climbingCenter);
