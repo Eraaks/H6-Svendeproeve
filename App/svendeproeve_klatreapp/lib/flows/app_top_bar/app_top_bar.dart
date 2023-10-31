@@ -16,7 +16,7 @@ PreferredSize reusableAppBar() {
       elevation: 0.0,
       actions: <Widget>[
         TextButton.icon(
-          icon: Icon(
+          icon: const Icon(
             Icons.settings,
             color: mainBackgroundColor,
           ),

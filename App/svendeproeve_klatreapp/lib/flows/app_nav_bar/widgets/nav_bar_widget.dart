@@ -63,7 +63,7 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
           BottomNavyBarItem(
               icon: const Icon(Icons.home),
               title: const Text('Home'),
-              activeColor: mainBackgroundColor,
+              activeColor: topBackgroundColor,
               inactiveColor: inactiveColor,
               textAlign: TextAlign.center),
           BottomNavyBarItem(
