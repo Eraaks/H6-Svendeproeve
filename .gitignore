@@ -42,3 +42,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+App/svendeproeve_klatreapp/windows/flutter/generated_plugins.cmake
+App/svendeproeve_klatreapp/windows/flutter/generated_plugin_registrant.h
+App/svendeproeve_klatreapp/windows/flutter/generated_plugin_registrant.cc
+App/svendeproeve_klatreapp/macos/Flutter/GeneratedPluginRegistrant.swift
+App/svendeproeve_klatreapp/linux/flutter/generated_plugins.cmake
+App/svendeproeve_klatreapp/linux/flutter/generated_plugin_registrant.h
+App/svendeproeve_klatreapp/linux/flutter/generated_plugin_registrant.cc
+*.cmake
+*.h
+*.cc
+*.swift
