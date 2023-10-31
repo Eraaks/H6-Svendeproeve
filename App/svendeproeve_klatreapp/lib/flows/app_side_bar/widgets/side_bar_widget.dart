@@ -55,6 +55,7 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                   Icons.search,
                   color: topBackgroundColor,
                 ),
+                //TODO: Needed for clearing SearchBar.
                 // suffixIcon: IconButton(
                 //   onPressed: () {
                 //     controller.clear();

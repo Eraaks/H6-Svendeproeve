@@ -62,7 +62,6 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
   Widget buildUsers(ClimbingScore snapshotData) => Card(
         elevation: 4,
         child: ListTile(
-          // onTap: (){ Navigator.push(context, MaterialPageRoute(builder: (context) => PersonProfile(personProfile: snapshotData.useremail)))},
           trailing: const Icon(
             Icons.arrow_right,
           ),
