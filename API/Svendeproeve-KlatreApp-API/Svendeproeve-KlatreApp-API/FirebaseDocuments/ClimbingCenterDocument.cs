@@ -19,6 +19,10 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
 
         [FirestoreProperty]
         public List<string> Moderators { get; set; }
+
+        [FirestoreProperty]
+        public List<string> AreaNames { get; set; }
+
         public List<Areas> Areas { get; set; }
     }
 
@@ -29,6 +33,8 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public string Name { get; set; }
         [FirestoreProperty]
         public string Description { get; set; }
+
+        public List<AreaRoutes> AreaRoutes { get; set; }
     }
 
     [FirestoreData]

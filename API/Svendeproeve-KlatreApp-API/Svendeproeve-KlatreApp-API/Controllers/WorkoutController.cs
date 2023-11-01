@@ -22,10 +22,28 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             await _firebaseService.CreateNewWorkout(workout);
         }
 
+        [HttpGet("/WorkoutController/GetWorkout/{workoutID}")]
+        public async Task<WorkoutDocument> GetWorkout(string workoutID)
+        {
+            return await _firebaseService.GetWorkout(workoutID);
+        }
+
         [HttpGet("/WorkoutController/GetWorkouts/")]
         public async Task<List<WorkoutDocument>> GetWorkouts()
         {
             return await _firebaseService.GetWorkouts();
+        }
+
+        [HttpPatch("/WorkoutController/UpdateWorkout/{workoutID}")]
+        public async Task UpdateWorkout(WorkoutDocument newWorkout, string workoutID)
+        {
+            await _firebaseService.UpdateWorkout(newWorkout, workoutID);
+        }
+
+        [HttpDelete("/WorkoutController/DeleteWorkout/{workoutID}")]
+        public async Task DeleteWorkout(string workoutID)
+        {
+            await _firebaseService.DeleteWorkout(workoutID);
         }
     }
 }
