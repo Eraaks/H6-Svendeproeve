@@ -39,6 +39,11 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         {
             var exerciseDocuments = await _firestoreDb.Collection("Exercises").GetSnapshotAsync();
             var exerciseData = exerciseDocuments.Documents.Select(s => s.ConvertTo<ExerciseDocument>()).ToList();
+            foreach(var data in exerciseData)
+            {
+                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).Collection("How_To").Document($"{data.Name}-HowTo").GetSnapshotAsync();
+                data.how_To = howToData.ConvertTo<How_To>();
+            }
             return exerciseData;
         }
 

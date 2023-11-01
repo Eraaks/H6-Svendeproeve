@@ -46,10 +46,6 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
         public async Task DeleteProfileData(string userUID)
         {
-            var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
-            var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
-            var climbingHistoryDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(userUID).GetSnapshotAsync();
-            var climbingHistoryData = climbingHistoryDocument.ConvertTo<Climbing_History>();
             var sendCollections = await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(userUID).Collection("Send_Collections").GetSnapshotAsync();
             var sendCollectionsData = sendCollections.Documents.Select(s => s.ConvertTo<Send_Collection>()).ToList();
             foreach (var item in sendCollectionsData)
