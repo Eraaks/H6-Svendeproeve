@@ -35,7 +35,7 @@ namespace Svendeproeve_KlatreApp_API
                 new ModeratorService(fireStoreDB), 
                 new LoginVerificationService(fireStoreDB),
                 new GripsService(fireStoreDB),
-                new ExcerciseService(fireStoreDB),
+                new ExerciseService(fireStoreDB),
                 new WorkoutService(fireStoreDB)
                 );
 

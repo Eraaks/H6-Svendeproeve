@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin.Auth;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
@@ -10,30 +11,20 @@ namespace Svendeproeve_KlatreApp_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FirebaseController : ControllerBase
+    [Authorize]
+    public class ProfileDataController : ControllerBase
     {
         private readonly FirebaseService _fireStoreService;
 
-        public FirebaseController(FirebaseService firestoreService)
+        public ProfileDataController(FirebaseService firestoreService)
         {
             _fireStoreService = firestoreService;
         }
 
-        [HttpGet("/Testing/{UID}")]
-        public async Task<dynamic> Tester(string UID)
-        {
-            return await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(UID);
-            //FirebaseAuth.DefaultInstance.
-            //var test = await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(UID);
-            //var test2 = test;
-            // Console.WriteLine(FirebaseAuth.GetAuth());
-        }
-
         [HttpPost("/NewProfileDataAsync/{userUID}&{email}")]
-        [Authorize]
         public async Task NewProfileDataAsync(string userUID, string email, string moderatorCode = "Empty")
         {
-            await _fireStoreService.AddAsync(new ProfileDataDocument
+            await _fireStoreService.AddProfileData(new ProfileDataDocument
             {
                 ID = userUID,
                 Follows_Me = new List<string>(){""},
@@ -61,6 +52,24 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             });
 
             if(moderatorCode != null && moderatorCode != "Empty") await _fireStoreService.CheckModeratorCodeAndAddToCenter(moderatorCode, userUID);
+        }
+
+        [HttpGet("/GetProfileData/{userUID}")]
+        public async Task<ProfileDataDocument> GetProfileData(string userUID)
+        {
+            return await _fireStoreService.GetProfileData(userUID);
+        }
+
+        [HttpPatch("/UpdateProfileData/{userUID}")]
+        public async Task UpdateProfileData(ProfileDataDocument newProfile, string userUID)
+        {
+            await _fireStoreService.UpdateProfileData(newProfile, userUID);
+        }
+
+        [HttpDelete("/DeleteProfileData/{userUID}")]
+        public async Task RemoveProfileData(string userUID)
+        {
+            await _fireStoreService.RemoveProfileData(userUID);
         }
     }
 }

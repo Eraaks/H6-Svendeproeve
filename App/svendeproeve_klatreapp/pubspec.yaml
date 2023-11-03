@@ -55,6 +55,9 @@ dependencies:
   auto_route_generator: ^7.3.2
   bottom_navy_bar: ^6.0.0
 
+  #Secure Storage
+  flutter_secure_storage: ^9.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

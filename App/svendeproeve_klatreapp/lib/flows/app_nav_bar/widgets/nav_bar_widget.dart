@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/home/home_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/overview/user_overview_page.dart';
@@ -8,9 +13,9 @@ import 'package:svendeproeve_klatreapp/flows/user/rankings/user_rankings_page.da
 import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/user_tips_tricks_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
+import 'package:http/http.dart' as http;
 
 final AuthService _auth = AuthService();
-final Sidebar _Sidebar = Sidebar();
 
 class NavBarWidgets extends StatefulWidget {
   const NavBarWidgets({Key? key}) : super(key: key);
