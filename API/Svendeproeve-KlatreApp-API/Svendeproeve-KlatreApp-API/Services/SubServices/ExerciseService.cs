@@ -47,6 +47,18 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             return exerciseData;
         }
 
+        public async Task<List<ExerciseDocument>> GetExercisesIncludedIn(string musclegroups)
+        {
+            var exerciseDocuments = await _firestoreDb.Collection("Exercises").WhereArrayContains("Included_In", musclegroups).GetSnapshotAsync();
+            var exerciseData = exerciseDocuments.Documents.Select(e => e.ConvertTo<ExerciseDocument>()).ToList();
+            foreach (var data in exerciseData)
+            {
+                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).Collection("How_To").Document($"{data.Name}-HowTo").GetSnapshotAsync();
+                data.how_To = howToData.ConvertTo<How_To>();
+            }
+            return exerciseData;
+        }
+
         public async Task UpdateExercise(ExerciseDocument newExercise, string exerciseName)
         {
             await DeleteExercise(exerciseName);
