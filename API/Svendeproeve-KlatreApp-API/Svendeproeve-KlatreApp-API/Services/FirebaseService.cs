@@ -167,6 +167,11 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _exerciseService.GetExercises();
         }
 
+        public async Task<List<ExerciseDocument>> GetExercisesIncludedIn(string musclegroups)
+        {
+            return await _exerciseService.GetExercisesIncludedIn(musclegroups);
+        }
+
         public async Task UpdateExercise(ExerciseDocument newExercise, string exerciseName)
         {
             await _exerciseService.UpdateExercise(newExercise, exerciseName);

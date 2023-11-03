@@ -34,6 +34,12 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             return await _firebaseService.GetExercises();
         }
 
+        [HttpGet("/ExerciseController/GetExercisesIncludedIn/{musclegroups}")]
+        public async Task<List<ExerciseDocument>> GetExercisesIncludedIn(string musclegroups)
+        {
+            return await _firebaseService.GetExercisesIncludedIn(musclegroups);
+        }
+
         [HttpPatch("/ExerciseController/UpdateExercise/{exerciseName}")]
         public async Task UpdateExercise(ExerciseDocument newExercise, string exerciseName)
         {
