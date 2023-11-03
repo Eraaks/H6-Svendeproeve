@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
+import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/widgets/user_exercises.widget.dart';
+import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/widgets/user_grips_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/models/grips_model.dart';
@@ -17,8 +19,9 @@ class TipsTricksWidgets extends StatefulWidget {
 }
 
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
-  List<ExerciseModel> exercises = _getAllExercises();
-  List<GripsModel> grips = _getAllGrips();
+  List<ExerciseModel> exercises = getAllExercises();
+  Future<List> filteredExercises = getFilteredExercises();
+  List<GripsModel> grips = getAllGrips();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,12 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
                 final exercise = exercises[index];
                 return GestureDetector(
                   onTap: () {
-                    print(exercise.name);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExercisePage(exercise: exercise),
+                      ),
+                    );
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -61,7 +69,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(exercise.name),
+                      Text(exercise.primaryActivation),
                     ],
                   ),
                 );
@@ -86,7 +94,12 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
                 final grip = grips[index];
                 return GestureDetector(
                   onTap: () {
-                    print(grip.name);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GripPage(grip: grip),
+                      ),
+                    );
                   },
                   child: Column(
                     children: [
@@ -111,88 +124,4 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
       ),
     );
   }
-}
-
-List<ExerciseModel> _getAllExercises() {
-  final allExercises = [
-    const ExerciseModel(
-      name: 'Pullups',
-      assetLocation: 'https://i.stack.imgur.com/AY9Xl.png',
-      benefits: '',
-      includedIn: '',
-      overallTarget: '',
-      primaryActivation: 'ur',
-      secondaryActivation: '',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-    const ExerciseModel(
-      name: 'Lunges',
-      assetLocation:
-          'https://www.inspireusafoundation.org/wp-content/uploads/2023/07/bodyweight-forward-lunge.gif',
-      benefits: '',
-      includedIn: '',
-      overallTarget: '',
-      primaryActivation: 'mum',
-      secondaryActivation: '',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-    const ExerciseModel(
-      name: 'Test',
-      assetLocation:
-          'https://fitnessprogramer.com/wp-content/uploads/2022/08/how-to-do-pull-up.gif',
-      benefits: '',
-      includedIn: '',
-      overallTarget: '',
-      primaryActivation: 'mate',
-      secondaryActivation: '',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-    const ExerciseModel(
-      name: 'Pullups',
-      assetLocation: 'https://i.stack.imgur.com/AY9Xl.png',
-      benefits: '',
-      includedIn: '',
-      overallTarget: '',
-      primaryActivation: 'ur',
-      secondaryActivation: '',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-  ];
-  return allExercises;
-}
-
-List<GripsModel> _getAllGrips() {
-  final allGrips = [
-    const GripsModel(
-      name: 'Jugs',
-      img:
-          'https://static.wixstatic.com/media/003ebe_868ef5895e9647f78e1e816043d8da40~mv2.jpeg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/003ebe_868ef5895e9647f78e1e816043d8da40~mv2.jpeg',
-      description: 'Nice',
-    ),
-    const GripsModel(
-        name: 'Pinches',
-        img:
-            'https://static.wixstatic.com/media/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg',
-        description: 'Alright'),
-    const GripsModel(
-      name: 'Crimp',
-      img:
-          'https://www.99boulders.com/wp-content/uploads/2018/02/crimp-climbing-hold-1200x675.png',
-      description: 'Bitch',
-    ),
-    const GripsModel(
-        name: 'Pinches',
-        img:
-            'https://static.wixstatic.com/media/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg',
-        description: 'Alright'),
-  ];
-  return allGrips;
 }
