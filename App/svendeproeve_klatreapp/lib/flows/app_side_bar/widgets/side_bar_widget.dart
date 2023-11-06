@@ -83,11 +83,12 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
               itemBuilder: (context, index) {
                 final center = centers[index];
                 return ListTile(
-                    title: Text(center.country),
-                    subtitle: Text(center.place),
-                    onTap: () {
-                      Navigator.of(context).pop(center.place);
-                    });
+                  title: Text(center.country),
+                  subtitle: Text(center.place),
+                  onTap: () {
+                    Navigator.of(context).pop(center.place);
+                  },
+                );
               },
             ),
           ],

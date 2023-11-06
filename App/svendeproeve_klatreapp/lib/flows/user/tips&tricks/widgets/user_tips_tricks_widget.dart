@@ -20,7 +20,7 @@ class TipsTricksWidgets extends StatefulWidget {
 
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   List<ExerciseModel> exercises = getAllExercises();
-  Future<List> filteredExercises = getFilteredExercises();
+  //Future<List> filteredExercises = getFilteredExercises();
   List<GripsModel> grips = getAllGrips();
 
   @override
@@ -32,7 +32,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
       body: Column(
         children: [
           const Text(
-            "Exercises",
+            "Muscle Groups",
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
@@ -125,3 +125,5 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
     );
   }
 }
+
+// getFilteredExercises();

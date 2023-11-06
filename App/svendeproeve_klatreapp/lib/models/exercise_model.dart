@@ -6,11 +6,11 @@ class ExerciseModel {
   final String overallTarget;
   final String primaryActivation;
   final String secondaryActivation;
-  final int reps;
-  final int sets;
+  int reps;
+  int sets;
   final HowTo? howTo;
 
-  const ExerciseModel({
+  ExerciseModel({
     required this.name,
     required this.assetLocation,
     required this.benefits,
@@ -31,7 +31,7 @@ class HowTo {
 
 List<ExerciseModel> getAllExercises() {
   final allExercises = [
-    const ExerciseModel(
+    ExerciseModel(
       name: 'Pullups',
       assetLocation: 'https://i.stack.imgur.com/AY9Xl.png',
       benefits: '',
@@ -43,7 +43,7 @@ List<ExerciseModel> getAllExercises() {
       sets: 0,
       howTo: null,
     ),
-    const ExerciseModel(
+    ExerciseModel(
       name: 'Lunges',
       assetLocation:
           'https://www.inspireusafoundation.org/wp-content/uploads/2023/07/bodyweight-forward-lunge.gif',
@@ -56,7 +56,7 @@ List<ExerciseModel> getAllExercises() {
       sets: 0,
       howTo: null,
     ),
-    const ExerciseModel(
+    ExerciseModel(
       name: 'Test',
       assetLocation:
           'https://fitnessprogramer.com/wp-content/uploads/2022/08/how-to-do-pull-up.gif',
@@ -69,7 +69,7 @@ List<ExerciseModel> getAllExercises() {
       sets: 0,
       howTo: null,
     ),
-    const ExerciseModel(
+    ExerciseModel(
       name: 'Climbing',
       assetLocation:
           'https://s3.amazonaws.com/www.explorersweb.com/wp-content/uploads/2022/03/25004754/ondra.jpg',
@@ -84,15 +84,4 @@ List<ExerciseModel> getAllExercises() {
     ),
   ];
   return allExercises;
-}
-
-Future<List> getFilteredExercises() async {
-  final val = await getAllExercises();
-  for (final filteredExercises
-      in val.where((element) => element.includedIn == element.overallTarget)) {
-    filteredExercises;
-  }
-
-  final filteredExercises = getAllExercises();
-  return filteredExercises;
 }
