@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/user/overview/user_overview_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class SidebarWidgets extends StatefulWidget {
   const SidebarWidgets({Key? key}) : super(key: key);
@@ -13,7 +14,29 @@ class SidebarWidgets extends StatefulWidget {
 class _SidebarWidgetsState extends State<SidebarWidgets> {
   final controller = TextEditingController();
   final clearController = TextEditingController();
-  List<ClimbingCenter> centers = _getAllClimbingCenters();
+  static final APIService _apiService = APIService();
+  late Future<List<ClimbingCenter>> centers;
+  // int centersLength = centers.length;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // initial load
+    centers = _apiService.getAllClimbingCenters();
+  }
+
+  Future<void> refreshList() async {
+    // reload
+    setState(() {
+      centers = updateAndGetList();
+    });
+  }
+
+  Future<List<ClimbingCenter>> updateAndGetList() async {
+    // return the list here
+    return _apiService.getAllClimbingCenters();
+  }
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -74,42 +97,52 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                   borderSide: const BorderSide(color: topBackgroundColor),
                 ),
               ),
-              onChanged: searchCenter,
+              // onChanged: searchCenter,
             ),
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: centers.length,
-              itemBuilder: (context, index) {
-                final center = centers[index];
-                return ListTile(
-                    title: Text(center.country),
-                    subtitle: Text(center.place),
-                    onTap: () {
-                      Navigator.of(context).pop(center.place);
-                    });
-              },
-            ),
+            // const Center(child: CircularProgressIndicator()),
+            FutureBuilder(
+                future: centers,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ClimbingCenter>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    var items = snapshot.data ??
+                        <ClimbingCenter>[]; // handle the case that data is null
+                    return RefreshIndicator(
+                      child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final center = items[index];
+                            return ListTile(
+                                title: Text(center.centerName),
+                                subtitle: Text(center.location),
+                                onTap: () {
+                                  Navigator.of(context).pop(center.location);
+                                });
+                          }),
+                      onRefresh: refreshList,
+                    );
+                  }
+                }),
           ],
         ),
       );
 
-  void searchCenter(String query) {
-    final suggestions = _getAllClimbingCenters().where((center) {
-      final centerPlace = center.place.toLowerCase();
-      final input = query.toLowerCase();
+  // void searchCenter(String query) {
+  //   final suggestions = _getAllClimbingCenters(_apiService).where((center) {
+  //     final centerPlace = center.place.toLowerCase();
+  //     final input = query.toLowerCase();
 
-      return centerPlace.contains(input);
-    }).toList();
+  //     return centerPlace.contains(input);
+  //   }).toList();
 
-    setState(() => centers = suggestions);
-  }
-}
-
-List<ClimbingCenter> _getAllClimbingCenters() {
-  final allClimbingCenters = [
-    const ClimbingCenter(country: 'Denmark', place: 'Beta Boulders'),
-    const ClimbingCenter(country: 'Denmark', place: 'Boulders Syd')
-  ];
-  return allClimbingCenters;
+  //   setState(() => centers = suggestions);
+  // }
 }

@@ -34,23 +34,6 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
     const PersonalPage(),
   ];
 
-  Future<String?> testToken() async {
-    const storage = FlutterSecureStorage();
-    return await storage.read(key: 'Token');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    testToken().then((value) => {print(value)});
-  }
-
-  // _auth.user.listen((user) {
-  //   if (user == null) {
-  //     Navigator.pushReplacementNamed(context, '/authenticate');
-  //   }
-  // });
-
   @override
   Widget build(BuildContext context) => Scaffold(
       body: IndexedStack(
