@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: const Text('Sign in to Workout App'),
+        title: const Text('Sign in to Climbing App'),
         actions: <Widget>[
           TextButton.icon(
             icon: const Icon(Icons.person),
