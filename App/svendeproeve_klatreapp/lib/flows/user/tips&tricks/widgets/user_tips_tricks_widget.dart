@@ -125,5 +125,3 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
     );
   }
 }
-
-// getFilteredExercises();

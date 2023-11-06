@@ -66,8 +66,7 @@ class GripPage extends StatelessWidget {
                       const SizedBox(height: 20),
                       Center(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center, // Align text to the beginning
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
                               'Description:',

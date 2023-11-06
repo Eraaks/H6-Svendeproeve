@@ -67,16 +67,14 @@ class _ExercisePageState extends State<ExercisePage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(
-                            3), // Adjust the padding value as needed
+                        padding: const EdgeInsets.all(3),
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: topBackgroundColor, // Border color
-                              width: 2, // Border width
+                              color: topBackgroundColor,
+                              width: 2,
                             ),
-                            borderRadius: BorderRadius.circular(
-                                15), // Border radius for the entire row
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: Row(
                             children: [
@@ -94,8 +92,7 @@ class _ExercisePageState extends State<ExercisePage> {
                               ),
                               const SizedBox(height: 20),
                               Column(
-                                crossAxisAlignment: CrossAxisAlignment
-                                    .start, // Align text to the beginning
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(exercise.name),
                                   Text(exercise.primaryActivation),
