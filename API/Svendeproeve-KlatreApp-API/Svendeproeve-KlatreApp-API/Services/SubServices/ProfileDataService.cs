@@ -1,5 +1,6 @@
 ﻿using Google.Cloud.Firestore;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
+using System.Text.RegularExpressions;
 
 namespace Svendeproeve_KlatreApp_API.Services.SubServices
 {
@@ -20,14 +21,19 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
         private async Task AddClimbingHistory(string profileID, Climbing_History climbing_History)
         {
-            var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(climbing_History.ID);
-            await collection.SetAsync(climbing_History);
-            if (climbing_History.Send_Collections != null) await AddSendCollections(profileID, climbing_History, climbing_History.Send_Collections);
+            var klatreCentre = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
+            var klatreData = klatreCentre.Documents.Select(k => k.ConvertTo<ClimbingCenterDocument>()).ToList();
+            foreach (var document in klatreData)
+            {
+                var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(document.CenterName);
+                await collection.SetAsync(climbing_History);
+                if (climbing_History.Send_Collections != null) await AddSendCollections(profileID, climbing_History, document.CenterName, climbing_History.Send_Collections);
+            }
         }
 
-        private async Task AddSendCollections(string profileID, Climbing_History climbing_History, Send_Collection send_Collections)
+        private async Task AddSendCollections(string profileID, Climbing_History climbing_History, string historyID, Send_Collection send_Collections)
         {
-            var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(climbing_History.ID).Collection("Send_Collections").Document(send_Collections.ID);
+            var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(historyID).Collection("Send_Collections").Document(send_Collections.ID);
             await collection.SetAsync(send_Collections);
         }
 
@@ -54,6 +60,27 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             }
             await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(userUID).DeleteAsync();
             await _firestoreDb.Collection("Profile_data").Document(userUID).DeleteAsync();
+        }
+
+        public async Task<List<ClimbingScoreDocument>> GetClimbingScores(string climbingCenter)
+        {
+            List<ClimbingScoreDocument> climbingScores = new List<ClimbingScoreDocument>();
+            var profileDocuments = await _firestoreDb.Collection("Profile_data").GetSnapshotAsync();
+            var profileData = profileDocuments.Documents.Select(p => p.ConvertTo<ProfileDataDocument>()).ToList();
+            foreach(var profile in profileData)
+            {
+                var historyDocuments = await _firestoreDb.Collection("Profile_data").Document(profile.ID).Collection("Climbing_History").Document(climbingCenter).GetSnapshotAsync();
+                var historyData = historyDocuments.ConvertTo<Climbing_History>();
+                climbingScores.Add(new ClimbingScoreDocument
+                {
+                    Name = profile.User_Email,
+                    Center_Name = Regex.Replace(climbingCenter, "([a-z])([A-Z])", "$1 $2"),
+                    Grade = historyData.Estimated_Grade,
+                    Score = historyData.Total_Points
+                });
+            }
+
+            return climbingScores;
         }
     }
 }

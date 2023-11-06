@@ -31,8 +31,6 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Friend_Ids = new List<string>(){""},
                 Saved_Exercises = new List<string>() { },
                 Saved_Workouts = new List<string>() { },
-                Training_For = "",
-                Training_Skill_Level = "",
                 User_Email = email,
                 Climbing_History = new Climbing_History
                 {
@@ -69,7 +67,13 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         [HttpDelete("/DeleteProfileData/{userUID}")]
         public async Task RemoveProfileData(string userUID)
         {
-            await _fireStoreService.RemoveProfileData(userUID);
+            await _fireStoreService.DeleteProfileData(userUID);
+        }
+
+        [HttpGet("/GetClimbingScore/{climbingCenter}")]
+        public async Task<List<ClimbingScoreDocument>> GetClimbingScores(string climbingCenter)
+        {
+            return await _fireStoreService.GetClimbingScores(climbingCenter);
         }
     }
 }
