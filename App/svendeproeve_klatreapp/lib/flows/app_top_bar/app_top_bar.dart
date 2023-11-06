@@ -15,15 +15,13 @@ PreferredSize reusableAppBar() {
       backgroundColor: topBackgroundColor,
       elevation: 0.0,
       actions: <Widget>[
-        TextButton.icon(
+        IconButton(
           icon: const Icon(
             Icons.settings,
             color: mainBackgroundColor,
           ),
-          label: Text(''),
-          onPressed: () {
-            navigatorKey.currentState!.push(
-                MaterialPageRoute(builder: (context) => const SettingsPage()));
+          onPressed: () async {
+            await _auth.signOut();
           },
         ),
       ],

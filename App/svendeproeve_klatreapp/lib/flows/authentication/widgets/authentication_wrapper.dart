@@ -19,7 +19,7 @@ class Wrapper extends StatelessWidget {
         .replaceAll('!', '%21')
         .replaceAll('25', '');
 
-    var uri = 'https://10.0.2.2:44380/Login/$secret&$userUID';
+    var uri = 'https://10.0.2.2:7239/Login/$secret&$userUID';
     var request = await http.get(Uri.parse(uri));
 
     if (request.statusCode == 200) {
