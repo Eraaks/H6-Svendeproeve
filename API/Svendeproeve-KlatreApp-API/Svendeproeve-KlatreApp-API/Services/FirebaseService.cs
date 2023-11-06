@@ -77,7 +77,7 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _profileDataService.GetProfileData(userUID);
         }
 
-        public async Task RemoveProfileData(string userUID)
+        public async Task DeleteProfileData(string userUID)
         {
             await _profileDataService.DeleteProfileData(userUID);
         }
@@ -85,6 +85,11 @@ namespace Svendeproeve_KlatreApp_API.Services
         public async Task UpdateProfileData(ProfileDataDocument newProfile, string userUID)
         {
            await _profileDataService.UpdateProfileData(newProfile, userUID);
+        }
+
+        public async Task<List<ClimbingScoreDocument>> GetClimbingScores(string climbingCenter)
+        {
+            return await _profileDataService.GetClimbingScores(climbingCenter);
         }
 
         public async Task AddClimbingCenter(ClimbingCenterDocument climbingCenter, string climbingCenterName)

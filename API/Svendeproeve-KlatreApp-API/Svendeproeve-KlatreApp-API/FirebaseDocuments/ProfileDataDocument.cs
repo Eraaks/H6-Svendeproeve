@@ -16,10 +16,6 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         [FirestoreProperty]
         public List<string>? Saved_Workouts { get; set; }
         [FirestoreProperty]
-        public string Training_For { get; set; }
-        [FirestoreProperty]
-        public string Training_Skill_Level { get; set; }
-        [FirestoreProperty]
         public string User_Email { get; set; }
         public Climbing_History Climbing_History { get; set; }
     }
