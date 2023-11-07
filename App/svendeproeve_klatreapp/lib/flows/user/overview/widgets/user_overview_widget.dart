@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
-
-final AuthService _auth = AuthService();
-final Sidebar _Sidebar = Sidebar();
+import 'package:svendeproeve_klatreapp/global/constants.dart';
+import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 
 class OverviewWidgets extends StatefulWidget {
   const OverviewWidgets({Key? key}) : super(key: key);
@@ -14,48 +12,117 @@ class OverviewWidgets extends StatefulWidget {
 }
 
 class _OverviewWidgetsState extends State<OverviewWidgets> {
+  List<ProblemsModel> problemsList = getAllProblems();
+  List<ClimbingAreaModel> climbingAreas = getAllClimbingAreas();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.brown[50],
-      appBar: reusableAppBar(),
-      drawer: _Sidebar,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Table(
-            columnWidths: {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(1),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: mainBackgroundColor,
+        appBar: reusableAppBar(),
+        drawer: const Sidebar(),
+        body: Center(
+          child: ListView.builder(
+            itemCount: climbingAreas.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  const Divider(height: 20, color: Colors.black),
+                  Text(
+                    climbingAreas[index].name,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  DataTableBuilder(
+                    problems: climbingAreas[index].problems,
+                    updateState: () {
+                      setState(() {});
+                    },
+                  ),
+                ],
+              );
             },
-            border: TableBorder.all(),
-            children: [
-              buildRow(['Header1', 'Header2'], isHeader: true),
-              buildRow(['Dummy1', 'Dummy1']),
-              buildRow(['Dummy1', 'Dummy1']),
-              buildRow(['Dummy1', 'Dummy1']),
-            ],
           ),
         ),
       ),
     );
   }
+}
 
-  TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
-        children: cells.map(
-          (cell) {
-            final style = TextStyle(
-              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-              fontSize: 18,
-            );
+class DataTableBuilder extends StatelessWidget {
+  final List<ProblemsModel> problems;
+  final Function updateState;
 
-            return Padding(
-              padding: const EdgeInsets.all(12),
-              child: Center(
-                child: Text(cell, style: style),
+  DataTableBuilder({required this.problems, required this.updateState});
+
+  @override
+  Widget build(BuildContext context) {
+    int doneCount = problems
+        .where((problem) => problem.isCompleted || problem.isFlashed)
+        .length;
+    int flashedCount = problems.where((problem) => problem.isFlashed).length;
+    int totalRows = problems.length;
+
+    return DataTable(
+      columns: <DataColumn>[
+        DataColumn(
+          label: Text('Done $doneCount/$totalRows',
+              style: const TextStyle(fontStyle: FontStyle.italic)),
+        ),
+        DataColumn(
+          label: Text('Flashed $flashedCount/$totalRows',
+              style: const TextStyle(fontStyle: FontStyle.italic)),
+        ),
+        const DataColumn(
+          label: Text('Grade', style: TextStyle(fontStyle: FontStyle.italic)),
+        ),
+      ],
+      rows: problems.map((problem) {
+        return DataRow(
+          cells: <DataCell>[
+            DataCell(
+              IconButton(
+                icon: const Icon(Icons.done),
+                color: problem.isCompleted == true || problem.isFlashed == true
+                    ? Colors.green
+                    : null,
+                onPressed: () {
+                  problem.isCompleted = !problem.isCompleted;
+                  updateState();
+                },
               ),
-            );
-          },
-        ).toList(),
-      );
+            ),
+            DataCell(
+              IconButton(
+                icon: const Icon(Icons.done_all),
+                color: problem.isFlashed == true ? Colors.green : null,
+                onPressed: () {
+                  problem.isFlashed = !problem.isFlashed;
+                  updateState();
+                },
+              ),
+            ),
+            DataCell(
+              Container(
+                decoration: BoxDecoration(
+                  color: problem.color,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Center(
+                  child: Text(
+                    problem.grade,
+                    style: TextStyle(
+                      color:
+                          problem.color == Colors.black ? Colors.white : null,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }).toList(),
+    );
+  }
 }
