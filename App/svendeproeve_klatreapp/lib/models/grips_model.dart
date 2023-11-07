@@ -1,40 +1,33 @@
 class GripsModel {
-  final String name;
-  final String img;
-  final String description;
+  late String _gripName;
+  late String _gripImg;
+  late String _gripDescription;
 
-  const GripsModel({
-    required this.name,
-    required this.img,
-    required this.description,
+  GripsModel({
+    required String gripName,
+    required String gripImg,
+    required String gripDescription,
   });
-}
 
-List<GripsModel> getAllGrips() {
-  final allGrips = [
-    const GripsModel(
-      name: 'Jugs',
-      img:
-          'https://static.wixstatic.com/media/003ebe_868ef5895e9647f78e1e816043d8da40~mv2.jpeg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/003ebe_868ef5895e9647f78e1e816043d8da40~mv2.jpeg',
-      description: 'Jugs are Very nice indeed, we very like like yis.',
-    ),
-    const GripsModel(
-        name: 'Pinches',
-        img:
-            'https://static.wixstatic.com/media/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg',
-        description:
-            'Pinches is alright, use your fingers and thumb to PINCH it, like grandma pinches your cheeks'),
-    const GripsModel(
-      name: 'Crimp',
-      img:
-          'https://www.99boulders.com/wp-content/uploads/2018/02/crimp-climbing-hold-1200x675.png',
-      description: 'u bitch.',
-    ),
-    const GripsModel(
-        name: 'Pinches',
-        img:
-            'https://static.wixstatic.com/media/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/003ebe_418dcfcb31bb4375b5c4312f1922c0b4~mv2.jpeg',
-        description: 'Alright'),
-  ];
-  return allGrips;
+  String get gripName => _gripName;
+  set gripName(String? gripName) => _gripName = gripName!;
+  String get gripImg => _gripImg;
+  set gripImg(String? gripImg) => _gripImg = gripImg!;
+  String get gripDescription => _gripDescription;
+  set gripDescription(String? gripDescription) =>
+      _gripDescription = gripDescription!;
+
+  GripsModel.fromJson(Map<String, dynamic> json) {
+    _gripName = json['name'];
+    _gripImg = json['image_Location'];
+    _gripDescription = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = _gripName;
+    data['image_Location'] = _gripImg;
+    data['description'] = _gripDescription;
+    return data;
+  }
 }

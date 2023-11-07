@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
+import 'package:svendeproeve_klatreapp/models/grips_model.dart';
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
-  static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  // static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
+  List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   // getClimbingscore(String requestPath) async {
   //   final headers = {
@@ -34,5 +37,23 @@ class APIService {
     }
 
     return climbingCenters;
+  }
+
+  Future<List<GripsModel>> getAllGrips() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    var request = await http.get(Uri.parse('${_baseUrlLocal}Grips/GetGrips'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      for (var i = 0; i < encodedString.length; i++) {
+        grips
+            .add(GripsModel.fromJson(encodedString[i] as Map<String, dynamic>));
+      }
+    }
+    return grips;
   }
 }
