@@ -11,7 +11,6 @@ import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({super.key});
-
   Future<void> GetAPIToken(storage, userUID) async {
     String secret = await storage.read(key: 'Secret');
     secret = Uri.encodeComponent(secret)
@@ -19,11 +18,10 @@ class Wrapper extends StatelessWidget {
         .replaceAll('!', '%21')
         .replaceAll('25', '');
 
-    var uri = 'https://10.0.2.2:7239/Login/$secret&$userUID';
+    var uri = 'https://10.0.2.2:44380/Login/$secret&$userUID';
     var request = await http.get(Uri.parse(uri));
 
     if (request.statusCode == 200) {
-      print('Token fetched');
       await storage.write(key: 'Token', value: request.body);
     }
   }

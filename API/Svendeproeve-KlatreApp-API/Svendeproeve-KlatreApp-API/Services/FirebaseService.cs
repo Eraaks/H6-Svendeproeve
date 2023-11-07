@@ -87,6 +87,21 @@ namespace Svendeproeve_KlatreApp_API.Services
            await _profileDataService.UpdateProfileData(newProfile, userUID);
         }
 
+        public async Task UpdateFollow(string userUID, string userToFollowUserUID)
+        {
+            await _profileDataService.UpdateFollow(userUID, userToFollowUserUID);
+        }
+
+        public async Task RemoveFollow(string userUID, string userToFollowUserUID)
+        {
+            await _profileDataService.RemoveFollow(userUID, userToFollowUserUID);
+        }
+
+        public async Task<List<string>> GetFollowList(string userUID)
+        {
+            return await _profileDataService.GetFollowList(userUID);
+        }
+
         public async Task<List<ClimbingScoreDocument>> GetClimbingScores(string climbingCenter)
         {
             return await _profileDataService.GetClimbingScores(climbingCenter);

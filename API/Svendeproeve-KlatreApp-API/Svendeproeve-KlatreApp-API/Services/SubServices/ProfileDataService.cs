@@ -62,6 +62,39 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             await _firestoreDb.Collection("Profile_data").Document(userUID).DeleteAsync();
         }
 
+        public async Task UpdateFollow(string userUID, string userToFollowUserUID)
+        {
+            var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
+            var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
+            profileData.Friend_Ids.Add(userToFollowUserUID);
+            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Friend_Ids", profileData.Friend_Ids);
+
+            var userToFollowDocument = await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).GetSnapshotAsync();
+            var userToFollowData = userToFollowDocument.ConvertTo<ProfileDataDocument>();
+            userToFollowData.Follows_Me.Add(userUID);
+            await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).UpdateAsync("Follows_Me", userToFollowData.Follows_Me);
+        }
+
+        public async Task RemoveFollow(string userUID, string userToFollowUserUID)
+        {
+            var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
+            var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
+            profileData.Friend_Ids.Remove(userToFollowUserUID);
+            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Friend_Ids", profileData.Friend_Ids);
+
+            var userToFollowDocument = await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).GetSnapshotAsync();
+            var userToFollowData = userToFollowDocument.ConvertTo<ProfileDataDocument>();
+            userToFollowData.Follows_Me.Remove(userUID);
+            await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).UpdateAsync("Follows_Me", userToFollowData.Follows_Me);
+        }
+
+        public async Task<List<string>> GetFollowList(string userUID)
+        {
+            var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
+            var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
+            return profileData.Friend_Ids;
+        }
+
         public async Task<List<ClimbingScoreDocument>> GetClimbingScores(string climbingCenter)
         {
             List<ClimbingScoreDocument> climbingScores = new List<ClimbingScoreDocument>();
@@ -73,11 +106,20 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 var historyData = historyDocuments.ConvertTo<Climbing_History>();
                 climbingScores.Add(new ClimbingScoreDocument
                 {
+                    UserUID = profile.ID,
+                    Rank = 0,
                     Name = profile.User_Email,
                     Center_Name = Regex.Replace(climbingCenter, "([a-z])([A-Z])", "$1 $2"),
                     Grade = historyData.Estimated_Grade,
                     Score = historyData.Total_Points
                 });
+            }
+
+            climbingScores = climbingScores.OrderBy(p => p.Score).ToList();
+
+            for (int i = 0; i < climbingScores.Count; i++)
+            {
+                climbingScores[i].Rank = i + 1;
             }
 
             return climbingScores;

@@ -70,6 +70,24 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             await _fireStoreService.DeleteProfileData(userUID);
         }
 
+        [HttpPatch("/UpdateFollow/{userUID}&{userToFollowUserUID}")]
+        public async Task UpdateFollow(string userUID, string userToFollowUserUID)
+        {
+            await _fireStoreService.UpdateFollow(userUID, userToFollowUserUID);
+        }
+
+        [HttpDelete("/RemoveFollow/{userUID}&{userToFollowUserUID}")]
+        public async Task RemoveFollow(string userUID, string userToFollowUserUID)
+        {
+            await _fireStoreService.RemoveFollow(userUID, userToFollowUserUID);
+        }
+
+        [HttpGet("/GetFollowList/{userUID}")]
+        public async Task<List<string>> GetFollowList(string userUID)
+        {
+            return await _fireStoreService.GetFollowList(userUID);
+        }
+
         [HttpGet("/GetClimbingScore/{climbingCenter}")]
         public async Task<List<ClimbingScoreDocument>> GetClimbingScores(string climbingCenter)
         {
