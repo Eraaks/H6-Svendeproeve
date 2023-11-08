@@ -72,7 +72,7 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _profileDataService.AddProfileData(profileData);
         }
 
-        public async Task<ProfileDataDocument> GetProfileData(string userUID)
+        public async Task<ProfileDataDocument?> GetProfileData(string userUID)
         {
             return await _profileDataService.GetProfileData(userUID);
         }

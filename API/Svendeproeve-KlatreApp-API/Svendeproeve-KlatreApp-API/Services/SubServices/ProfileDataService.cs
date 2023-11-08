@@ -37,9 +37,10 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             await collection.SetAsync(send_Collections);
         }
 
-        public async Task<ProfileDataDocument> GetProfileData(string userUID)
+        public async Task<ProfileDataDocument?> GetProfileData(string userUID)
         {
             var document = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
+            if(document.Exists == false) return null;
             var profileData = document.ConvertTo<ProfileDataDocument>();
             return profileData;
         }
