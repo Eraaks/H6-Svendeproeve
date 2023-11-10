@@ -5,7 +5,6 @@ import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 
 final AuthService _auth = AuthService();
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 PreferredSize reusableAppBar() {
   return PreferredSize(
@@ -20,11 +19,18 @@ PreferredSize reusableAppBar() {
             Icons.settings,
             color: mainBackgroundColor,
           ),
-          onPressed: () async {
-            await _auth.signOut();
+          onPressed: () {
+            //navigate();
           },
         ),
       ],
     ),
   );
 }
+
+// void navigate() {
+//   print('Navigate');
+//   navigatorKey.currentState?.push(MaterialPageRoute(
+//     builder: (context) => SettingsPage(),
+//   ));
+// }
