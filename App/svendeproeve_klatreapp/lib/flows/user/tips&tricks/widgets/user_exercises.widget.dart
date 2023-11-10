@@ -4,18 +4,27 @@ import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/widgets/user_selected_exercise_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class ExercisePage extends StatefulWidget {
   final ExerciseModel exercise;
 
-  ExercisePage({Key? key, required this.exercise}) : super(key: key);
+  const ExercisePage({Key? key, required this.exercise}) : super(key: key);
 
   @override
-  _ExercisePageState createState() => _ExercisePageState();
+  State<ExercisePage> createState() => _ExercisePageState();
 }
 
 class _ExercisePageState extends State<ExercisePage> {
-  List<ExerciseModel> exercises = getAllExercises();
+  static final APIService _apiService = APIService();
+  late Future<List<ExerciseModel>> includedIn;
+
+  @override
+  void initState() {
+    super.initState();
+    includedIn =
+        _apiService.getIncludedInExercises(widget.exercise.primaryActivation);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,71 +52,91 @@ class _ExercisePageState extends State<ExercisePage> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 700,
-            child: ListView.separated(
-              scrollDirection: Axis.vertical,
-              padding: const EdgeInsets.all(12),
-              itemCount: exercises.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(width: 12);
-              },
-              itemBuilder: (context, index) {
-                final exercise = exercises[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SelectedExercisePage(exercise: exercise),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: topBackgroundColor,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
+          FutureBuilder(
+              future: includedIn,
+              builder: (context, includedInSnapshot) {
+                if (includedInSnapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return Center(
+                    child:
+                        CircularProgressIndicator(), // Loading indicator in the center.
+                  );
+                } else if (includedInSnapshot.hasError) {
+                  return Center(
+                    child: Text(
+                        'Error: ${includedInSnapshot.error}'), // Handle error state in the center.
+                  );
+                } else {
+                  final includedInList = includedInSnapshot.data;
+                  return SizedBox(
+                    height: 700,
+                    child: ListView.separated(
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.all(12),
+                      itemCount: includedInList!.length,
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(width: 12);
+                      },
+                      itemBuilder: (context, index) {
+                        final exercise = includedInList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SelectedExercisePage(exercise: exercise),
+                              ),
+                            );
+                          },
+                          child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(
-                                    exercise.assetLocation,
-                                    height: 150,
-                                    width: 150,
-                                    fit: BoxFit.cover,
+                                padding: const EdgeInsets.all(3),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: topBackgroundColor,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: Image.network(
+                                            exercise.assetLocation,
+                                            height: 150,
+                                            width: 150,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(exercise.name),
+                                          Text(exercise.name),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(exercise.name),
-                                  Text(exercise.primaryActivation),
-                                ],
-                              ),
+                              )
                             ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+                        );
+                      },
+                    ),
+                  );
+                }
+              })
         ],
       ),
     );

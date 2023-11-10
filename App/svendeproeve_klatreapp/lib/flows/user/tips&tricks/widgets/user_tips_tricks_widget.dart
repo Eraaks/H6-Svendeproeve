@@ -19,13 +19,15 @@ class TipsTricksWidgets extends StatefulWidget {
 
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
-  List<ExerciseModel> exercises = getAllExercises();
+  late Future<List<ExerciseModel>> exercises;
+  // List<ExerciseModel> exercises = getAllExercises();
   late Future<List<GripsModel>> grips;
 
   @override
   void initState() {
     super.initState();
     grips = _apiService.getAllGrips();
+    exercises = _apiService.getAllExercises();
   }
 
   @override
@@ -41,45 +43,65 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(12),
-              itemCount: exercises.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(width: 12);
-              },
-              itemBuilder: (context, index) {
-                final exercise = exercises[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExercisePage(exercise: exercise),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          exercise.assetLocation,
-                          height: 150,
-                          width: 150,
-                          fit: BoxFit.cover,
+          FutureBuilder<List<ExerciseModel>>(
+            future:
+                exercises, // Assuming 'exercises' is a Future that retrieves a list of ExerciseModel objects
+            builder: (context, exerciseSnapshot) {
+              if (exerciseSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child:
+                      CircularProgressIndicator(), // Loading indicator in the center.
+                );
+              } else if (exerciseSnapshot.hasError) {
+                return Center(
+                  child: Text(
+                      'Error: ${exerciseSnapshot.error}'), // Handle error state in the center.
+                );
+              } else {
+                final exerciseList = exerciseSnapshot.data;
+                return SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.all(12),
+                    itemCount: exerciseList!.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 12);
+                    },
+                    itemBuilder: (context, index) {
+                      final exercise = exerciseList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ExercisePage(exercise: exercise),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                exercise.assetLocation,
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(exercise.name),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(exercise.primaryActivation),
-                    ],
+                      );
+                    },
                   ),
                 );
-              },
-            ),
+              }
+            },
           ),
           const Text(
             "Grips",
@@ -87,25 +109,32 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             textAlign: TextAlign.center,
           ),
           FutureBuilder<List<GripsModel>>(
-            future: grips,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Loading indicator.
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}'); // Handle error state.
+            future:
+                grips, // Assuming 'grips' is a Future that retrieves a list of GripsModel objects
+            builder: (context, gripSnapshot) {
+              if (gripSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                    child:
+                        CircularProgressIndicator() // Loading indicator in the center.
+                    );
+              } else if (gripSnapshot.hasError) {
+                return Center(
+                    child: Text(
+                        'Error: ${gripSnapshot.error}') // Handle error state in the center.
+                    );
               } else {
-                // Data is available, build the ListView.
+                final gripList = gripSnapshot.data;
                 return SizedBox(
                   height: 200,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.all(12),
-                    itemCount: snapshot.data!.length,
+                    itemCount: gripList!.length,
                     separatorBuilder: (context, index) {
                       return const SizedBox(width: 12);
                     },
                     itemBuilder: (context, index) {
-                      final grip = snapshot.data![index];
+                      final grip = gripList[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(

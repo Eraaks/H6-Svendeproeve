@@ -11,8 +11,10 @@ class GripsModel {
 
   String get gripName => _gripName;
   set gripName(String? gripName) => _gripName = gripName!;
+
   String get gripImg => _gripImg;
   set gripImg(String? gripImg) => _gripImg = gripImg!;
+
   String get gripDescription => _gripDescription;
   set gripDescription(String? gripDescription) =>
       _gripDescription = gripDescription!;

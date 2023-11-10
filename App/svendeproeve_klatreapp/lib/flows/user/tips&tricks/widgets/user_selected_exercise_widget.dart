@@ -6,7 +6,7 @@ import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 
 class SelectedExercisePage extends StatefulWidget {
   final ExerciseModel exercise;
-  SelectedExercisePage({required this.exercise, super.key});
+  const SelectedExercisePage({required this.exercise, super.key});
 
   @override
   State<SelectedExercisePage> createState() => _SelectedExercisePageState();
