@@ -11,7 +11,7 @@ PreferredSize reusableAppBar() {
   return PreferredSize(
     preferredSize: Size.fromHeight(56),
     child: AppBar(
-      title: Text('Climbing App'),
+      title: isModerator ? Text('Moderator') : Text('Climbing App'),
       backgroundColor: topBackgroundColor,
       elevation: 0.0,
       actions: <Widget>[

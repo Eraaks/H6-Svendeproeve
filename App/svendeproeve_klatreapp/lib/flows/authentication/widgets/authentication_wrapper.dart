@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:svendeproeve_klatreapp/flows/app_nav_bar/app_nav_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/authentication_page.dart';
+import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_page.dart';
+import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
@@ -58,7 +60,7 @@ class Wrapper extends StatelessWidget {
     } else {
       getFirebaseSecret();
       apiService.getAllClimbingCenters();
-      return const NavBarPage();
+      return isModerator ? const ModOverviewPage() : const NavBarPage();
     }
   }
 }
