@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:svendeproeve_klatreapp/flows/settings/settings_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
 
-final AuthService _auth = AuthService();
+class Topbar extends StatefulWidget implements PreferredSizeWidget {
+  const Topbar({Key? key}) : super(key: key);
 
-PreferredSize reusableAppBar() {
-  return PreferredSize(
-    preferredSize: Size.fromHeight(56),
-    child: AppBar(
-      title: Text('Climbing App'),
+  @override
+  State<Topbar> createState() => _TopbarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+}
+
+class _TopbarState extends State<Topbar> {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text('Climbing App'),
       backgroundColor: topBackgroundColor,
       elevation: 0.0,
       actions: <Widget>[
@@ -20,17 +26,15 @@ PreferredSize reusableAppBar() {
             color: mainBackgroundColor,
           ),
           onPressed: () {
-            //navigate();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsPage(),
+              ),
+            );
           },
         ),
       ],
-    ),
-  );
+    );
+  }
 }
-
-// void navigate() {
-//   print('Navigate');
-//   navigatorKey.currentState?.push(MaterialPageRoute(
-//     builder: (context) => SettingsPage(),
-//   ));
-// }

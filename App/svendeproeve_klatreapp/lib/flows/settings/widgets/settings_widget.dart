@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
-import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/settings/widgets/feedback_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
@@ -22,8 +20,20 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
-      appBar: reusableAppBar(),
-      drawer: const Sidebar(),
+      appBar: AppBar(
+        title: const Text('Climbing App'),
+        backgroundColor: topBackgroundColor,
+        elevation: 0.0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 26,
+          ),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,18 +41,16 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
             const Text(
               'Settings:',
               style: TextStyle(
-                fontSize: 18, // Adjust the font size as needed
-                fontWeight: FontWeight.bold, // Adjust the font weight as needed
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(
-                height:
-                    20), // Add some spacing between the title and the button
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 200, // Set the desired width
+                  width: 200,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: topBackgroundColor,
@@ -56,7 +64,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               ],
             ),
             SizedBox(
-              width: 200, // Set the desired width
+              width: 200,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: topBackgroundColor,

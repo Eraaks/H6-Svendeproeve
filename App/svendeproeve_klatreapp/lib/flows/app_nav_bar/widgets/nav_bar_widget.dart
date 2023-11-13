@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/home/home_page.dart';
+import 'package:svendeproeve_klatreapp/flows/settings/settings_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/overview/user_overview_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/personal/user_personal_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/rankings/user_rankings_page.dart';

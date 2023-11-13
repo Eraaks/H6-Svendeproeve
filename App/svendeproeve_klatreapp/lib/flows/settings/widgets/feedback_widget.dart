@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
-import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 
 class FeedbackWidget extends StatefulWidget {
@@ -19,27 +17,26 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
-      appBar: reusableAppBar(),
-      drawer: const Sidebar(),
+      appBar: AppBar(
+        title: const Text('Climbing App'),
+        backgroundColor: topBackgroundColor,
+        elevation: 0.0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 26,
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                color: mainBackgroundColor,
-                padding: const EdgeInsets.only(top: 5, left: 15),
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    size: 26,
-                    color: topBackgroundColor,
-                  ),
-                ),
-              ),
               const Center(),
               const SizedBox(height: 20),
               SizedBox(
@@ -93,11 +90,12 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
               ),
               const SizedBox(height: 20),
               SizedBox(
-                width: 200, // Set the desired width
+                width: 200,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: topBackgroundColor),
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
+                  //TODO: Implement API call for feedback IF have time.
                   onPressed: () {
                     print('Submit');
                   },
