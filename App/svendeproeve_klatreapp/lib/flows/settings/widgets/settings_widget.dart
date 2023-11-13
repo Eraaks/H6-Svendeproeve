@@ -58,6 +58,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                     child: const Text('Logout'),
                     onPressed: () async {
                       await _auth.signOut();
+                      Navigator.pop(context);
                     },
                   ),
                 ),
