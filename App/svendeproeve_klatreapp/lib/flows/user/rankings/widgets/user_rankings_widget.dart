@@ -47,26 +47,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
-<<<<<<< HEAD
       appBar: const Topbar(),
-      drawer: Sidebar(),
-      body: FutureBuilder(
-        future: climbingScoreList,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('something went wrong! ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            final climbing = snapshot.data!;
-            return ListView(
-              padding: const EdgeInsets.all(5),
-              children: climbing.map(buildUsers).toList(),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-=======
-      appBar: reusableAppBar(),
       drawer: const Sidebar(),
       body: Column(
         children: [
@@ -97,7 +78,6 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
             ),
           )
         ],
->>>>>>> master
       ),
     );
   }
