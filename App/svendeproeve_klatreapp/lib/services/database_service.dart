@@ -4,15 +4,15 @@ import 'package:svendeproeve_klatreapp/models/climbing_score.dart';
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<List<ClimbingScore>> getClimbingscore() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot = await _db
-        .collection('Climbing_Score')
-        .orderBy('score', descending: false)
-        .get();
-    return snapshot.docs
-        .map((docSnapshot) => ClimbingScore.fromDocumentSnapshot(docSnapshot))
-        .toList();
-  }
+  // Future<List<ClimbingScore>> getClimbingscore() async {
+  //   QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+  //       .collection('Climbing_Score')
+  //       .orderBy('score', descending: false)
+  //       .get();
+  //   return snapshot.docs
+  //       .map((docSnapshot) => ClimbingScore.fromDocumentSnapshot(docSnapshot))
+  //       .toList();
+  // }
 
 // Future<List<SavedWorkout>> getSavedWorkouts(String userEmail) async {
 //     late List<dynamic> workoutIds;
