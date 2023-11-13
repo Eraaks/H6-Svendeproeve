@@ -23,7 +23,7 @@ class _ExercisePageState extends State<ExercisePage> {
   void initState() {
     super.initState();
     includedIn =
-        _apiService.getIncludedInExercises(widget.exercise.primaryActivation);
+        _apiService.getIncludedInExercises(widget.exercise.overallTarget);
   }
 
   @override
