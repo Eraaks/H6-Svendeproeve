@@ -18,7 +18,7 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
-      appBar: reusableAppBar(),
+      appBar: const Topbar(),
       drawer: _Sidebar,
       body: const Center(
         child: Text(

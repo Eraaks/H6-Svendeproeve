@@ -47,7 +47,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
-      appBar: reusableAppBar(),
+      appBar: const Topbar(),
       drawer: const Sidebar(),
       body: Column(
         children: [
