@@ -1,6 +1,7 @@
 ﻿using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
+using Octokit;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 using Svendeproeve_KlatreApp_API.Services.SubServices;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace Svendeproeve_KlatreApp_API.Services
         private readonly GripsService _gripsService;
         private readonly ExerciseService _exerciseService;
         private readonly WorkoutService _workoutService;
+        private readonly ReportService _reportService;
         public FirebaseService(ProfileDataService profileDataService, 
             KlatrecentreService klatrecentreService, 
             ModeratorService moderatorService, 
             LoginVerificationService loginVerificationService, 
             GripsService gripsService,
             ExerciseService exerciseService,
-            WorkoutService workoutService)
+            WorkoutService workoutService,
+            ReportService reportService)
         {
             _profileDataService = profileDataService;
             _klatrecentreService = klatrecentreService;
@@ -31,6 +34,7 @@ namespace Svendeproeve_KlatreApp_API.Services
             _gripsService = gripsService;
             _exerciseService = exerciseService;
             _workoutService = workoutService;
+            _reportService = reportService;
         }
 
         //public async Task<List<Shoe>> GetAll()
@@ -225,6 +229,16 @@ namespace Svendeproeve_KlatreApp_API.Services
         public async Task DeleteWorkout(string workoutID)
         {
             await _workoutService.DeleteWorkout(workoutID);
+        }
+
+        public async Task<Issue> CreateIssue(string title, string description, bool isBug)
+        {
+            return await _reportService.CreateIssue(title, description, isBug);
+        }
+
+        public async Task<IReadOnlyList<Issue>> GetIssues()
+        {
+            return await _reportService.GetIssues();
         }
     }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class FeedbackWidget extends StatefulWidget {
   const FeedbackWidget({Key? key}) : super(key: key);
@@ -9,9 +11,11 @@ class FeedbackWidget extends StatefulWidget {
 }
 
 class _FeedbackWidgetState extends State<FeedbackWidget> {
-  final controller = TextEditingController();
-  List<String> items = ['Select Report Type', 'Feedback', 'Bug Report'];
-  String? selectedValue = 'Select Report Type';
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  List<String> items = ['Feedback', 'Bug Report'];
+  String? selectedValue = 'Feedback';
+  final APIService _apiService = APIService();
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +74,31 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: controller,
+                controller: titleController,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide:
+                        const BorderSide(width: 2, color: topBackgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 2, color: topBackgroundColor),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  hintText: 'Title',
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: descriptionController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 minLines: 10,
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(new RegExp(r"\n"))
+                ],
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
@@ -95,9 +120,11 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: topBackgroundColor),
                   child: const Text('Submit'),
-                  //TODO: Implement API call for feedback IF have time.
-                  onPressed: () {
-                    print('Submit');
+                  onPressed: () async {
+                    await _apiService.createIssue(
+                        titleController.text,
+                        descriptionController.text,
+                        selectedValue == 'Feedback' ? false : true);
                   },
                 ),
               )
