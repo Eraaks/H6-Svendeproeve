@@ -93,5 +93,33 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
             return centerData;
         }
+        public async Task DeleteClimbingRoute(string centerName, string areaName, string problemId)
+        {
+            var routeData =  _firestoreDb.Collection("Klatrecentre").Document(centerName).Collection(areaName).Document(areaName).Collection("AreaRoutes").Document(problemId);
+            await routeData.DeleteAsync();
+        }
+
+        public async Task DeleteClimbingArea(string centerName, string areaName, string problemId)
+        {
+            var routes = await _firestoreDb.Collection("Klatrecentre").Document(centerName).Collection(areaName).Document(areaName).Collection("AreaRoutes").GetSnapshotAsync();
+            var routesData = routes.Documents.Select(s => s.ConvertTo<AreaRoutes>()).ToList();
+            foreach(var item in routesData)
+            {
+                await _firestoreDb.Collection("Klatrecentre").Document(centerName).Collection(areaName).Document(areaName).Collection("AreaRoutes").Document(problemId).DeleteAsync();
+            }
+
+            await _firestoreDb.Collection("Klatrecentre").Document(centerName).Collection(areaName).Document(areaName).DeleteAsync();
+
+        }
+
+        public async Task UpdateClimbingRoutes(string centerName, string areaName, string fieldToChange, string newValue, string problemId)
+        {
+            await _firestoreDb.Collection("Klatrecentre").Document(centerName).Collection(areaName).Document(areaName).Collection("AreaRoutes").Document(problemId).UpdateAsync(fieldToChange, newValue);
+        }
+        public async Task UpdateClimbingArea(string centerName,string areaName, string fieldToChange, string newValue)
+        {
+            await _firestoreDb.Collection("Klatrecentre").Document(centerName).Collection(areaName).Document(areaName).UpdateAsync(fieldToChange, newValue);
+        }
     }
+
 }
