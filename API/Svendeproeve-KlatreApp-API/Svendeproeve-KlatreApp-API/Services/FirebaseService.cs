@@ -1,6 +1,7 @@
 ﻿using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
+using Octokit;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 using Svendeproeve_KlatreApp_API.Services.SubServices;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace Svendeproeve_KlatreApp_API.Services
         private readonly GripsService _gripsService;
         private readonly ExerciseService _exerciseService;
         private readonly WorkoutService _workoutService;
+        private readonly ReportService _reportService;
         public FirebaseService(ProfileDataService profileDataService, 
             KlatrecentreService klatrecentreService, 
             ModeratorService moderatorService, 
             LoginVerificationService loginVerificationService, 
             GripsService gripsService,
             ExerciseService exerciseService,
-            WorkoutService workoutService)
+            WorkoutService workoutService,
+            ReportService reportService)
         {
             _profileDataService = profileDataService;
             _klatrecentreService = klatrecentreService;
@@ -31,42 +34,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             _gripsService = gripsService;
             _exerciseService = exerciseService;
             _workoutService = workoutService;
+            _reportService = reportService;
         }
 
-        //public async Task<List<Shoe>> GetAll()
-        //{
-        //    var collection = _firestoreDb.Collection(_collectionName);
-        //    var snapshot = await collection.GetSnapshotAsync();
-
-        //    var shoeDocuments = snapshot.Documents.Select(s => s.ConvertTo<ShoeDocument>()).ToList();
-        //    return shoeDocuments.Select(ConvertDocumentToModel).ToList();
-        //}
-        //public async Task AddAsync(Shoe shoe)
-        //{   
-        //    var collection = _firestoreDb.Collection(_collectionName);
-        //    var shoeDocument = ConvertModelToDocument(shoe);
-        //    await collection.AddAsync(shoeDocument);
-        //}
-        //private static Shoe ConvertDocumentToModel(ShoeDocument shoeDocument)
-        //{
-        //    return new Shoe
-        //    {
-        //        Id = shoeDocument.Id,
-        //        Name = shoeDocument.Name,
-        //        Brand = shoeDocument.Brand,
-        //        Price = decimal.Parse(shoeDocument.Price)
-        //    };
-        //}
-        //private static ShoeDocument ConvertModelToDocument(Shoe shoe)
-        //{
-        //    return new ShoeDocument
-        //    {
-        //        Id = shoe.Id,
-        //        Name = shoe.Name,
-        //        Brand = shoe.Brand,
-        //        Price = shoe.Price.ToString()
-        //    };
-        //}
         public async Task AddProfileData(ProfileDataDocument profileData)
         {
             await _profileDataService.AddProfileData(profileData);
@@ -225,6 +195,16 @@ namespace Svendeproeve_KlatreApp_API.Services
         public async Task DeleteWorkout(string workoutID)
         {
             await _workoutService.DeleteWorkout(workoutID);
+        }
+
+        public async Task<Issue> CreateIssue(string title, string description, bool isBug)
+        {
+            return await _reportService.CreateIssue(title, description, isBug);
+        }
+
+        public async Task<IReadOnlyList<Issue>> GetIssues()
+        {
+            return await _reportService.GetIssues();
         }
     }
 }

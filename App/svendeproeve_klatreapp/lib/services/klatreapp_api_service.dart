@@ -209,4 +209,14 @@ class APIService {
         Uri.parse('${_baseUrlLocal}NewProfileDataAsync/$userUID&$email'),
         headers: headers);
   }
+
+  Future<void> createIssue(String title, String description, bool isBug) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    await http.post(
+        Uri.parse('${_baseUrlLocal}CreateIssue/$title&$description&$isBug'),
+        headers: headers);
+  }
 }
