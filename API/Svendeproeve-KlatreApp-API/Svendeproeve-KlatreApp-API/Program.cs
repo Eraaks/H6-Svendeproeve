@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Octokit;
 using Svendeproeve_KlatreApp_API.Services;
 using Svendeproeve_KlatreApp_API.Services.SubServices;
 using System.Reflection;
@@ -24,8 +23,12 @@ namespace Svendeproeve_KlatreApp_API
 
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Eraaks\Downloads\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
 
+            //var fireApp = FirebaseApp.Create(new AppOptions()
+            //{
+            //    Credential = GoogleCredential.GetApplicationDefault(),
+            //    ProjectId = "h6-svendeproeve-klatreapp",
+            //});
             var fireStoreDB = FirestoreDb.Create("h6-svendeproeve-klatreapp");
-            var githubClient = new GitHubClient(new ProductHeaderValue("H6-Svendeproeve-KlatreApp"));
             var fireStoreService = new FirebaseService(
                 new ProfileDataService(fireStoreDB), 
                 new KlatrecentreService(fireStoreDB), 
@@ -33,8 +36,7 @@ namespace Svendeproeve_KlatreApp_API
                 new LoginVerificationService(fireStoreDB),
                 new GripsService(fireStoreDB),
                 new ExerciseService(fireStoreDB),
-                new WorkoutService(fireStoreDB),
-                new ReportService(githubClient)
+                new WorkoutService(fireStoreDB)
                 );
 
             builder.Services.AddSingleton(s => fireStoreService);

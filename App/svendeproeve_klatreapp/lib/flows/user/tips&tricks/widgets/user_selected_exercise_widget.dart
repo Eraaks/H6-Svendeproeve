@@ -43,7 +43,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainBackgroundColor,
-      appBar: const Topbar(),
+      appBar: reusableAppBar(),
       drawer: const Sidebar(),
       body: Column(
         children: [

@@ -13,7 +13,7 @@ class GripPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainBackgroundColor,
-      appBar: const Topbar(),
+      appBar: reusableAppBar(),
       drawer: const Sidebar(),
       body: Column(
         children: [

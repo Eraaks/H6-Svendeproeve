@@ -58,7 +58,6 @@ dependencies:
 
   #Secure Storage
   flutter_secure_storage: ^9.0.0
-  syncfusion_flutter_charts: ^23.1.44
 
 dev_dependencies:
   flutter_test:

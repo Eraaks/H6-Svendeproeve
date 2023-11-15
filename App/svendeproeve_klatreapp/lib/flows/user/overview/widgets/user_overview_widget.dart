@@ -20,7 +20,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: mainBackgroundColor,
-        appBar: const Topbar(),
+        appBar: reusableAppBar(),
         drawer: const Sidebar(),
         body: Center(
           child: ListView.builder(

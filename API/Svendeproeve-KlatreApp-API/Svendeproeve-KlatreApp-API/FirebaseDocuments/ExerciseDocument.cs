@@ -12,7 +12,7 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public string Description { get; set; }
 
         [FirestoreProperty]
-        public string Asset_Location { get; set; }
+        public string Asset_location { get; set; }
 
         [FirestoreProperty]
         public string Benefits { get; set; }
