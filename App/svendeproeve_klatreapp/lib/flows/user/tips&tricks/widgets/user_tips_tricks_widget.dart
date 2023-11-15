@@ -34,7 +34,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainBackgroundColor,
-      appBar: reusableAppBar(),
+      appBar: const Topbar(),
       drawer: const Sidebar(),
       body: Column(
         children: [
