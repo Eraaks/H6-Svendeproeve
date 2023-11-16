@@ -32,20 +32,25 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Saved_Exercises = new List<string>() { },
                 Saved_Workouts = new List<string>() { },
                 User_Email = email,
-                Climbing_History = new Climbing_History
+                Climbing_History = new List<Climbing_History>()
                 {
-                    ID = userUID,
-                    Estimated_Grade = "2",
-                    Location = "",
-                    Total_Points = 200,
-                    Send_Collections = new Send_Collection
+                    new Climbing_History
                     {
-                        ID = Guid.NewGuid().ToString(),
-                        Area = "",
-                        Grade = "",
-                        Points = 0,
-                        Tries = 0,
-                    }
+                        ID = userUID,
+                        Estimated_Grade = "2",
+                        Location = "",
+                        Total_Points = 200,
+                        Send_Collections = new List<Send_Collection>() { new Send_Collection
+                            {
+                                ID = Guid.NewGuid().ToString(),
+                                Area = "",
+                                Grade = "",
+                                Points = 0,
+                                Tries = 0,
+                                SendDate = DateTime.Today.Ticks,
+                            },
+                        },
+                    },
                 },
             });
 
@@ -68,6 +73,24 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         public async Task RemoveProfileData(string userUID)
         {
             await _fireStoreService.DeleteProfileData(userUID);
+        }
+
+        [HttpPatch("/UpdateFollow/{userUID}&{userToFollowUserUID}")]
+        public async Task UpdateFollow(string userUID, string userToFollowUserUID)
+        {
+            await _fireStoreService.UpdateFollow(userUID, userToFollowUserUID);
+        }
+
+        [HttpDelete("/RemoveFollow/{userUID}&{userToFollowUserUID}")]
+        public async Task RemoveFollow(string userUID, string userToFollowUserUID)
+        {
+            await _fireStoreService.RemoveFollow(userUID, userToFollowUserUID);
+        }
+
+        [HttpGet("/GetFollowList/{userUID}")]
+        public async Task<List<string>> GetFollowList(string userUID)
+        {
+            return await _fireStoreService.GetFollowList(userUID);
         }
 
         [HttpGet("/GetClimbingScore/{climbingCenter}")]
