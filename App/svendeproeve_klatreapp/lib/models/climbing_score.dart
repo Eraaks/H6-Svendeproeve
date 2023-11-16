@@ -1,38 +1,68 @@
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-ClimbingScore? limbingscoreFromMap(String str) =>
-    ClimbingScore.fromMap(json.decode(str));
-String climbingScoreToMap(ClimbingScore? data) => json.encode(data!.toMap());
-
 class ClimbingScore {
-  ClimbingScore({
-    required this.useremail,
-    required this.username,
-    required this.score,
-  });
+  String? _userUID;
+  int? _rank;
+  String? _name;
+  String? _centerName;
+  int? _score;
+  String? _grade;
 
-  String useremail;
-  String username;
-  String? score;
-
-  factory ClimbingScore.fromMap(Map<String, dynamic> json) => ClimbingScore(
-        username: json["username"],
-        useremail: json["useremail"],
-        score: json["score"],
-      );
-
-  Map<String, dynamic> toMap() {
-    return {
-      'username': username,
-      'useremail': useremail,
-      'score': score,
-    };
+  ClimbingScore(
+      {String? userUID,
+      int? rank,
+      String? name,
+      String? centerName,
+      int? score,
+      String? grade}) {
+    if (userUID != null) {
+      this._userUID = userUID;
+    }
+    if (rank != null) {
+      this._rank = rank;
+    }
+    if (name != null) {
+      this._name = name;
+    }
+    if (centerName != null) {
+      this._centerName = centerName;
+    }
+    if (score != null) {
+      this._score = score;
+    }
+    if (grade != null) {
+      this._grade = grade;
+    }
   }
 
-  // named constructor
-  ClimbingScore.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
-      : useremail = doc.data()!['useremail'],
-        username = doc.data()!['username'],
-        score = doc.data()!['score'];
+  String? get userUID => _userUID;
+  set userUID(String? userUID) => _userUID = userUID;
+  int? get rank => _rank;
+  set rank(int? rank) => _rank = rank;
+  String? get name => _name;
+  set name(String? name) => _name = name;
+  String? get centerName => _centerName;
+  set centerName(String? centerName) => _centerName = centerName;
+  int? get score => _score;
+  set score(int? score) => _score = score;
+  String? get grade => _grade;
+  set grade(String? grade) => _grade = grade;
+
+  ClimbingScore.fromJson(Map<String, dynamic> json) {
+    _userUID = json['userUID'];
+    _rank = json['rank'];
+    _name = json['name'];
+    _centerName = json['center_Name'];
+    _score = json['score'];
+    _grade = json['grade'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['userUID'] = this._userUID;
+    data['rank'] = this._rank;
+    data['name'] = this._name;
+    data['center_Name'] = this._centerName;
+    data['score'] = this._score;
+    data['grade'] = this._grade;
+    return data;
+  }
 }

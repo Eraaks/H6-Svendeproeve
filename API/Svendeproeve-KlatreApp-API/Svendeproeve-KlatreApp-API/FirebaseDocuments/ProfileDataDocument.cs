@@ -17,7 +17,9 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public List<string>? Saved_Workouts { get; set; }
         [FirestoreProperty]
         public string User_Email { get; set; }
-        public Climbing_History Climbing_History { get; set; }
+        [FirestoreProperty]
+        public string Selected_Gym { get; set; }
+        public List<Climbing_History> Climbing_History { get; set; }
     }
 
     [FirestoreData]
@@ -31,7 +33,7 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public string Location { get; set; }
         [FirestoreProperty]
         public int Total_Points { get; set; }
-        public Send_Collection? Send_Collections { get; set; }
+        public List<Send_Collection>? Send_Collections { get; set; }
     }
 
     [FirestoreData]
@@ -47,5 +49,7 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public int Points { get; set; }
         [FirestoreProperty]
         public int Tries { get; set; }
+        [FirestoreProperty]
+        public long SendDate { get; set; }
     }
 }

@@ -5,15 +5,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:svendeproeve_klatreapp/flows/app_nav_bar/app_nav_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/authentication_page.dart';
+<<<<<<< HEAD
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
+=======
+import 'package:svendeproeve_klatreapp/flows/authentication/widgets/loading.dart';
+>>>>>>> master
 import 'package:svendeproeve_klatreapp/models/user.dart';
-import 'package:http/http.dart' as http;
-import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({super.key});
 
+<<<<<<< HEAD
   Future<void> GetAPIToken(storage, userUID) async {
     String secret = await storage.read(key: 'Secret');
     secret = Uri.encodeComponent(secret)
@@ -53,17 +56,22 @@ class Wrapper extends StatelessWidget {
     }
   }
 
+=======
+>>>>>>> master
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserClass?>(context);
-    final apiService = APIService();
     // Return either home or authenticate widget
     if (user == null) {
       return const Authenticate();
     } else {
+<<<<<<< HEAD
       getFirebaseSecret();
       apiService.getAllClimbingCenters();
       return isModerator ? const ModOverviewPage() : const NavBarPage();
+=======
+      return const LoadingWidget();
+>>>>>>> master
     }
   }
 }
