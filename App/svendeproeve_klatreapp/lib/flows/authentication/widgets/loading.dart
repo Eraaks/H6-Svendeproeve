@@ -36,6 +36,7 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           );
         } else if (snapshot.data == true) {
           // data loaded:
+          // set Moderator = True in Constants to test Mod page.
           return isModerator ? const ModOverviewPage() : const NavBarPage();
         } else {
           return const Center(

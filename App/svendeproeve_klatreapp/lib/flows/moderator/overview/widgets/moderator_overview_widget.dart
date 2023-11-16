@@ -145,17 +145,4 @@ class DataTableBuilder extends StatelessWidget {
       }).toList(),
     );
   }
-
-  // Future editGrade(ProblemsModel editGrade) async {
-  //   final grade = await showTextDialog(
-  //     context,
-  //     title: 'Change grade',
-  //     value: editGrade.grade,
-  //   );
-  //   setState(() => grades = grades.map((grade) {
-  //         final isEditedGrade = grade == editGrade;
-
-  //         return isEditedGrade ? grade.copy(grade: grade) : grade;
-  //       }).toList());
-  // }
 }

@@ -58,13 +58,11 @@ class _ExercisePageState extends State<ExercisePage> {
                 if (includedInSnapshot.connectionState ==
                     ConnectionState.waiting) {
                   return Center(
-                    child:
-                        CircularProgressIndicator(), // Loading indicator in the center.
+                    child: CircularProgressIndicator(),
                   );
                 } else if (includedInSnapshot.hasError) {
                   return Center(
-                    child: Text(
-                        'Error: ${includedInSnapshot.error}'), // Handle error state in the center.
+                    child: Text('Error: ${includedInSnapshot.error}'),
                   );
                 } else {
                   final includedInList = includedInSnapshot.data;

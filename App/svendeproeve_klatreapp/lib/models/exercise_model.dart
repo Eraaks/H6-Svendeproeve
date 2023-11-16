@@ -2,10 +2,10 @@ class ExerciseModel {
   late String _name;
   late String _assetLocation;
   late String _benefits;
-  late List<String> _includedIn; // Change the type to List<String>
+  late List<String> _includedIn;
   late String _overallTarget;
-  late List<String> _primaryActivation; // Change the type to List<String>
-  late List<String> _secondaryActivation; // Change the type to List<String>
+  late List<String> _primaryActivation;
+  late List<String> _secondaryActivation;
   late int _reps;
   late int _sets;
   late HowTo? _howTo;
@@ -14,11 +14,10 @@ class ExerciseModel {
     required String name,
     required String assetLocation,
     required String benefits,
-    required List<String> includedIn, // Change the type to List<String>
+    required List<String> includedIn,
     required String overallTarget,
-    required List<String> primaryActivation, // Change the type to List<String>
-    required List<String>
-        secondaryActivation, // Change the type to List<String>
+    required List<String> primaryActivation,
+    required List<String> secondaryActivation,
     required int reps,
     required int sets,
     required HowTo howTo,
@@ -71,10 +70,10 @@ class ExerciseModel {
       'name': _name,
       'asset_location': _assetLocation,
       'benefits': _benefits,
-      'included_In': _includedIn, // Serialize the List
+      'included_In': _includedIn,
       'overall_Target': _overallTarget,
-      'primary_Activation': _primaryActivation, // Serialize the List
-      'secondary_Activation': _secondaryActivation, // Serialize the List
+      'primary_Activation': _primaryActivation,
+      'secondary_Activation': _secondaryActivation,
       'reps': _reps,
       'sets': _sets,
       'how_To': _howTo?.toJson() ?? {},
