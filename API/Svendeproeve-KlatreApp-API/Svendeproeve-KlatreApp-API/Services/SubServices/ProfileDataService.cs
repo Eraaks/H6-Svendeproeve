@@ -83,9 +83,9 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             return climbingScores;
         }
 
-        //public async Task UpdateClimbingScore(string climbingCenter, bool isCompleted, bool isFlashed, string userUID)
+        //public async Task UpdateClimbingScore(string climbingCenter, bool isCompleted, bool isFlashed, string userUID, string grade)
         //{
-        //    await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").
+        //    await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document().UpdateAsync();
         //}
     }
 }

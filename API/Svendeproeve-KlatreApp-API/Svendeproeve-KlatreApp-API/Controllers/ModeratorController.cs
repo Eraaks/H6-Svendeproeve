@@ -77,9 +77,9 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         }
 
         [HttpPatch("/UpdateClimbingRoutes/{centerName}&{areaName}&{problemId}&{fieldToChange}&{newValue}")]
-        public async Task UpdateClimbingRoutes(string centerName, string areaName, string fieldToChange, string newValue, string problemId)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID, string problemId)
         {
-            await _fireStoreService.UpdateClimbingRoutes(centerName, areaName, fieldToChange, newValue, problemId);
+            await _fireStoreService.UpdateClimbingRoutes(climbingCenterName, climbingArea, changerUserUID, areaRoutes, problemId);
         }
         [HttpPatch("/UpdateClimbingArea/{centerName}&{areaName}&{fieldToChange}&{newValue}")]
         public async Task UpdateClimbingArea(string centerName, string areaName, string fieldToChange, string newValue)
