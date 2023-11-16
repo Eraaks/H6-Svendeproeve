@@ -39,7 +39,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Estimated_Grade = "2",
                 Location = "BetaBouldersSouth",
                 Total_Points = 200,
-                Send_Collections = new List<Send_Collection>(){ }
+                Send_Collections = new List<Send_Collection>(){ send_Collection }
             };
             await _fireStoreService.AddProfileData(new ProfileDataDocument
             {
