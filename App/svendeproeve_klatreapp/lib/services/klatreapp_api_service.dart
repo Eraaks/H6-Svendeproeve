@@ -33,10 +33,10 @@ class APIService {
 
     if (request.statusCode == 200) {
       await storage.write(key: 'Token', value: request.body);
-
+      var moderatorCode = await storage.read(key: 'ModeratorCode');
       var profile = await profileDataExists(user.uid);
       if (profile == false) {
-        await createProfileData(user.uid, user.email!);
+        await createProfileData(user.uid, user.email!, moderatorCode);
       }
       return true;
     } else {
@@ -199,14 +199,16 @@ class APIService {
     }
   }
 
-  Future<void> createProfileData(String userUID, String email) async {
+  Future<void> createProfileData(
+      String userUID, String email, String moderatorCode) async {
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
     };
 
     await http.post(
-        Uri.parse('${_baseUrlLocal}NewProfileDataAsync/$userUID&$email'),
+        Uri.parse(
+            '${_baseUrlLocal}NewProfileDataAsync/$userUID&$email?moderatorCode=$moderatorCode'),
         headers: headers);
   }
 

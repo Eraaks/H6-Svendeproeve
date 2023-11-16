@@ -27,6 +27,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 areaNames.Add(area.Name);
                 var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(area.Name).Document(area.Name);
                 await collection.SetAsync(area);
+                await AddClimbingRoutes(climbingCenterName, area.Name, area.AreaRoutes, "", true);
             }
 
             await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).UpdateAsync("AreaNames", areaNames);
@@ -38,7 +39,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             await centerData.SetAsync(area);
         }
 
-        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID)
+        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger)
         {
             var centerDocument = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
             var centerData = centerDocument.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
@@ -46,7 +47,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             {
                 if (center.CenterName == climbingCenterName)
                 {
-                    if (center.Moderators.Contains(changerUserUID))
+                    if (center.Moderators.Contains(changerUserUID) || systemChanger)
                     {
                         foreach (var area in areaRoutes)
                         {

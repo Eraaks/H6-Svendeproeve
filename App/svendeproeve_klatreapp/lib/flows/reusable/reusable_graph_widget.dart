@@ -59,7 +59,7 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
               final climbing = snapshot.data!;
               data = climbing.climbingHistory!
                   .firstWhere(
-                    (element) => element.location == 'BetaBoulderWest',
+                    (element) => element.location == 'BetaBouldersSouth',
                   )
                   .sendCollections!
                   .where((element) => element.sendDate! >= dateMinusTwoMonths)

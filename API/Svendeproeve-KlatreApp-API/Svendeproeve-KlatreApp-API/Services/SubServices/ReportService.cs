@@ -9,7 +9,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         public ReportService(GitHubClient gitHubClient)
         {
             _gitHubClient = gitHubClient;
-            var tokenAuth = new Credentials("");
+            var tokenAuth = new Credentials("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");
             _gitHubClient.Credentials = tokenAuth;
         }
 
