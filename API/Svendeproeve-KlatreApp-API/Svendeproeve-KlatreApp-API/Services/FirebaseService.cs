@@ -212,23 +212,23 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _workoutService.DeleteWorkout(workoutID);
         }
 
-        public async Task DeleteClimbingRoute(string centerName, string areaName, string problemId)
+        public async Task DeleteClimbingRoute(string centerName, string areaName, string problemId, string changerUserUID)
         {
-            await _klatrecentreService.DeleteClimbingRoute(centerName, areaName, problemId);
+            await _klatrecentreService.DeleteClimbingRoute(centerName, areaName, problemId, changerUserUID);
         }
-        public async Task DeleteClimbingArea(string centerName, string areaName, string problemId)
+        public async Task DeleteClimbingArea(string centerName, string areaName, string problemId, string changerUserUID)
         {
-            await _klatrecentreService.DeleteClimbingArea(centerName, areaName, problemId);
-        }
-
-        public async Task UpdateClimbingRoutes(string centerName, string areaName, string fieldToChange, string newValue, string problemId)
-        {
-            await _klatrecentreService.UpdateClimbingRoutes(centerName, areaName, fieldToChange, newValue, problemId);
+            await _klatrecentreService.DeleteClimbingArea(centerName, areaName, problemId, changerUserUID);
         }
 
-        public async Task UpdateClimbingArea(string centerName, string areaName, string fieldToChange, string newValue)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID)
         {
-            await _klatrecentreService.UpdateClimbingArea(centerName, areaName, fieldToChange, newValue);
+            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, changerUserUID);
+        }
+
+        public async Task UpdateClimbingArea(string centerName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
+        {
+            await _klatrecentreService.UpdateClimbingArea(centerName, climbingArea, fieldToChange, newValue, changerUserUID);
         }
 
 

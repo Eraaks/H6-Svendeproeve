@@ -7,7 +7,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Moderator, Admin")]
+    //[Authorize(Roles = "Moderator, Admin")]
     public class ModeratorController : ControllerBase
     {
         private readonly FirebaseService _fireStoreService;
@@ -64,27 +64,27 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         }
 
         [HttpDelete("/DeleteClimbingRoute/{climbingCenterName}&{climbingArea}&{problemId}")]
-        public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId)
+        public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-            climbingCenterName = ReplaceWSpace(climbingCenterName);
-            await _fireStoreService.DeleteClimbingRoute(climbingCenterName, climbingArea, problemId);
+           
+            await _fireStoreService.DeleteClimbingRoute(climbingCenterName, climbingArea, problemId, changerUserUID);
         }
         [HttpDelete("/DeleteClimbingArea/{climbingCenterName}&{climbingArea}&{problemId}")]
-        public async Task DeleteClimbingArea(string climbingCenterName, string climbingArea, string problemId)
+        public async Task DeleteClimbingArea(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-            climbingCenterName = ReplaceWSpace(climbingCenterName);
-            await _fireStoreService.DeleteClimbingArea(climbingCenterName, climbingArea, problemId);
+          
+            await _fireStoreService.DeleteClimbingArea(climbingCenterName, climbingArea, problemId, changerUserUID);
         }
 
-        [HttpPatch("/UpdateClimbingRoutes/{centerName}&{areaName}&{problemId}&{fieldToChange}&{newValue}")]
-        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID, string problemId)
+        [HttpPatch("/UpdateClimbingRoutes/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID)
         {
-            await _fireStoreService.UpdateClimbingRoutes(climbingCenterName, climbingArea, changerUserUID, areaRoutes, problemId);
+            await _fireStoreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, changerUserUID);
         }
-        [HttpPatch("/UpdateClimbingArea/{centerName}&{areaName}&{fieldToChange}&{newValue}")]
-        public async Task UpdateClimbingArea(string centerName, string areaName, string fieldToChange, string newValue)
+        [HttpPatch("/UpdateClimbingArea/{climbingCenterName}&{climbingArea}&{fieldToChange}&{newValue}")]
+        public async Task UpdateClimbingArea(string climbingCenterName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
         {
-            await _fireStoreService.UpdateClimbingArea(centerName, areaName, fieldToChange, newValue);
+            await _fireStoreService.UpdateClimbingArea(climbingCenterName, climbingArea, fieldToChange, newValue, changerUserUID);
         }
 
     }

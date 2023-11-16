@@ -21,7 +21,9 @@ namespace Svendeproeve_KlatreApp_API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Eraaks\Downloads\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+        //    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Eraaks\Downloads\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Skole\Firebase key\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+
 
             //var fireApp = FirebaseApp.Create(new AppOptions()
             //{

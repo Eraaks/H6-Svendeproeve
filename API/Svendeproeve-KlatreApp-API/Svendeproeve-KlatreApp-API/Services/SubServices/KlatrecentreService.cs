@@ -96,23 +96,24 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         }
         public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
-            var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+           // var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+          //  var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
-            if (centerData.Moderators.Contains(changerUserUID))
-            {
+          //  if (centerData.Moderators.Contains(changerUserUID))
+            
                 var routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("AreaRoutes").Document(problemId);
                 await routeData.DeleteAsync();
-            }
+            
+            
         }
 
         public async Task DeleteClimbingArea(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
-            var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+            //var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+            //var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
-            if (centerData.Moderators.Contains(changerUserUID))
-            {
+            //if (centerData.Moderators.Contains(changerUserUID))
+            
                 var routes = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("AreaRoutes").GetSnapshotAsync();
                 var routesData = routes.Documents.Select(s => s.ConvertTo<AreaRoutes>()).ToList();
                 foreach (var item in routesData)
@@ -121,36 +122,41 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 }
 
                 await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).DeleteAsync();
-            }
+
+            
+            
             
         }
         
 
-        public async Task UpdateClimbingRoutes(List<AreaRoutes> areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
             var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
             var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
             if (centerData.Moderators.Contains(changerUserUID))
             {
-                
-                    var routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("AreaRoutes").Document(problemId);
+                    var routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("Routes").Document(problemId);
                     await routeData.DeleteAsync();
-                    routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("AreaRoutes").Document(problemId);
+                    routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("Routes").Document(problemId);
                     await routeData.CreateAsync(areaRoutes);
-                
+
             }
+                
+            
         }
         public async Task UpdateClimbingArea(string climbingCenterName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
         {
-            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).GetSnapshotAsync();
             var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
             if (centerData.Moderators.Contains(changerUserUID))
             {
-                await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).UpdateAsync(fieldToChange, newValue);
+                await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).UpdateAsync("Name", newValue);
 
             }
+
+            
 
         }
     }

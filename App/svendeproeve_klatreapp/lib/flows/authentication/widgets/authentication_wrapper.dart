@@ -22,7 +22,10 @@ class Wrapper extends StatelessWidget {
         .replaceAll('25', '');
 
     var uri = 'https://10.0.2.2:7239/Login/$secret&$userUID';
+    print(secret);
+    print(userUID);
     var request = await http.get(Uri.parse(uri));
+    print(request.body);
 
     if (request.statusCode == 200) {
       print('Token fetched');
