@@ -20,7 +20,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<List<ClimbingScore>>? climbingScoreList;
   List<String>? followList;
-  static const String climbingCenter = 'Beta Boulder West';
+  static const String climbingCenter = 'Beta Boulders West';
   @override
   void initState() {
     super.initState();

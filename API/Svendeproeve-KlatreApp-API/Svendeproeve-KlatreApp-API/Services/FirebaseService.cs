@@ -87,9 +87,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _klatrecentreService.AddAreaToClimbingCenter(climbingCenterName, area);
         }
 
-        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID)
+        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger)
         {
-            await _klatrecentreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID);
+            await _klatrecentreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID, systemChanger);
         }
 
         public async Task<List<ClimbingCenterDocument>> GetClimbingCentre()

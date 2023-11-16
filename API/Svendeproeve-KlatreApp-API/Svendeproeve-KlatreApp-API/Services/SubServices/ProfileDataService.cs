@@ -28,7 +28,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(document.CenterName);
                 foreach(var history in climbing_History)
                 {
-                    await collection.SetAsync(climbing_History);
+                    await collection.SetAsync(history);
                     if (history.Send_Collections != null) await AddSendCollections(profileID, document.CenterName, history.Send_Collections);
                 }
             }
@@ -39,7 +39,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             foreach(var sendCollection in send_Collections)
             {
                 var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(historyID).Collection("Send_Collections").Document(sendCollection.ID);
-                await collection.SetAsync(send_Collections);
+                await collection.SetAsync(sendCollection);
             }
         }
 

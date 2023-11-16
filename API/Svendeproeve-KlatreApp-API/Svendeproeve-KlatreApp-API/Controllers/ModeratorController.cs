@@ -50,11 +50,11 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             await _fireStoreService.AddAreaToClimbingCenter(climbingCenterName, area);
         }
 
-        [HttpPost("/AddRoutesToArea/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
-        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID)
+        [HttpPost("/AddRoutesToArea/{climbingCenterName}&{climbingArea}&{changerUserUID}&{systemChanger}")]
+        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger = false)
         {
             climbingCenterName = ReplaceWSpace(climbingCenterName);
-            await _fireStoreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID);
+            await _fireStoreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID, systemChanger);
         }
 
         [HttpGet("/GetClimbingCentre/")]
