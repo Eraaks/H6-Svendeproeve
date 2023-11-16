@@ -84,11 +84,27 @@ class DataTableBuilder extends StatelessWidget {
             DataCell(
               IconButton(
                 icon: const Icon(Icons.done),
-                color: problem.isCompleted == true || problem.isFlashed == true
-                    ? Colors.green
-                    : null,
+                color:
+                    (problem.isCompleted == true || problem.isFlashed == true)
+                        ? Colors.green
+                        : null,
                 onPressed: () {
-                  problem.isCompleted = !problem.isCompleted;
+                  if (problem.isFlashed == true) {
+                    print('do nothing');
+                  } else {
+                    if (problem.isCompleted == true) {
+                      if (problem.isFlashed == false) {
+                        print('subtract for completed -5');
+                        // points -= 5;
+                      }
+                    } else {
+                      print('add for completed +5');
+                      //  points += 5;
+                    }
+
+                    problem.isCompleted = !problem.isCompleted;
+                  }
+
                   updateState();
                 },
               ),
@@ -98,6 +114,22 @@ class DataTableBuilder extends StatelessWidget {
                 icon: const Icon(Icons.done_all),
                 color: problem.isFlashed == true ? Colors.green : null,
                 onPressed: () {
+                  if (problem.isFlashed == true &&
+                      problem.isCompleted == false) {
+                    print('subtract for flash + completed -15');
+                    // points -= 15;
+                  } else if (problem.isFlashed == true) {
+                    print('subtract for flash - completed -10');
+                    // points -= 10;
+                  } else {
+                    if (problem.isCompleted == true) {
+                      print('added for flashed - completed + 10');
+                      // points += 10;
+                    } else {
+                      print('added for flashed + completed + 15');
+                      // points += 15;
+                    }
+                  }
                   problem.isFlashed = !problem.isFlashed;
                   updateState();
                 },

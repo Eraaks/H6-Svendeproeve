@@ -1,87 +1,103 @@
 class ExerciseModel {
-  final String name;
-  final String assetLocation;
-  final String benefits;
-  final String includedIn;
-  final String overallTarget;
-  final String primaryActivation;
-  final String secondaryActivation;
-  int reps;
-  int sets;
-  final HowTo? howTo;
+  late String _name;
+  late String _assetLocation;
+  late String _benefits;
+  late List<String> _includedIn;
+  late String _overallTarget;
+  late List<String> _primaryActivation;
+  late List<String> _secondaryActivation;
+  late int _reps;
+  late int _sets;
+  late HowTo? _howTo;
 
   ExerciseModel({
-    required this.name,
-    required this.assetLocation,
-    required this.benefits,
-    required this.includedIn,
-    required this.overallTarget,
-    required this.primaryActivation,
-    required this.secondaryActivation,
-    required this.reps,
-    required this.sets,
-    required this.howTo,
+    required String name,
+    required String assetLocation,
+    required String benefits,
+    required List<String> includedIn,
+    required String overallTarget,
+    required List<String> primaryActivation,
+    required List<String> secondaryActivation,
+    required int reps,
+    required int sets,
+    required HowTo howTo,
   });
+
+  String get name => _name;
+
+  set name(String? name) => _name = name!;
+
+  String get assetLocation => _assetLocation;
+  set assetLocation(String? assetLocation) => _assetLocation = assetLocation!;
+
+  String get benefits => _benefits;
+  set benefits(String? benefits) => _benefits = benefits!;
+
+  List<String> get includedIn => _includedIn;
+  set includedIn(List<String>? includedIn) => _includedIn = includedIn!;
+
+  String get overallTarget => _overallTarget;
+  set overallTarget(String? overallTarget) => _overallTarget = overallTarget!;
+
+  List<String> get primaryActivation => _primaryActivation;
+  set primaryActivation(List<String>? primaryActivation) =>
+      _primaryActivation = primaryActivation!;
+
+  List<String> get secondaryActivation => _secondaryActivation;
+  set secondaryActivation(List<String>? secondaryActivation) =>
+      _secondaryActivation = secondaryActivation!;
+
+  int get reps => _reps;
+  set reps(int? reps) => _reps = reps!;
+
+  int get sets => _sets;
+  set sets(int? sets) => _sets = sets!;
+
+  ExerciseModel.fromJson(Map<String, dynamic> json)
+      : _name = json['name'],
+        _assetLocation = json['asset_Location'],
+        _benefits = json['benefits'],
+        _includedIn = List<String>.from(json['included_In']),
+        _overallTarget = json['overall_Target'],
+        _primaryActivation = List<String>.from(json['primary_Activation']),
+        _secondaryActivation = List<String>.from(json['secondary_Activation']),
+        _reps = json['reps'],
+        _sets = json['sets'],
+        _howTo = HowTo.fromJson(json['how_To'] ?? {});
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'name': _name,
+      'asset_location': _assetLocation,
+      'benefits': _benefits,
+      'included_In': _includedIn,
+      'overall_Target': _overallTarget,
+      'primary_Activation': _primaryActivation,
+      'secondary_Activation': _secondaryActivation,
+      'reps': _reps,
+      'sets': _sets,
+      'how_To': _howTo?.toJson() ?? {},
+    };
+    return data;
+  }
 }
 
 class HowTo {
-  final String videoLink;
-  const HowTo({required this.videoLink});
-}
+  late String _videoLink;
 
-List<ExerciseModel> getAllExercises() {
-  final allExercises = [
-    ExerciseModel(
-      name: 'Pullups',
-      assetLocation: 'https://i.stack.imgur.com/AY9Xl.png',
-      benefits: '',
-      includedIn: 'Upper',
-      overallTarget: 'Upper',
-      primaryActivation: 'Lats',
-      secondaryActivation: 'Arms',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-    ExerciseModel(
-      name: 'Lunges',
-      assetLocation:
-          'https://www.inspireusafoundation.org/wp-content/uploads/2023/07/bodyweight-forward-lunge.gif',
-      benefits: '',
-      includedIn: '',
-      overallTarget: 'Legs',
-      primaryActivation: 'Quads',
-      secondaryActivation: 'Glutes',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-    ExerciseModel(
-      name: 'Test',
-      assetLocation:
-          'https://fitnessprogramer.com/wp-content/uploads/2022/08/how-to-do-pull-up.gif',
-      benefits: '',
-      includedIn: 'Upper',
-      overallTarget: 'Test3',
-      primaryActivation: 'Test1',
-      secondaryActivation: 'Test2',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-    ExerciseModel(
-      name: 'Climbing',
-      assetLocation:
-          'https://s3.amazonaws.com/www.explorersweb.com/wp-content/uploads/2022/03/25004754/ondra.jpg',
-      benefits: '',
-      includedIn: '',
-      overallTarget: 'All',
-      primaryActivation: 'Skills',
-      secondaryActivation: 'Arms',
-      reps: 0,
-      sets: 0,
-      howTo: null,
-    ),
-  ];
-  return allExercises;
+  HowTo({
+    required String videoLink,
+  });
+
+  factory HowTo.fromJson(Map<String, dynamic> json) {
+    return HowTo(
+      videoLink: json['video_Link'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'video_Link': _videoLink,
+    };
+  }
 }

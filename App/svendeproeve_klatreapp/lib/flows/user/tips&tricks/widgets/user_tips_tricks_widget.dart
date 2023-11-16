@@ -8,8 +8,7 @@ import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/models/grips_model.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
-
-final AuthService _auth = AuthService();
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class TipsTricksWidgets extends StatefulWidget {
   const TipsTricksWidgets({Key? key}) : super(key: key);
@@ -19,9 +18,17 @@ class TipsTricksWidgets extends StatefulWidget {
 }
 
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
-  List<ExerciseModel> exercises = getAllExercises();
-  //Future<List> filteredExercises = getFilteredExercises();
-  List<GripsModel> grips = getAllGrips();
+  static final APIService _apiService = APIService();
+  late Future<List<ExerciseModel>> exercises;
+  //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
+  late Future<List<GripsModel>> grips;
+
+  @override
+  void initState() {
+    super.initState();
+    grips = _apiService.getAllGrips();
+    exercises = _apiService.getAllExercises();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,89 +43,118 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(12),
-              itemCount: exercises.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(width: 12);
-              },
-              itemBuilder: (context, index) {
-                final exercise = exercises[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExercisePage(exercise: exercise),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          exercise.assetLocation,
-                          height: 150,
-                          width: 150,
-                          fit: BoxFit.cover,
+          FutureBuilder<List<ExerciseModel>>(
+            future: exercises,
+            builder: (context, exerciseSnapshot) {
+              if (exerciseSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (exerciseSnapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${exerciseSnapshot.error}'),
+                );
+              } else {
+                final exerciseList = exerciseSnapshot.data;
+                return SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.all(12),
+                    itemCount: exerciseList!.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 12);
+                    },
+                    itemBuilder: (context, index) {
+                      final exercise = exerciseList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ExercisePage(exercise: exercise),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                exercise.assetLocation,
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(exercise.name),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(exercise.primaryActivation),
-                    ],
+                      );
+                    },
                   ),
                 );
-              },
-            ),
+              }
+            },
           ),
           const Text(
             "Grips",
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(12),
-              itemCount: grips.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(width: 12);
-              },
-              itemBuilder: (context, index) {
-                final grip = grips[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => GripPage(grip: grip),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          grip.img,
-                          height: 150,
-                          width: 150,
-                          fit: BoxFit.cover,
+          FutureBuilder<List<GripsModel>>(
+            future: grips,
+            builder: (context, gripSnapshot) {
+              if (gripSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (gripSnapshot.hasError) {
+                return Center(child: Text('Error: ${gripSnapshot.error}'));
+              } else {
+                final gripList = gripSnapshot.data;
+                return SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.all(12),
+                    itemCount: gripList!.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 12);
+                    },
+                    itemBuilder: (context, index) {
+                      final grip = gripList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GripPage(grip: grip),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                grip.gripImg,
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(grip.gripName),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(grip.name),
-                    ],
+                      );
+                    },
                   ),
                 );
-              },
-            ),
+              }
+            },
           ),
         ],
       ),

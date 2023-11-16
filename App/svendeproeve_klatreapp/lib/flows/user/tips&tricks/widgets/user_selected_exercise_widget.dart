@@ -6,15 +6,13 @@ import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 
 class SelectedExercisePage extends StatefulWidget {
   final ExerciseModel exercise;
-  SelectedExercisePage({required this.exercise, super.key});
+  const SelectedExercisePage({required this.exercise, super.key});
 
   @override
   State<SelectedExercisePage> createState() => _SelectedExercisePageState();
 }
 
 class _SelectedExercisePageState extends State<SelectedExercisePage> {
-  //late HowTo howto;
-
   void _setsIncrementCounter() {
     setState(() {
       widget.exercise.sets++;
@@ -96,8 +94,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
                       const SizedBox(height: 20),
                       Center(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center, // Align text to the beginning
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             _setsCounter(),
                             _repsCounter(),

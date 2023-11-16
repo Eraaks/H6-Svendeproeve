@@ -5,14 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
+import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
+import 'package:svendeproeve_klatreapp/models/grips_model.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 
 import '../models/climbing_score.dart';
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
-  static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  // static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
+  List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
+  List<ExerciseModel> exercises = [];
   // getClimbingscore(String requestPath) async {
   //   final headers = {
   //     'Content-Type': 'application/json',
@@ -84,6 +89,63 @@ class APIService {
     }
 
     return climbingCenters;
+  }
+
+  Future<List<GripsModel>> getAllGrips() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    var request = await http.get(Uri.parse('${_baseUrlLocal}Grips/GetGrips'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      for (var i = 0; i < encodedString.length; i++) {
+        grips
+            .add(GripsModel.fromJson(encodedString[i] as Map<String, dynamic>));
+      }
+    }
+    return grips;
+  }
+
+  Future<List<ExerciseModel>> getAllExercises() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    var request = await http.get(
+        Uri.parse('${_baseUrlLocal}ExerciseController/GetExercises'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      for (var i = 0; i < encodedString.length; i++) {
+        exercises.add(
+            ExerciseModel.fromJson(encodedString[i] as Map<String, dynamic>));
+      }
+    }
+    return exercises;
+  }
+
+  Future<List<ExerciseModel>> getIncludedInExercises(musclegroup) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    var request = await http.get(
+        Uri.parse(
+            '${_baseUrlLocal}ExerciseController/GetExercisesIncludedIn/$musclegroup'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      for (var i = 0; i < encodedString.length; i++) {
+        exercises.add(
+            ExerciseModel.fromJson(encodedString[i] as Map<String, dynamic>));
+      }
+    }
+    return exercises;
   }
 
   Future<List<ClimbingScore>> getClimbingScore(String centerName) async {

@@ -18,10 +18,10 @@ namespace Svendeproeve_KlatreApp_API.Services
         private readonly ExerciseService _exerciseService;
         private readonly WorkoutService _workoutService;
         private readonly ReportService _reportService;
-        public FirebaseService(ProfileDataService profileDataService, 
-            KlatrecentreService klatrecentreService, 
-            ModeratorService moderatorService, 
-            LoginVerificationService loginVerificationService, 
+        public FirebaseService(ProfileDataService profileDataService,
+            KlatrecentreService klatrecentreService,
+            ModeratorService moderatorService,
+            LoginVerificationService loginVerificationService,
             GripsService gripsService,
             ExerciseService exerciseService,
             WorkoutService workoutService,
@@ -54,7 +54,7 @@ namespace Svendeproeve_KlatreApp_API.Services
 
         public async Task UpdateProfileData(ProfileDataDocument newProfile, string userUID)
         {
-           await _profileDataService.UpdateProfileData(newProfile, userUID);
+            await _profileDataService.UpdateProfileData(newProfile, userUID);
         }
 
         public async Task UpdateFollow(string userUID, string userToFollowUserUID)
@@ -206,5 +206,26 @@ namespace Svendeproeve_KlatreApp_API.Services
         {
             return await _reportService.GetIssues();
         }
+
+        public async Task DeleteClimbingRoute(string centerName, string areaName, string problemId, string changerUserUID)
+        {
+            await _klatrecentreService.DeleteClimbingRoute(centerName, areaName, problemId, changerUserUID);
+        }
+        public async Task DeleteClimbingArea(string centerName, string areaName, string changerUserUID)
+        {
+            await _klatrecentreService.DeleteClimbingArea(centerName, areaName , changerUserUID);
+        }
+
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
+        {
+            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea,  problemId, changerUserUID);
+        }
+
+        public async Task UpdateClimbingArea(string centerName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
+        {
+            await _klatrecentreService.UpdateClimbingArea(centerName, climbingArea, fieldToChange, newValue, changerUserUID);
+        }
+
+
     }
 }

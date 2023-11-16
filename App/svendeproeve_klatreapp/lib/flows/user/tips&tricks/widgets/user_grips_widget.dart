@@ -31,7 +31,7 @@ class GripPage extends StatelessWidget {
             ),
           ),
           Text(
-            grip.name,
+            grip.gripName,
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
@@ -47,7 +47,7 @@ class GripPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    print(grip.name);
+                    print(grip.gripName);
                   },
                   child: Column(
                     children: [
@@ -56,7 +56,7 @@ class GripPage extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            grip.img,
+                            grip.gripImg,
                             height: 400,
                             width: 400,
                             fit: BoxFit.cover,
@@ -73,7 +73,7 @@ class GripPage extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
-                            Text(grip.description),
+                            Text(grip.gripDescription),
                           ],
                         ),
                       ),
