@@ -56,7 +56,7 @@ class ExerciseModel {
 
   ExerciseModel.fromJson(Map<String, dynamic> json)
       : _name = json['name'],
-        _assetLocation = json['asset_location'],
+        _assetLocation = json['asset_Location'],
         _benefits = json['benefits'],
         _includedIn = List<String>.from(json['included_In']),
         _overallTarget = json['overall_Target'],

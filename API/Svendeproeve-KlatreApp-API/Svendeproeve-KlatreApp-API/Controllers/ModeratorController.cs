@@ -7,7 +7,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Moderator, Admin")]
+    [Authorize(Roles = "Moderator, Admin")]
     public class ModeratorController : ControllerBase
     {
         private readonly FirebaseService _fireStoreService;
