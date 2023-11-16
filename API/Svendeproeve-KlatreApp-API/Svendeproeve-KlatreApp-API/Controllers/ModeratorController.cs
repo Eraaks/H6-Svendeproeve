@@ -69,17 +69,16 @@ namespace Svendeproeve_KlatreApp_API.Controllers
            
             await _fireStoreService.DeleteClimbingRoute(climbingCenterName, climbingArea, problemId, changerUserUID);
         }
-        [HttpDelete("/DeleteClimbingArea/{climbingCenterName}&{climbingArea}&{problemId}")]
-        public async Task DeleteClimbingArea(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
+        [HttpDelete("/DeleteClimbingArea/{climbingCenterName}&{climbingArea}")]
+        public async Task DeleteClimbingArea(string climbingCenterName, string climbingArea, string changerUserUID)
         {
-          
-            await _fireStoreService.DeleteClimbingArea(climbingCenterName, climbingArea, problemId, changerUserUID);
+            await _fireStoreService.DeleteClimbingArea(climbingCenterName, climbingArea, changerUserUID);
         }
 
         [HttpPatch("/UpdateClimbingRoutes/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
-        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-            await _fireStoreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, changerUserUID);
+            await _fireStoreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, problemId, changerUserUID);
         }
         [HttpPatch("/UpdateClimbingArea/{climbingCenterName}&{climbingArea}&{fieldToChange}&{newValue}")]
         public async Task UpdateClimbingArea(string climbingCenterName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)

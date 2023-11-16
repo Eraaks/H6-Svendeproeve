@@ -211,14 +211,14 @@ namespace Svendeproeve_KlatreApp_API.Services
         {
             await _klatrecentreService.DeleteClimbingRoute(centerName, areaName, problemId, changerUserUID);
         }
-        public async Task DeleteClimbingArea(string centerName, string areaName, string problemId, string changerUserUID)
+        public async Task DeleteClimbingArea(string centerName, string areaName, string changerUserUID)
         {
-            await _klatrecentreService.DeleteClimbingArea(centerName, areaName, problemId, changerUserUID);
+            await _klatrecentreService.DeleteClimbingArea(centerName, areaName , changerUserUID);
         }
 
-        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, changerUserUID);
+            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea,  problemId, changerUserUID);
         }
 
         public async Task UpdateClimbingArea(string centerName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
