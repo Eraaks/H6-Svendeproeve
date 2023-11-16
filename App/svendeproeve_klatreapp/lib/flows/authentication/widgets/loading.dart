@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/app_nav_bar/app_nav_bar.dart';
+import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_page.dart';
+import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
@@ -34,7 +36,7 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           );
         } else if (snapshot.data == true) {
           // data loaded:
-          return const NavBarPage();
+          return isModerator ? const ModOverviewPage() : const NavBarPage();
         } else {
           return const Center(
             child: Text('Something went wrong'),
