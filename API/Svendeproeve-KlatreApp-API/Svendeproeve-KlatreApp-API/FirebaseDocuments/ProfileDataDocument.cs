@@ -33,7 +33,6 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public string Location { get; set; }
         [FirestoreProperty]
         public int Total_Points { get; set; }
-        [FirestoreProperty]
         public List<Send_Collection>? Send_Collections { get; set; }
     }
 

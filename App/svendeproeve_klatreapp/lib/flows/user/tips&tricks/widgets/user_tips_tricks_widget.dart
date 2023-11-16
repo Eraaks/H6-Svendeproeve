@@ -20,7 +20,7 @@ class TipsTricksWidgets extends StatefulWidget {
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
   late Future<List<ExerciseModel>> exercises;
-  // List<ExerciseModel> exercises = getAllExercises();
+  //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
   late Future<List<GripsModel>> grips;
 
   @override
@@ -44,18 +44,15 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             textAlign: TextAlign.center,
           ),
           FutureBuilder<List<ExerciseModel>>(
-            future:
-                exercises, // Assuming 'exercises' is a Future that retrieves a list of ExerciseModel objects
+            future: exercises,
             builder: (context, exerciseSnapshot) {
               if (exerciseSnapshot.connectionState == ConnectionState.waiting) {
                 return Center(
-                  child:
-                      CircularProgressIndicator(), // Loading indicator in the center.
+                  child: CircularProgressIndicator(),
                 );
               } else if (exerciseSnapshot.hasError) {
                 return Center(
-                  child: Text(
-                      'Error: ${exerciseSnapshot.error}'), // Handle error state in the center.
+                  child: Text('Error: ${exerciseSnapshot.error}'),
                 );
               } else {
                 final exerciseList = exerciseSnapshot.data;
@@ -109,19 +106,12 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             textAlign: TextAlign.center,
           ),
           FutureBuilder<List<GripsModel>>(
-            future:
-                grips, // Assuming 'grips' is a Future that retrieves a list of GripsModel objects
+            future: grips,
             builder: (context, gripSnapshot) {
               if (gripSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                    child:
-                        CircularProgressIndicator() // Loading indicator in the center.
-                    );
+                return Center(child: CircularProgressIndicator());
               } else if (gripSnapshot.hasError) {
-                return Center(
-                    child: Text(
-                        'Error: ${gripSnapshot.error}') // Handle error state in the center.
-                    );
+                return Center(child: Text('Error: ${gripSnapshot.error}'));
               } else {
                 final gripList = gripSnapshot.data;
                 return SizedBox(

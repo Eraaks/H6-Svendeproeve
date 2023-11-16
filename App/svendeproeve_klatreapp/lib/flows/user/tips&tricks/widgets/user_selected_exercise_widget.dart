@@ -13,8 +13,6 @@ class SelectedExercisePage extends StatefulWidget {
 }
 
 class _SelectedExercisePageState extends State<SelectedExercisePage> {
-  //late HowTo howto;
-
   void _setsIncrementCounter() {
     setState(() {
       widget.exercise.sets++;
@@ -96,8 +94,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
                       const SizedBox(height: 20),
                       Center(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center, // Align text to the beginning
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             _setsCounter(),
                             _repsCounter(),

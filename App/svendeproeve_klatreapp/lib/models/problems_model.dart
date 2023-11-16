@@ -21,6 +21,21 @@ class ProblemsModel {
       required this.color,
       required this.isFlashed,
       required this.isCompleted});
+
+  ProblemsModel copy({String? grade}) => ProblemsModel(
+      grade: grade ?? this.grade,
+      color: color,
+      isCompleted: isCompleted,
+      isFlashed: isFlashed);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProblemsModel &&
+          runtimeType == other.runtimeType &&
+          grade == other.grade;
+  @override
+  int get hashCode => grade.hashCode;
 }
 
 List<ClimbingAreaModel> getAllClimbingAreas() {
