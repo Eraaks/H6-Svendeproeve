@@ -153,10 +153,40 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             {
                 await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).UpdateAsync("Name", newValue);
 
-            }
-
-            
+            }           
 
         }
+        public async Task<List<Areas>> GetSelectedClimbingCenter(string climbingCenterName)
+        {
+            List<Areas> areas = new List<Areas>();
+
+            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+            var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+
+            if (centerData.AreaNames != null)
+            {
+                foreach (var areaName in centerData.AreaNames)
+                {
+                    var areaDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).GetSnapshotAsync();
+                    var areaData = areaDocument.Select(a => a.ConvertTo<Areas>()).ToList();
+
+                    foreach (var area in areaData)
+                    {
+                        var routesDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(area.Name).Collection("Routes").GetSnapshotAsync();
+                        var routesData = routesDocument.Select(r => r.ConvertTo<AreaRoutes>()).ToList();
+
+                        if (routesData.Count != 0)
+                        {
+                            area.AreaRoutes = routesData;
+                        }
+
+                        areas.Add(area);
+                    }
+                }
+            }
+
+            return areas;
+        }
+
     }
 }
