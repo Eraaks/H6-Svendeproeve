@@ -153,10 +153,45 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             {
                 await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).UpdateAsync("Name", newValue);
 
-            }
-
-            
+            }           
 
         }
+        public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
+        {
+            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+            var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+
+           
+                List<Areas> area = new List<Areas>();
+
+                if (centerData.AreaNames != null)
+                {
+                    foreach (var areaName in centerData.AreaNames)
+                    {
+                        List<AreaRoutes> areaRoutes = new List<AreaRoutes>();
+                        var areaDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).GetSnapshotAsync();
+                        var areaData = areaDocument.Select(a => a.ConvertTo<Areas>()).ToList();
+
+                        foreach (var areas in areaData)
+                        {
+                            var routesDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").GetSnapshotAsync();
+                            var routesData = routesDocument.Select(r => r.ConvertTo<AreaRoutes>()).ToList();
+                            if (routesData.Count != 0)
+                            {
+                                areaRoutes.AddRange(routesData);
+                                areas.AreaRoutes = areaRoutes;
+                            }
+                        }
+
+                        area.AddRange(areaData);
+                    }
+                }
+
+                centerData.Areas = area;
+                centerData.CenterName = Regex.Replace(centerData.CenterName, "([a-z])([A-Z])", "$1 $2");
+
+            return centerData;
+        }
+
     }
 }

@@ -98,5 +98,11 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             climbingCenter = climbingCenter.Replace(" ", "");
             return await _fireStoreService.GetClimbingScores(climbingCenter);
         }
+
+        [HttpGet("/GetSelectedClimbingCenter/{climbingCenterName}")]
+        public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
+        {
+            return await _fireStoreService.GetSelectedClimbingCenter(climbingCenterName);
+        }
     }
 }

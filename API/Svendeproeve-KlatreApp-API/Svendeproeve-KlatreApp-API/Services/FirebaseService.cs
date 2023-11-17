@@ -226,6 +226,10 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _klatrecentreService.UpdateClimbingArea(centerName, climbingArea, fieldToChange, newValue, changerUserUID);
         }
 
+        public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
+        {
+            return await _klatrecentreService.GetSelectedClimbingCenter(climbingCenterName);
+        }
 
     }
 }
