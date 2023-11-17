@@ -23,7 +23,7 @@ class _ExercisePageState extends State<ExercisePage> {
   void initState() {
     super.initState();
     includedIn =
-        _apiService.getIncludedInExercises(widget.exercise.primaryActivation);
+        _apiService.getIncludedInExercises(widget.exercise.overallTarget);
   }
 
   @override
@@ -53,88 +53,88 @@ class _ExercisePageState extends State<ExercisePage> {
             textAlign: TextAlign.center,
           ),
           FutureBuilder(
-              future: includedIn,
-              builder: (context, includedInSnapshot) {
-                if (includedInSnapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (includedInSnapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${includedInSnapshot.error}'),
-                  );
-                } else {
-                  final includedInList = includedInSnapshot.data;
-                  return SizedBox(
-                    height: 700,
-                    child: ListView.separated(
-                      scrollDirection: Axis.vertical,
-                      padding: const EdgeInsets.all(12),
-                      itemCount: includedInList!.length,
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(width: 12);
-                      },
-                      itemBuilder: (context, index) {
-                        final exercise = includedInList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    SelectedExercisePage(exercise: exercise),
-                              ),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: topBackgroundColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
+            future: includedIn,
+            builder: (context, includedInSnapshot) {
+              if (includedInSnapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (includedInSnapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${includedInSnapshot.error}'),
+                );
+              } else {
+                final includedInList = includedInSnapshot.data;
+                return SizedBox(
+                  height: 700,
+                  child: ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.all(12),
+                    itemCount: includedInList!.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 12);
+                    },
+                    itemBuilder: (context, index) {
+                      final exercise = includedInList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SelectedExercisePage(exercise: exercise),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: topBackgroundColor,
+                                    width: 2,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(5),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Image.network(
-                                            exercise.assetLocation,
-                                            height: 150,
-                                            width: 150,
-                                            fit: BoxFit.cover,
-                                          ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.network(
+                                          exercise.assetLocation,
+                                          height: 150,
+                                          width: 150,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      const SizedBox(height: 20),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(exercise.name),
-                                          Text(exercise.name),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(exercise.name),
+                                        Text(exercise.benefits),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }
-              })
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          )
         ],
       ),
     );

@@ -90,7 +90,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text(exercise.name),
+                            Text(exercise.overallTarget),
                           ],
                         ),
                       );
