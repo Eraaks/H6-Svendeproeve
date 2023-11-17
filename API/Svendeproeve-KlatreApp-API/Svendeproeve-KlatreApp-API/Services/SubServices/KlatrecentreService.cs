@@ -156,13 +156,12 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             }           
 
         }
-        public async Task<List<ClimbingCenterDocument>> GetSelectedClimbingCenter(string climbingCenterName)
+        public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
         {
             var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
             var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
-            if (centerData != null)
-            {
+           
                 List<Areas> area = new List<Areas>();
 
                 if (centerData.AreaNames != null)
@@ -191,11 +190,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 centerData.Areas = area;
                 centerData.CenterName = Regex.Replace(centerData.CenterName, "([a-z])([A-Z])", "$1 $2");
 
-         
-                return new List<ClimbingCenterDocument> { centerData };
-            }
-
-            return new List<ClimbingCenterDocument>();
+            return centerData;
         }
 
     }

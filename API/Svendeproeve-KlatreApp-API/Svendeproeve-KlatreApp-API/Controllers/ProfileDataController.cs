@@ -100,7 +100,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         }
 
         [HttpGet("/GetSelectedClimbingCenter/{climbingCenterName}")]
-        public async Task<List<ClimbingCenterDocument>> GetSelectedClimbingCenter(string climbingCenterName)
+        public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
         {
             return await _fireStoreService.GetSelectedClimbingCenter(climbingCenterName);
         }
