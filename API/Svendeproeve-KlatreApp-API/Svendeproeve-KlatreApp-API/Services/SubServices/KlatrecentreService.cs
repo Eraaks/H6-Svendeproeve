@@ -156,36 +156,46 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             }           
 
         }
-        public async Task<List<Areas>> GetSelectedClimbingCenter(string climbingCenterName)
+        public async Task<List<ClimbingCenterDocument>> GetSelectedClimbingCenter(string climbingCenterName)
         {
-            List<Areas> areas = new List<Areas>();
-
             var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
             var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
-            if (centerData.AreaNames != null)
+            if (centerData != null)
             {
-                foreach (var areaName in centerData.AreaNames)
+                List<Areas> area = new List<Areas>();
+
+                if (centerData.AreaNames != null)
                 {
-                    var areaDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).GetSnapshotAsync();
-                    var areaData = areaDocument.Select(a => a.ConvertTo<Areas>()).ToList();
-
-                    foreach (var area in areaData)
+                    foreach (var areaName in centerData.AreaNames)
                     {
-                        var routesDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(area.Name).Collection("Routes").GetSnapshotAsync();
-                        var routesData = routesDocument.Select(r => r.ConvertTo<AreaRoutes>()).ToList();
+                        List<AreaRoutes> areaRoutes = new List<AreaRoutes>();
+                        var areaDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).GetSnapshotAsync();
+                        var areaData = areaDocument.Select(a => a.ConvertTo<Areas>()).ToList();
 
-                        if (routesData.Count != 0)
+                        foreach (var areas in areaData)
                         {
-                            area.AreaRoutes = routesData;
+                            var routesDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").GetSnapshotAsync();
+                            var routesData = routesDocument.Select(r => r.ConvertTo<AreaRoutes>()).ToList();
+                            if (routesData.Count != 0)
+                            {
+                                areaRoutes.AddRange(routesData);
+                                areas.AreaRoutes = areaRoutes;
+                            }
                         }
 
-                        areas.Add(area);
+                        area.AddRange(areaData);
                     }
                 }
+
+                centerData.Areas = area;
+                centerData.CenterName = Regex.Replace(centerData.CenterName, "([a-z])([A-Z])", "$1 $2");
+
+         
+                return new List<ClimbingCenterDocument> { centerData };
             }
 
-            return areas;
+            return new List<ClimbingCenterDocument>();
         }
 
     }
