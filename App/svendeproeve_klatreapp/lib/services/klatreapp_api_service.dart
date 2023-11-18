@@ -283,4 +283,50 @@ class APIService {
         Uri.parse('${_baseUrlLocal}CreateIssue/$title&$description&$isBug'),
         headers: headers);
   }
+
+  Future<List<Areas>> getCenterRoutes(String centerName) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    var request = await http.get(
+        Uri.parse('${_baseUrlLocal}GetCenterRoutes/$centerName'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      List<Areas> areas = [];
+      for (var i = 0; i < encodedString.length; i++) {
+        areas.add(Areas.fromJson(encodedString[i] as Map<String, dynamic>));
+      }
+      return areas;
+    } else {
+      return [];
+    }
+  }
+
+  Future<void> updateRouteCompleters(String climbingCenterName, String areaName,
+      String routeID, String userUID, bool flashed) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    await http.patch(
+        Uri.parse(
+            '${_baseUrlLocal}UpdateRouteCompleters/$climbingCenterName&$areaName&$routeID&$userUID&$flashed'),
+        headers: headers);
+  }
+
+  Future<void> submitUserClimb(String userUID, String climbingCenterName,
+      String areaName, String grade, bool flash, String problemID) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    await http.post(
+        Uri.parse(
+            '${_baseUrlLocal}SubmitUserClimb/$userUID&$climbingCenterName&$areaName&$grade&$problemID?flash=$flash'),
+        headers: headers);
+  }
 }

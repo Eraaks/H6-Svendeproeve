@@ -1,33 +1,31 @@
 class ClimbingCenter {
-  late String _centerName;
-  late String _description;
-  late String _location;
-  late String _moderatorCode;
+  String? _centerName;
+  String? _description;
+  String? _location;
+  String? _moderatorCode;
   List<String>? _moderators;
   List<String>? _areaNames;
   List<Areas>? _areas;
 
   ClimbingCenter(
-      {required String centerName,
-      required String description,
-      required String location,
-      required String moderatorCode,
+      {String? centerName,
+      String? description,
+      String? location,
+      String? moderatorCode,
       List<String>? moderators,
       List<String>? areaNames,
-      List<Areas>? areas,
-      required String country,
-      required String place}) {
+      List<Areas>? areas}) {
     if (centerName != null) {
-      _centerName = centerName;
+      this._centerName = centerName;
     }
     if (description != null) {
-      _description = description;
+      this._description = description;
     }
     if (location != null) {
-      _location = location;
+      this._location = location;
     }
     if (moderatorCode != null) {
-      _moderatorCode = moderatorCode;
+      this._moderatorCode = moderatorCode;
     }
     if (moderators != null) {
       this._moderators = moderators;
@@ -40,14 +38,14 @@ class ClimbingCenter {
     }
   }
 
-  String get centerName => _centerName;
-  set centerName(String? centerName) => _centerName = centerName!;
-  String get description => _description;
-  set description(String? description) => _description = description!;
-  String get location => _location;
-  set location(String? location) => _location = location!;
-  String get moderatorCode => _moderatorCode;
-  set moderatorCode(String? moderatorCode) => _moderatorCode = moderatorCode!;
+  String? get centerName => _centerName;
+  set centerName(String? centerName) => _centerName = centerName;
+  String? get description => _description;
+  set description(String? description) => _description = description;
+  String? get location => _location;
+  set location(String? location) => _location = location;
+  String? get moderatorCode => _moderatorCode;
+  set moderatorCode(String? moderatorCode) => _moderatorCode = moderatorCode;
   List<String>? get moderators => _moderators;
   set moderators(List<String>? moderators) => _moderators = moderators;
   List<String>? get areaNames => _areaNames;
@@ -132,32 +130,72 @@ class Areas {
 }
 
 class AreaRoutes {
+  String? _id;
   String? _color;
   String? _grade;
+  List<String>? _usersWhoCompleted;
+  List<String>? _usersWhoFlashed;
+  int? _number;
 
-  AreaRoutes({String? color, String? grade}) {
+  AreaRoutes(
+      {String? id,
+      String? color,
+      String? grade,
+      List<String>? usersWhoCompleted,
+      List<String>? usersWhoFlashed,
+      int? number}) {
+    if (id != null) {
+      this._id = id;
+    }
     if (color != null) {
       this._color = color;
     }
     if (grade != null) {
       this._grade = grade;
     }
+    if (usersWhoCompleted != null) {
+      this._usersWhoCompleted = usersWhoCompleted;
+    }
+    if (usersWhoFlashed != null) {
+      this._usersWhoFlashed = usersWhoFlashed;
+    }
+    if (number != null) {
+      this._number = number;
+    }
   }
 
+  String? get id => _id;
+  set id(String? id) => _id = id;
   String? get color => _color;
   set color(String? color) => _color = color;
   String? get grade => _grade;
   set grade(String? grade) => _grade = grade;
+  List<String>? get usersWhoCompleted => _usersWhoCompleted;
+  set usersWhoCompleted(List<String>? usersWhoCompleted) =>
+      _usersWhoCompleted = usersWhoCompleted;
+  List<String>? get usersWhoFlashed => _usersWhoFlashed;
+  set usersWhoFlashed(List<String>? usersWhoFlashed) =>
+      _usersWhoFlashed = usersWhoFlashed;
+  int? get number => _number;
+  set number(int? number) => _number = number;
 
   AreaRoutes.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
     _color = json['color'];
     _grade = json['grade'];
+    _usersWhoCompleted = json['usersWhoCompleted'].cast<String>();
+    _usersWhoFlashed = json['usersWhoFlashed'].cast<String>();
+    _number = json['number'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this._id;
     data['color'] = this._color;
     data['grade'] = this._grade;
+    data['usersWhoCompleted'] = this._usersWhoCompleted;
+    data['usersWhoFlashed'] = this._usersWhoFlashed;
+    data['number'] = this._number;
     return data;
   }
 }

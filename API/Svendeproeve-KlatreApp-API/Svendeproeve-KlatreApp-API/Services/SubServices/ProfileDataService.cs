@@ -146,10 +146,112 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
             return climbingScores;
         }
+        public async Task SubmitUserClimb(string userUID, string climbingCenterName, string areaName, string grade, bool flash, string problemID)
+        {
+            var newSendCollection = new Send_Collection()
+            {
+                ID = problemID,
+                Area = areaName,
+                Grade = grade.Replace("Plus", "+"),
+                Points = CalculatePoints(grade) + (flash ? 17 : 0),
+                Tries = flash ? 1 : 2,
+                SendDate = DateTime.Today.Ticks
+            };
 
-        //public async Task UpdateClimbingScore(string climbingCenter, bool isCompleted, bool isFlashed, string userUID, string grade)
-        //{
-        //    await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document().UpdateAsync();
-        //}
+            await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(problemID).SetAsync(newSendCollection);
+        }
+
+        private int CalculatePoints(string grade)
+        {
+            switch(grade)
+            {
+                case "2":
+                    return 200;
+
+                case "3":
+                    return 300;
+
+                case "4":
+                    return 400;
+
+                case "4Plus":
+                    return 433;
+
+                case "5":
+                    return 500;
+
+                case "5Plus":
+                    return 550;
+
+                case "6A":
+                    return 600;
+
+                case "6APlus":
+                    return 617;
+
+                case "6B":
+                    return 633;
+
+                case "6BPlus":
+                    return 650;
+
+                case "6C":
+                    return 667;
+
+                case "6CPlus":
+                    return 683;
+
+                case "7A":
+                    return 700;
+
+                case "7APlus":
+                    return 717;
+
+                case "7B":
+                    return 733;
+
+                case "7BPlus":
+                    return 750;
+
+                case "7C":
+                    return 767;
+
+                case "7CPlus":
+                    return 783;
+
+                case "8A":
+                    return 800;
+
+                case "8APlus":
+                    return 817;
+
+                case "8B":
+                    return 833;
+
+                case "8BPlus":
+                    return 850;
+
+                case "8C":
+                    return 867;
+
+                case "8CPlus":
+                    return 883;
+
+                case "9A":
+                    return 900;
+
+                case "9APlus":
+                    return 917;
+
+                case "9B":
+                    return 933;
+
+                case "9BPlus":
+                    return 950;
+
+                default:
+                    return 0;
+            }
+        }
     }
 }
