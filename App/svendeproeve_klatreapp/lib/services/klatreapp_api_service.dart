@@ -13,8 +13,8 @@ import '../models/climbing_score.dart';
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
-  // static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
-  static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
+  static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  // static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
@@ -33,7 +33,7 @@ class APIService {
         .replaceAll('!', '%21')
         .replaceAll('25', '');
 
-    var uri = 'https://10.0.2.2:44380/Login/$secret&${user.uid}';
+    var uri = '${_baseUrlLocal}Login/$secret&${user.uid}';
     var request = await http.get(Uri.parse(uri));
 
     if (request.statusCode == 200) {
