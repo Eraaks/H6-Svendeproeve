@@ -121,8 +121,8 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                           itemBuilder: (context, index) {
                             final center = items[index];
                             return ListTile(
-                                title: Text(center.centerName),
-                                subtitle: Text(center.location),
+                                title: Text(center.centerName!),
+                                subtitle: Text(center.location!),
                                 onTap: () {
                                   Navigator.of(context).pop(center.location);
                                 });
