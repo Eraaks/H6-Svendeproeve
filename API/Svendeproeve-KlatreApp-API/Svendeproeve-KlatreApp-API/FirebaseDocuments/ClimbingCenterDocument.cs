@@ -41,9 +41,21 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
     public class AreaRoutes
     {
         [FirestoreProperty]
+        public string ID { get; set; }
+
+        [FirestoreProperty]
         public string Color { get; set; }
 
         [FirestoreProperty]
         public string Grade { get; set; }
+
+        [FirestoreProperty]
+        public List<string> UsersWhoCompleted { get; set; }
+
+        [FirestoreProperty]
+        public List<string> UsersWhoFlashed { get; set; }
+
+        [FirestoreProperty]
+        public int Number { get; set; }
     }
 }

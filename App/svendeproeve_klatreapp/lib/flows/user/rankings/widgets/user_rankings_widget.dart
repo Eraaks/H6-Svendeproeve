@@ -92,7 +92,6 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
           subtitle:
               Text('Rank: ${snapshotData.rank}, Score: ${snapshotData.score}'),
           children: [
-            const Text('Du lugter af lort'),
             TextButton(
                 onPressed: () {
                   Navigator.push(

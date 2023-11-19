@@ -146,10 +146,225 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
             return climbingScores;
         }
+        public async Task SubmitUserClimb(string userUID, string climbingCenterName, string areaName, string grade, bool flash, string problemID)
+        {
+            var newSendCollection = new Send_Collection()
+            {
+                ID = problemID,
+                Area = areaName,
+                Grade = grade.Replace("Plus", "+"),
+                Points = CalculatePoints(grade) + (flash ? 17 : 0),
+                Tries = flash ? 1 : 2,
+                SendDate = DateTime.Today.Ticks
+            };
 
-        //public async Task UpdateClimbingScore(string climbingCenter, bool isCompleted, bool isFlashed, string userUID, string grade)
-        //{
-        //    await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document().UpdateAsync();
-        //}
+            await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(problemID).SetAsync(newSendCollection);
+
+            await UpdateTotalPointsAndEstimatedGrade(userUID, climbingCenterName);
+        }
+
+        private int CalculatePoints(string grade)
+        {
+            switch(grade)
+            {
+                case "2":
+                    return 200;
+
+                case "3":
+                    return 300;
+
+                case "4":
+                    return 400;
+
+                case "4Plus":
+                    return 433;
+
+                case "5":
+                    return 500;
+
+                case "5Plus":
+                    return 550;
+
+                case "6A":
+                    return 600;
+
+                case "6APlus":
+                    return 617;
+
+                case "6B":
+                    return 633;
+
+                case "6BPlus":
+                    return 650;
+
+                case "6C":
+                    return 667;
+
+                case "6CPlus":
+                    return 683;
+
+                case "7A":
+                    return 700;
+
+                case "7APlus":
+                    return 717;
+
+                case "7B":
+                    return 733;
+
+                case "7BPlus":
+                    return 750;
+
+                case "7C":
+                    return 767;
+
+                case "7CPlus":
+                    return 783;
+
+                case "8A":
+                    return 800;
+
+                case "8APlus":
+                    return 817;
+
+                case "8B":
+                    return 833;
+
+                case "8BPlus":
+                    return 850;
+
+                case "8C":
+                    return 867;
+
+                case "8CPlus":
+                    return 883;
+
+                case "9A":
+                    return 900;
+
+                case "9APlus":
+                    return 917;
+
+                case "9B":
+                    return 933;
+
+                case "9BPlus":
+                    return 950;
+
+                default:
+                    return 0;
+            }
+        }
+
+        private async Task UpdateTotalPointsAndEstimatedGrade(string userUID, string climbingCenterName)
+        {
+            var sendCollectionDocuments = await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").GetSnapshotAsync();
+            var sendCollectionData = sendCollectionDocuments.Documents.Select(s => s.ConvertTo<Send_Collection>()).ToList();
+            int totalNumberOfCollections = sendCollectionData.Count;
+            int totalPoints = 0;
+
+            foreach(var send in sendCollectionData)
+            {
+                totalPoints += send.Points;
+            }
+
+            totalPoints = totalPoints / totalNumberOfCollections;
+            string estimatedGrade = CalculateGrade(totalPoints);
+            await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).UpdateAsync("Total_Points", totalPoints);
+            await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).UpdateAsync("Estimated_Grade", estimatedGrade);
+        }
+
+        private string CalculateGrade(int points)
+        {
+            switch (points)
+            {
+                case int i when i < 300:
+                    return "2";
+
+                case int i when i >= 300 && i < 400:
+                    return "3";
+
+                case int i when i >= 400 && i < 433:
+                    return "4";
+
+                case int i when i >= 433 && i < 500:
+                    return "4+";
+
+                case int i when i >= 500 && i < 550:
+                    return "5";
+
+                case int i when i >= 550 && i < 600:
+                    return "5+";
+
+                case int i when i >= 600 && i < 617:
+                    return "6A";
+
+                case int i when i >= 617 && i < 633:
+                    return "6A+";
+
+                case int i when i >= 633 && i < 650:
+                    return "6B";
+
+                case int i when i >= 650 && i < 667:
+                    return "6B+";
+
+                case int i when i >= 667 && i < 683:
+                    return "6C";
+
+                case int i when i >= 683 && i < 700:
+                    return "6C+";
+
+                case int i when i >= 700 && i < 717:
+                    return "7A";
+
+                case int i when i >= 717 && i < 733:
+                    return "7A+";
+
+                case int i when i >= 733 && i < 750:
+                    return "7B";
+
+                case int i when i >= 750 && i < 767:
+                    return "7B+";
+
+                case int i when i >= 767 && i < 783:
+                    return "7C";
+
+                case int i when i >= 783 && i < 800:
+                    return "7C+";
+
+                case int i when i >= 800 && i < 817:
+                    return "8A";
+
+                case int i when i >= 817 && i < 833:
+                    return "8A+";
+
+                case int i when i >= 833 && i < 850:
+                    return "8B";
+
+                case int i when i >= 850 && i < 867:
+                    return "8B+";
+
+                case int i when i >= 867 && i < 883:
+                    return "8C";
+
+                case int i when i >= 883 && i < 900:
+                    return "8C+";
+
+                case int i when i >= 900 && i < 917:
+                    return "9A";
+
+                case int i when i >= 917 && i < 933:
+                    return "9A+";
+
+                case int i when i >= 933 && i < 950:
+                    return "9B";
+
+                case int i when i >= 950:
+                    return "9B+";
+
+                default:
+                    return "Ungrated";
+            }
+        }
     }
 }

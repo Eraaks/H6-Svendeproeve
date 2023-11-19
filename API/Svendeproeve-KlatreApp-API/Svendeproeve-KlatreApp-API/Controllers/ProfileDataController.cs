@@ -27,10 +27,10 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             Send_Collection send_Collection = new Send_Collection()
             {
                 ID = Guid.NewGuid().ToString(),
-                Area = "",
-                Grade = "",
+                Area = "BetaBouldersSouth",
+                Grade = "2",
                 Points = 200,
-                Tries = 0,
+                Tries = 2,
                 SendDate = DateTime.Today.Ticks,
             };
             Climbing_History history = new Climbing_History()
@@ -103,6 +103,12 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
         {
             return await _fireStoreService.GetSelectedClimbingCenter(climbingCenterName);
+        }
+        [HttpPost("/SubmitUserClimb/{userUID}&{climbingCenterName}&{areaName}&{grade}&{problemID}")]
+        public async Task SubmitUserClimb(string userUID, string climbingCenterName, string areaName, string grade, bool flash, string problemID)
+        {
+           climbingCenterName = climbingCenterName.Replace(" ", "");
+           await _fireStoreService.SubmitUserClimb(userUID, climbingCenterName, areaName, grade, flash, problemID);
         }
     }
 }
