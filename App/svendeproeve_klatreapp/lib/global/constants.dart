@@ -14,4 +14,4 @@ const textInputDecoration = InputDecoration(
     borderSide: BorderSide(color: Colors.pink, width: 2.0),
   ),
 );
-const bool isModerator = false;
+const bool isModerator = true;
