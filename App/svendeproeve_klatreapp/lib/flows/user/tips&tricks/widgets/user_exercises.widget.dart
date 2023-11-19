@@ -18,11 +18,12 @@ class ExercisePage extends StatefulWidget {
 
 class _ExercisePageState extends State<ExercisePage> {
   static final APIService _apiService = APIService();
-  Future<List<ExerciseModel>>? includedIn;
+  late Future<List<ExerciseModel>>? includedIn;
 
   @override
   void initState() {
     super.initState();
+
     includedIn =
         _apiService.getIncludedInExercises(widget.exercise.overallTarget);
   }
@@ -69,7 +70,6 @@ class _ExercisePageState extends State<ExercisePage> {
                 );
               } else if (includedInSnapshot.hasData) {
                 final includedInList = includedInSnapshot.data;
-                print(includedInList);
                 return SizedBox(
                   height: 700,
                   child: ListView.separated(
