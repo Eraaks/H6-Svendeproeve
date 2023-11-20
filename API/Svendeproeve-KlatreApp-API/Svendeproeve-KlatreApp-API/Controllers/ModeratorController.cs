@@ -63,24 +63,24 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             return await _fireStoreService.GetClimbingCentre();
         }
 
-        [HttpDelete("/DeleteClimbingRoute/{climbingCenterName}&{climbingArea}&{problemId}")]
+        [HttpDelete("/DeleteClimbingRoute/{climbingCenterName}&{climbingArea}&{problemId}&{changerUserUID}")]
         public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
            
             await _fireStoreService.DeleteClimbingRoute(climbingCenterName, climbingArea, problemId, changerUserUID);
         }
-        [HttpDelete("/DeleteClimbingArea/{climbingCenterName}&{climbingArea}")]
+        [HttpDelete("/DeleteClimbingArea/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
         public async Task DeleteClimbingArea(string climbingCenterName, string climbingArea, string changerUserUID)
         {
             await _fireStoreService.DeleteClimbingArea(climbingCenterName, climbingArea, changerUserUID);
         }
 
-        [HttpPatch("/UpdateClimbingRoutes/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
+        [HttpPatch("/UpdateClimbingRoutes/{climbingCenterName}&{climbingArea}&{problemId}&{changerUserUID}")]
         public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
             await _fireStoreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, problemId, changerUserUID);
         }
-        [HttpPatch("/UpdateClimbingArea/{climbingCenterName}&{climbingArea}&{fieldToChange}&{newValue}")]
+        [HttpPatch("/UpdateClimbingArea/{climbingCenterName}&{climbingArea}&{fieldToChange}&{newValue}&{changerUserUID}")]
         public async Task UpdateClimbingArea(string climbingCenterName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
         {
             await _fireStoreService.UpdateClimbingArea(climbingCenterName, climbingArea, fieldToChange, newValue, changerUserUID);

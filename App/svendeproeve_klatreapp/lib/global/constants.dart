@@ -15,3 +15,13 @@ const textInputDecoration = InputDecoration(
   ),
 );
 const bool isModerator = true;
+
+Map<String, Color> colorMap = {
+  'Color red': Colors.red,
+  'Color blue': Colors.blue,
+  'Color green': Colors.green,
+  'Color black': Colors.black,
+  'Color yellow': Colors.yellow,
+  'Color teal': Colors.teal,
+  'Color purple': Colors.purple,
+};

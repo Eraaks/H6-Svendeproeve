@@ -330,4 +330,74 @@ class APIService {
             '${_baseUrlLocal}SubmitUserClimb/$userUID&$climbingCenterName&$areaName&$grade&$problemID?flash=$flash'),
         headers: headers);
   }
+
+  Future<void> updateClimbingArea(
+      String climbingCenterName,
+      String climbingArea,
+      String userUID,
+      String fieldToChange,
+      String newValue) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    await http.patch(
+        Uri.parse(
+            '${_baseUrlLocal}UpdateClimbingArea/$userUID&$climbingCenterName&$climbingArea&$fieldToChange&$newValue'),
+        headers: headers);
+  }
+
+  Future<void> updateClimbingRoute(
+    String climbingCenterName,
+    String climbingArea,
+    String userUID,
+    String problemID,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+    await http.patch(
+        Uri.parse(
+            '${_baseUrlLocal}UpdateClimbingArea/$userUID&$climbingCenterName&$climbingArea&$problemID'),
+        headers: headers);
+  }
+
+  Future<bool> deleteClimbingArea(
+      String userUID, String climbingCenterName, String climbingArea) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    var request = await http.delete(
+        Uri.parse(
+            '${_baseUrlLocal}DeleteClimbingArea/$userUID&$climbingCenterName&$climbingCenterName'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<bool> deleteClimbingRoute(String userUID, String climbingCenterName,
+      String climbingArea, String problemID) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    var request = await http.delete(
+        Uri.parse(
+            '${_baseUrlLocal}DeleteClimbingArea/$userUID&$climbingCenterName&$climbingCenterName&$problemID'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
