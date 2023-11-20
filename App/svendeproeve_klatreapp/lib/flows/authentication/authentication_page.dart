@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/register.dart';
-import 'package:svendeproeve_klatreapp/flows/authentication/register2.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/sign_in.dart';
-import 'package:svendeproeve_klatreapp/flows/authentication/sign_in2.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});
