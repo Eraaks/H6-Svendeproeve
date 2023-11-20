@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/register.dart';
-import 'package:svendeproeve_klatreapp/flows/authentication/register2.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/sign_in.dart';
 
 class Authenticate extends StatefulWidget {
@@ -20,9 +19,9 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     if (showSignIn) {
-      return SignIn(toggleView: toggleView);
+      return SignInPage(toggleView: toggleView);
     } else {
-      return SignInPage2(
+      return SignUpPage(
         toggleView: toggleView,
       );
       // return Register(toggleView: toggleView);

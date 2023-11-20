@@ -11,6 +11,19 @@ import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 
 import '../models/climbing_score.dart';
 
+class TokenResult {
+  final bool success;
+  final String selectedGym;
+
+  TokenResult({required this.success, required this.selectedGym});
+}
+
+extension StringExtensions on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
+}
+
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
   //static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
@@ -18,15 +31,8 @@ class APIService {
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
-  // getClimbingscore(String requestPath) async {
-  //   final headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-  //   };
-  //   return http.get(Uri.parse(_baseUrlLocal + requestPath), headers: headers);
-  // }
 
-  Future<bool> GetAPIToken(storage, User user) async {
+  Future<TokenResult> GetAPIToken(storage, User user) async {
     String secret = await storage.read(key: 'Secret');
     secret = Uri.encodeComponent(secret)
         .replaceAll('*', '%2A')
@@ -39,17 +45,24 @@ class APIService {
     if (request.statusCode == 200) {
       await storage.write(key: 'Token', value: request.body);
       var moderatorCode = await storage.read(key: 'ModeratorCode');
-      var profile = await profileDataExists(user.uid);
-      if (profile == false) {
+      var profileExists = await profileDataExists(user.uid);
+      if (profileExists == false) {
         await createProfileData(user.uid, user.email!, moderatorCode);
       }
-      return true;
+
+      var profile = await getProfileData(user.uid);
+      return TokenResult(
+          success: true,
+          selectedGym: profile.selectedGym!
+              .split(' ')
+              .map((word) => word.capitalize())
+              .join(' '));
     } else {
-      return false;
+      return TokenResult(success: false, selectedGym: '');
     }
   }
 
-  Future<bool> getFirebaseSecret() async {
+  Future<TokenResult> getFirebaseSecret() async {
     const storage = FlutterSecureStorage();
     final FirebaseFirestore _db = FirebaseFirestore.instance;
     String? value = await storage.read(key: 'Secret');
@@ -67,7 +80,7 @@ class APIService {
     if (await storage.read(key: 'Secret') != null) {
       return GetAPIToken(storage, user!);
     } else {
-      return false;
+      return GetAPIToken(storage, user!);
     }
   }
 
@@ -329,5 +342,38 @@ class APIService {
         Uri.parse(
             '${_baseUrlLocal}SubmitUserClimb/$userUID&$climbingCenterName&$areaName&$grade&$problemID?flash=$flash'),
         headers: headers);
+  }
+
+  Future<void> updateSelectedGym(String userUID, String newSelectedGym) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    await http.patch(
+        Uri.parse('${_baseUrlLocal}UpdateSelectedGym/$userUID&$newSelectedGym'),
+        headers: headers);
+  }
+
+  Future<List<String>> getClimbingCentreNames() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    var request = await http.get(
+        Uri.parse('${_baseUrlLocal}GetClimbingCentreNames'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      List<String> climbingCentreNames = [];
+      for (var i = 0; i < encodedString.length; i++) {
+        climbingCentreNames.add(encodedString[i]);
+      }
+      return climbingCentreNames;
+    } else {
+      return [];
+    }
   }
 }
