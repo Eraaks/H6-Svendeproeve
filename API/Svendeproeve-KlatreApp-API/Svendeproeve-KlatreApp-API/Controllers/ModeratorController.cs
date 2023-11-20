@@ -66,7 +66,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         [HttpDelete("/DeleteClimbingRoute/{climbingCenterName}&{climbingArea}&{problemId}&{changerUserUID}")]
         public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
-           
+
             await _fireStoreService.DeleteClimbingRoute(climbingCenterName, climbingArea, problemId, changerUserUID);
         }
         [HttpDelete("/DeleteClimbingArea/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
