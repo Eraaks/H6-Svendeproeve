@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 
-Widget areaDialog() {
+Widget areaDialog(context) {
+  TextEditingController editAreaController = TextEditingController();
+
   return StatefulBuilder(
     builder: (context, setState) {
       return AlertDialog(
         title: const Text('Please fill out the data:'),
         content: TextFormField(
+          controller: editAreaController,
           decoration: InputDecoration(
             labelText: 'Area',
             labelStyle: const TextStyle(color: Colors.grey),
@@ -24,9 +27,8 @@ Widget areaDialog() {
         actions: [
           TextButton(
             onPressed: () {
-              // Implement logic when Confirm is pressed
               print('Confirmed editing');
-              Navigator.pop(context);
+              Navigator.pop(context, editAreaController.text);
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.black,

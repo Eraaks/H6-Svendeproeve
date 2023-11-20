@@ -7,17 +7,17 @@ import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class HomeWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const HomeWidgets({Key? key, required this.SelectedGym}) : super(key: key);
+  final String selectedGym;
+  const HomeWidgets({Key? key, required this.selectedGym}) : super(key: key);
 
   @override
   State<HomeWidgets> createState() =>
-      _HomeWidgetsState(SelectedGym: SelectedGym);
+      _HomeWidgetsState(selectedGym: selectedGym);
 }
 
 class _HomeWidgetsState extends State<HomeWidgets> {
-  final String SelectedGym;
-  _HomeWidgetsState({required this.SelectedGym});
+  final String selectedGym;
+  _HomeWidgetsState({required this.selectedGym});
 
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -49,7 +49,7 @@ class _HomeWidgetsState extends State<HomeWidgets> {
       body: Column(
         children: <Widget>[
           Text(
-            'Current gym:\n $SelectedGym\n\n You can switch to a different gym here:',
+            'Current gym:\n $selectedGym\n\n You can switch to a different gym here:',
             style: const TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
@@ -80,7 +80,7 @@ class _HomeWidgetsState extends State<HomeWidgets> {
   }
 
   Widget builderCenterName(String data) {
-    return SelectedGym != data
+    return selectedGym != data
         ? Card(
             elevation: 4,
             child: ExpansionTile(
