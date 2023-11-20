@@ -34,6 +34,7 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
           Text('Overview for $SelectedGym'),
           Reusable_Graph_Widget(
             userUID: FirebaseAuth.instance.currentUser!.uid,
+            selectedGym: SelectedGym,
           )
         ],
       )),

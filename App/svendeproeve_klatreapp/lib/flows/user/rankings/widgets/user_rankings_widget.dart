@@ -110,6 +110,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
                                     followList!.contains(snapshotData.userUID)
                                         ? true
                                         : false,
+                                selectedGym: SelectedGym,
                               )));
                 },
                 child: const Text('View User'))

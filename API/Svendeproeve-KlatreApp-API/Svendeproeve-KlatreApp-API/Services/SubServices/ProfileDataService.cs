@@ -372,5 +372,10 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                     return "Ungrated";
             }
         }
+
+        public async Task UpdateSelectedGym(string userUID, string newSelectedGym)
+        {
+            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Selected_Gym", newSelectedGym);
+        }
     }
 }

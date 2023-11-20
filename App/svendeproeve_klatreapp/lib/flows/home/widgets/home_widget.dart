@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
+import 'package:svendeproeve_klatreapp/flows/reusable/restart_app.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class HomeWidgets extends StatefulWidget {
   final String SelectedGym;
@@ -16,13 +19,25 @@ class _HomeWidgetsState extends State<HomeWidgets> {
   final String SelectedGym;
   _HomeWidgetsState({required this.SelectedGym});
 
-  var selectedClimbingPlace = 'Please Select Climbing Place';
+  static final APIService _apiService = APIService();
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
   final _controller = TextEditingController();
+  Future<List<String>>? centerNames;
+
+  @override
+  void initState() {
+    super.initState();
+    getClimbingCentreNames();
+  }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> getClimbingCentreNames() async {
+    centerNames = _apiService.getClimbingCentreNames();
   }
 
   @override
@@ -31,17 +46,59 @@ class _HomeWidgetsState extends State<HomeWidgets> {
       backgroundColor: mainBackgroundColor,
       appBar: const Topbar(),
       drawer: const Sidebar(),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text(
-              SelectedGym,
-              style: const TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
+      body: Column(
+        children: <Widget>[
+          Text(
+            'Current gym:\n $SelectedGym\n\n You can switch to a different gym here:',
+            style: const TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 500),
+            child: FutureBuilder<List<String>>(
+              future: centerNames,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final data = snapshot.data ?? <String>[];
+                  return ListView(
+                    padding: const EdgeInsets.all(5),
+                    children: data.map(builderCenterName).toList(),
+                  );
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+
+  Widget builderCenterName(String data) {
+    return SelectedGym != data
+        ? Card(
+            elevation: 4,
+            child: ExpansionTile(
+              trailing: const Icon(
+                Icons.arrow_right,
+              ),
+              title: Text(data),
+              children: [
+                TextButton(
+                    onPressed: () async {
+                      _apiService.updateSelectedGym(
+                          _auth.currentUser!.uid, data);
+
+                      RestartWidget.restartApp(context);
+                    },
+                    child: const Text('Switch to this climbing gym'))
+              ],
+            ))
+        : const Card();
   }
 }

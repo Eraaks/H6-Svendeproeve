@@ -82,6 +82,11 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _profileDataService.SubmitUserClimb(userUID, climbingCenterName, areaName, grade, flash, problemID);
         }
 
+        public async Task UpdateSelectedGym(string userUID, string newSelectedGym)
+        {
+            await _profileDataService.UpdateSelectedGym(userUID, newSelectedGym);
+        }
+
         public async Task AddClimbingCenter(ClimbingCenterDocument climbingCenter, string climbingCenterName)
         {
             await _klatrecentreService.AddClimbingCenter(climbingCenter, climbingCenterName);
@@ -100,6 +105,11 @@ namespace Svendeproeve_KlatreApp_API.Services
         public async Task<List<ClimbingCenterDocument>> GetClimbingCentre()
         {
             return await _klatrecentreService.GetClimbingCentre();
+        }
+
+        public async Task<List<string>> GetClimbingCentreNames()
+        {
+            return await _klatrecentreService.GetClimbingCentreNames();
         }
 
         public async Task<List<Areas>> GetCenterRoutes(string centerName)

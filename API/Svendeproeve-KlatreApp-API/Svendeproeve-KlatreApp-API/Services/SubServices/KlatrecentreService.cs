@@ -105,6 +105,19 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             return centerData;
         }
 
+        public async Task<List<string>> GetClimbingCentreNames()
+        {
+            var centerDocuments = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
+            var centerData = centerDocuments.Documents.Select(c => c.ConvertTo<ClimbingCenterDocument>()).ToList();
+            List<string> names = new List<string>();
+            foreach (var c in centerData)
+            {
+                names.Add(c.CenterName);
+            }
+
+            return names;
+        }
+
         public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {
             var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();

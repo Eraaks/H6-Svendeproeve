@@ -8,15 +8,18 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Reusable_Graph_Widget extends StatefulWidget {
   final String userUID;
-  const Reusable_Graph_Widget({super.key, required this.userUID});
+  final String selectedGym;
+  const Reusable_Graph_Widget(
+      {super.key, required this.userUID, required this.selectedGym});
 
   @override
   State<Reusable_Graph_Widget> createState() =>
-      _Reusable_Graph_WidgetState(userUID: userUID);
+      _Reusable_Graph_WidgetState(userUID: userUID, selectedGym: selectedGym);
 }
 
 class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
   final String userUID;
+  final String selectedGym;
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<ProfileData>? profileData;
@@ -26,7 +29,8 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
       DateTime.now().subtract(const Duration(days: 60)).millisecondsSinceEpoch;
   late List<SendCollections> data;
 
-  _Reusable_Graph_WidgetState({required this.userUID});
+  _Reusable_Graph_WidgetState(
+      {required this.userUID, required this.selectedGym});
   @override
   void initState() {
     super.initState();
@@ -59,7 +63,7 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
               final climbing = snapshot.data!;
               data = climbing.climbingHistory!
                   .firstWhere(
-                    (element) => element.location == 'BetaBouldersSouth',
+                    (element) => element.location == selectedGym,
                   )
                   .sendCollections!
                   .where((element) => element.sendDate! >= dateMinusTwoMonths)

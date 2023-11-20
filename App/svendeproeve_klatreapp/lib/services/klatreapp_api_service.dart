@@ -31,13 +31,6 @@ class APIService {
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
-  // getClimbingscore(String requestPath) async {
-  //   final headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-  //   };
-  //   return http.get(Uri.parse(_baseUrlLocal + requestPath), headers: headers);
-  // }
 
   Future<TokenResult> GetAPIToken(storage, User user) async {
     String secret = await storage.read(key: 'Secret');
@@ -348,5 +341,38 @@ class APIService {
         Uri.parse(
             '${_baseUrlLocal}SubmitUserClimb/$userUID&$climbingCenterName&$areaName&$grade&$problemID?flash=$flash'),
         headers: headers);
+  }
+
+  Future<void> updateSelectedGym(String userUID, String newSelectedGym) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    await http.patch(
+        Uri.parse('${_baseUrlLocal}UpdateSelectedGym/$userUID&$newSelectedGym'),
+        headers: headers);
+  }
+
+  Future<List<String>> getClimbingCentreNames() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+    };
+
+    var request = await http.get(
+        Uri.parse('${_baseUrlLocal}GetClimbingCentreNames'),
+        headers: headers);
+
+    if (request.statusCode == 200) {
+      var encodedString = json.decode(request.body);
+      List<String> climbingCentreNames = [];
+      for (var i = 0; i < encodedString.length; i++) {
+        climbingCentreNames.add(encodedString[i]);
+      }
+      return climbingCentreNames;
+    } else {
+      return [];
+    }
   }
 }

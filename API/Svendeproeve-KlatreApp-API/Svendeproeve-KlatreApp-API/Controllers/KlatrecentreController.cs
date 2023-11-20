@@ -27,5 +27,17 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         {
             await _fireBaseService.UpdateRouteCompleters(routes, climbingCenterName, areaName, userUID, flashed);
         }
+
+        [HttpGet("/GetClimbingCentre/")]
+        public async Task<List<ClimbingCenterDocument>> GetClimbingCentre()
+        {
+            return await _fireBaseService.GetClimbingCentre();
+        }
+
+        [HttpGet("/GetClimbingCentreNames/")]
+        public async Task<List<string>> GetClimbingCentreNames()
+        {
+            return await _fireBaseService.GetClimbingCentreNames();
+        }
     }
 }
