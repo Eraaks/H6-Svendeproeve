@@ -9,24 +9,18 @@ import 'package:svendeproeve_klatreapp/services/database_service.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class RankingsWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const RankingsWidgets({Key? key, required this.SelectedGym})
-      : super(key: key);
+  const RankingsWidgets({Key? key}) : super(key: key);
 
   @override
-  State<RankingsWidgets> createState() =>
-      _RankingsWidgetsState(SelectedGym: SelectedGym);
+  State<RankingsWidgets> createState() => _RankingsWidgetsState();
 }
 
 class _RankingsWidgetsState extends State<RankingsWidgets> {
-  final String SelectedGym;
-
-  _RankingsWidgetsState({required this.SelectedGym});
-
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<List<ClimbingScore>>? climbingScoreList;
   List<String>? followList;
+  static const String climbingCenter = 'Beta Boulders West';
   @override
   void initState() {
     super.initState();
@@ -42,7 +36,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
 
   Future<void> _initClimbingscore() async {
     climbingScoreList =
-        _apiService.getClimbingScore(SelectedGym.replaceAll(' ', ''));
+        _apiService.getClimbingScore(climbingCenter.replaceAll(' ', ''));
   }
 
   Future<void> _initFollowList() async {
@@ -57,7 +51,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
       drawer: const Sidebar(),
       body: Column(
         children: [
-          Text('Rankings for $SelectedGym',
+          const Text('Rankings for $climbingCenter',
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -110,7 +104,6 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
                                     followList!.contains(snapshotData.userUID)
                                         ? true
                                         : false,
-                                selectedGym: SelectedGym,
                               )));
                 },
                 child: const Text('View User'))

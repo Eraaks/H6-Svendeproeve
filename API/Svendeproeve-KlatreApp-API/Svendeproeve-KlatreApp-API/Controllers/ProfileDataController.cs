@@ -104,19 +104,11 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         {
             return await _fireStoreService.GetSelectedClimbingCenter(climbingCenterName);
         }
-
         [HttpPost("/SubmitUserClimb/{userUID}&{climbingCenterName}&{areaName}&{grade}&{problemID}")]
         public async Task SubmitUserClimb(string userUID, string climbingCenterName, string areaName, string grade, bool flash, string problemID)
         {
            climbingCenterName = climbingCenterName.Replace(" ", "");
            await _fireStoreService.SubmitUserClimb(userUID, climbingCenterName, areaName, grade, flash, problemID);
-        }
-
-        [HttpPatch("/UpdateSelectedGym/{userUID}&{newSelectedGym}")]
-        public async Task UpdateSelectedGym(string userUID, string newSelectedGym)
-        {
-            newSelectedGym = newSelectedGym.Replace(" ", "");
-            await _fireStoreService.UpdateSelectedGym(userUID, newSelectedGym);
         }
     }
 }

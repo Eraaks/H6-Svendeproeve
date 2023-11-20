@@ -10,18 +10,13 @@ import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 final Sidebar _Sidebar = Sidebar();
 
 class PersonalWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const PersonalWidgets({Key? key, required this.SelectedGym})
-      : super(key: key);
+  const PersonalWidgets({Key? key}) : super(key: key);
 
   @override
-  State<PersonalWidgets> createState() =>
-      _PersonalWidgetsState(SelectedGym: SelectedGym);
+  State<PersonalWidgets> createState() => _PersonalWidgetsState();
 }
 
 class _PersonalWidgetsState extends State<PersonalWidgets> {
-  final String SelectedGym;
-  _PersonalWidgetsState({required this.SelectedGym});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,14 +24,8 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
       appBar: const Topbar(),
       drawer: _Sidebar,
       body: Center(
-          child: Column(
-        children: [
-          Text('Overview for $SelectedGym'),
-          Reusable_Graph_Widget(
-            userUID: FirebaseAuth.instance.currentUser!.uid,
-            selectedGym: SelectedGym,
-          )
-        ],
+          child: Reusable_Graph_Widget(
+        userUID: FirebaseAuth.instance.currentUser!.uid,
       )),
     );
   }

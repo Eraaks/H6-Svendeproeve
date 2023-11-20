@@ -19,25 +19,20 @@ import 'package:http/http.dart' as http;
 final AuthService _auth = AuthService();
 
 class NavBarWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const NavBarWidgets({Key? key, required this.SelectedGym}) : super(key: key);
+  const NavBarWidgets({Key? key}) : super(key: key);
 
   @override
-  State<NavBarWidgets> createState() =>
-      _NavBarWidgetsState(SelectedGym: SelectedGym);
+  State<NavBarWidgets> createState() => _NavBarWidgetsState();
 }
 
 class _NavBarWidgetsState extends State<NavBarWidgets> {
-  final String SelectedGym;
-  _NavBarWidgetsState({required this.SelectedGym});
-
   int currentIndex = 2;
-  late List<StatefulWidget> screens = [
+  final screens = [
     const TipsTricksPage(),
-    OverviewPage(SelectedGym: SelectedGym),
-    HomePage(SelectedGym: SelectedGym),
-    RankingsPage(SelectedGym: SelectedGym),
-    PersonalPage(SelectedGym: SelectedGym),
+    const OverviewPage(),
+    const HomePage(),
+    const RankingsPage(),
+    const PersonalPage(),
   ];
 
   @override

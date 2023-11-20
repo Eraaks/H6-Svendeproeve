@@ -12,35 +12,26 @@ class PersonPageWidget extends StatefulWidget {
   final String email;
   final String userUID;
   final bool following;
-  final String selectedGym;
   const PersonPageWidget(
       {super.key,
       required this.email,
       required this.userUID,
-      required this.following,
-      required this.selectedGym});
+      required this.following});
 
   @override
   State<PersonPageWidget> createState() => _PersonPageWidgetState(
-      email: email,
-      userUID: userUID,
-      following: following,
-      selectedGym: selectedGym);
+      email: email, userUID: userUID, following: following);
 }
 
 class _PersonPageWidgetState extends State<PersonPageWidget> {
   final String email;
   final String userUID;
-  final String selectedGym;
   bool following;
   final User user = FirebaseAuth.instance.currentUser!;
   final APIService _apiService = APIService();
 
   _PersonPageWidgetState(
-      {required this.email,
-      required this.userUID,
-      required this.following,
-      required this.selectedGym});
+      {required this.email, required this.userUID, required this.following});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +90,6 @@ class _PersonPageWidgetState extends State<PersonPageWidget> {
                 const SizedBox(height: 16),
                 Reusable_Graph_Widget(
                   userUID: userUID,
-                  selectedGym: selectedGym,
                 ),
                 const SizedBox(height: 16),
               ],

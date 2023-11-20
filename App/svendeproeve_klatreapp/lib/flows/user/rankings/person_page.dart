@@ -5,33 +5,24 @@ class PersonPage extends StatefulWidget {
   final String email;
   final String userUID;
   final bool following;
-  final String selectedGym;
   const PersonPage(
       {super.key,
       required this.email,
       required this.userUID,
-      required this.following,
-      required this.selectedGym});
+      required this.following});
 
   @override
-  State<PersonPage> createState() => _PersonPageState(
-      email: email,
-      userUID: userUID,
-      following: following,
-      selectedGym: selectedGym);
+  State<PersonPage> createState() =>
+      _PersonPageState(email: email, userUID: userUID, following: following);
 }
 
 class _PersonPageState extends State<PersonPage> {
   final String email;
   final String userUID;
   final bool following;
-  final String selectedGym;
 
   _PersonPageState(
-      {required this.email,
-      required this.userUID,
-      required this.following,
-      required this.selectedGym});
+      {required this.email, required this.userUID, required this.following});
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -39,6 +30,5 @@ class _PersonPageState extends State<PersonPage> {
         email: email,
         userUID: userUID,
         following: following,
-        selectedGym: selectedGym,
       ));
 }

@@ -2,28 +2,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
-import 'package:svendeproeve_klatreapp/flows/reusable/restart_app.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
 import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class OverviewWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const OverviewWidgets({Key? key, required this.SelectedGym})
-      : super(key: key);
+  const OverviewWidgets({Key? key}) : super(key: key);
 
   @override
-  State<OverviewWidgets> createState() =>
-      _OverviewWidgetsState(SelectedGym: SelectedGym);
+  State<OverviewWidgets> createState() => _OverviewWidgetsState();
 }
 
 class _OverviewWidgetsState extends State<OverviewWidgets> {
-  final String SelectedGym;
-  _OverviewWidgetsState({required this.SelectedGym});
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<List<Areas>>? areas;
+  String centerName = 'BetaBouldersSouth';
 
   List<ProblemsModel> problemsList = getAllProblems();
   List<ClimbingAreaModel> climbingAreas = getAllClimbingAreas();
@@ -31,7 +26,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
   @override
   void initState() {
     super.initState();
-    getCenterRoutes(SelectedGym);
+    getCenterRoutes(centerName);
   }
 
   @override
@@ -62,53 +57,54 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                 return Text('Error: ${snapshot.error}');
               } else {
                 final data = snapshot.data ?? <Areas>[];
-                return Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              const Divider(height: 20, color: Colors.black),
-                              Text(
-                                data[index].name!,
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              DataTableBuilder(
-                                problems: data[index].areaRoutes!,
-                                updateState: () {
-                                  setState(() {});
-                                },
-                                userUID: _auth.currentUser!.uid,
-                                climbingCenterName: SelectedGym,
-                                areaName: data[index].name!,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    const Divider(height: 20, color: Colors.black),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Column(
                       children: [
-                        Text('Submit:'),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            //addRoute(grade);
-                            print('Submitting');
+                        const Divider(height: 20, color: Colors.black),
+                        Text(
+                          data[index].name!,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        DataTableBuilder(
+                          problems: data[index].areaRoutes!,
+                          updateState: () {
+                            setState(() {});
                           },
+                          userUID: _auth.currentUser!.uid,
+                          climbingCenterName: centerName,
+                          areaName: data[index].name!,
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 );
               }
             },
           ),
+          // child: ListView.builder(
+          //   itemCount: climbingAreas.length,
+          //   itemBuilder: (context, index) {
+          //     return Column(
+          //       children: [
+          //         const Divider(height: 20, color: Colors.black),
+          //         Text(
+          //           climbingAreas[index].name,
+          //           style: const TextStyle(
+          //               fontSize: 20, fontWeight: FontWeight.bold),
+          //         ),
+          //         DataTableBuilder(
+          //           problems: climbingAreas[index].problems,
+          //           updateState: () {
+          //             setState(() {});
+          //           },
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ),
         ),
       ),
     );
@@ -159,9 +155,9 @@ class DataTableBuilder extends StatelessWidget {
         const DataColumn(
           label: Text('Number', style: TextStyle(fontStyle: FontStyle.italic)),
         ),
-        // const DataColumn(
-        //     label:
-        //         Text('Submit', style: TextStyle(fontStyle: FontStyle.italic))),
+        const DataColumn(
+            label:
+                Text('Submit', style: TextStyle(fontStyle: FontStyle.italic))),
       ],
       rows: problems.map((problem) {
         final split = problem.color!.replaceAll(' ', '').split(',');
@@ -242,38 +238,35 @@ class DataTableBuilder extends StatelessWidget {
                 ),
               ),
             ),
-            // DataCell(
-            //   Container(
-            //     child: Center(
-            //       child: IconButton(
-            //         icon: const Icon(Icons.add),
-            //         onPressed: () async {
-            //           print('Submitting');
-            //           if (problem.usersWhoCompleted!.contains(userUID) ||
-            //               problem.usersWhoFlashed!.contains(userUID)) {
-            //             await _apiService.updateRouteCompleters(
-            //                 climbingCenterName,
-            //                 areaName,
-            //                 problem.id!,
-            //                 userUID,
-            //                 problem.usersWhoFlashed!.contains(userUID));
+            DataCell(
+              Container(
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () async {
+                      print('Submitting');
+                      if (problem.usersWhoCompleted!.contains(userUID) ||
+                          problem.usersWhoFlashed!.contains(userUID)) {
+                        await _apiService.updateRouteCompleters(
+                            climbingCenterName,
+                            areaName,
+                            problem.id!,
+                            userUID,
+                            problem.usersWhoFlashed!.contains(userUID));
 
-            //             await _apiService.submitUserClimb(
-            //                 userUID,
-            //                 climbingCenterName,
-            //                 areaName,
-            //                 problem.grade!.replaceAll('+', 'Plus'),
-            //                 problem.usersWhoFlashed!.contains(userUID),
-            //                 problem.id!);
-
-            //             // Restart Appen
-            //             RestartWidget.restartApp(context);
-            //           }
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // )
+                        await _apiService.submitUserClimb(
+                            userUID,
+                            climbingCenterName,
+                            areaName,
+                            problem.grade!.replaceAll('+', 'Plus'),
+                            problem.usersWhoFlashed!.contains(userUID),
+                            problem.id!);
+                      }
+                    },
+                  ),
+                ),
+              ),
+            )
           ],
         );
       }).toList(),

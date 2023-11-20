@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:svendeproeve_klatreapp/flows/authentication/widgets/authentication_wrapper.dart';
-import 'package:svendeproeve_klatreapp/flows/reusable/restart_app.dart';
 import 'package:svendeproeve_klatreapp/models/user.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 import 'firebase_options.dart';
@@ -16,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(RestartWidget(child: const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyHttpOverrides extends HttpOverrides {

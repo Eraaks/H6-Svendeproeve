@@ -137,7 +137,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 });
             }
 
-            climbingScores = climbingScores.OrderByDescending(p => p.Score).ToList();
+            climbingScores = climbingScores.OrderBy(p => p.Score).ToList();
 
             for (int i = 0; i < climbingScores.Count; i++)
             {
@@ -170,14 +170,8 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 case "2":
                     return 200;
 
-                case "2Plus":
-                    return 250;
-
                 case "3":
                     return 300;
-
-                case "3Plus":
-                    return 333;
 
                 case "4":
                     return 400;
@@ -371,11 +365,6 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 default:
                     return "Ungrated";
             }
-        }
-
-        public async Task UpdateSelectedGym(string userUID, string newSelectedGym)
-        {
-            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Selected_Gym", newSelectedGym);
         }
     }
 }

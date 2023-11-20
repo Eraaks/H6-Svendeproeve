@@ -15,7 +15,7 @@ class LoadingWidget extends StatefulWidget {
 
 class _LoadingWidgetState extends State<LoadingWidget> {
   final APIService _apiService = APIService();
-  late Future<TokenResult> tokenFetched;
+  late Future<bool> tokenFetched;
 
   @override
   void initState() {
@@ -26,21 +26,18 @@ class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<TokenResult>(
+        body: FutureBuilder<bool>(
       future: tokenFetched,
-      builder: (BuildContext context, AsyncSnapshot<TokenResult> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (!snapshot.hasData) {
           // while data is loading:
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (snapshot.data!.success == true) {
+        } else if (snapshot.data == true) {
           // data loaded:
           // set Moderator = True in Constants to test Mod page.
-          String selectedGym = snapshot.data!.selectedGym;
-          return isModerator
-              ? const ModOverviewPage()
-              : NavBarPage(SelectedGym: selectedGym);
+          return isModerator ? const ModOverviewPage() : const NavBarPage();
         } else {
           return const Center(
             child: Text('Something went wrong'),

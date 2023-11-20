@@ -57,6 +57,12 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             await _fireStoreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID, systemChanger);
         }
 
+        [HttpGet("/GetClimbingCentre/")]
+        public async Task<List<ClimbingCenterDocument>> GetClimbingCentre()
+        {
+            return await _fireStoreService.GetClimbingCentre();
+        }
+
         [HttpDelete("/DeleteClimbingRoute/{climbingCenterName}&{climbingArea}&{problemId}")]
         public async Task DeleteClimbingRoute(string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
         {

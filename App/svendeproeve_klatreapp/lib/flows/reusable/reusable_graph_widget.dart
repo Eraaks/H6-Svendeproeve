@@ -8,18 +8,15 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Reusable_Graph_Widget extends StatefulWidget {
   final String userUID;
-  final String selectedGym;
-  const Reusable_Graph_Widget(
-      {super.key, required this.userUID, required this.selectedGym});
+  const Reusable_Graph_Widget({super.key, required this.userUID});
 
   @override
   State<Reusable_Graph_Widget> createState() =>
-      _Reusable_Graph_WidgetState(userUID: userUID, selectedGym: selectedGym);
+      _Reusable_Graph_WidgetState(userUID: userUID);
 }
 
 class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
   final String userUID;
-  final String selectedGym;
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<ProfileData>? profileData;
@@ -29,8 +26,7 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
       DateTime.now().subtract(const Duration(days: 60)).millisecondsSinceEpoch;
   late List<SendCollections> data;
 
-  _Reusable_Graph_WidgetState(
-      {required this.userUID, required this.selectedGym});
+  _Reusable_Graph_WidgetState({required this.userUID});
   @override
   void initState() {
     super.initState();
@@ -63,7 +59,7 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
               final climbing = snapshot.data!;
               data = climbing.climbingHistory!
                   .firstWhere(
-                    (element) => element.location == selectedGym,
+                    (element) => element.location == 'BetaBouldersSouth',
                   )
                   .sendCollections!
                   .where((element) => element.sendDate! >= dateMinusTwoMonths)
@@ -83,9 +79,9 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
                     SplineSeries<SendCollections, String>(
                         dataSource: data,
                         xValueMapper: (SendCollections sales, _) =>
-                            'Day ' +
+                            'Month ' +
                             DateTime.fromMicrosecondsSinceEpoch(sales.sendDate!)
-                                .day
+                                .month
                                 .toString(),
                         yValueMapper: (SendCollections sales, _) =>
                             sales.points,
