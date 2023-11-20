@@ -17,11 +17,11 @@ const textInputDecoration = InputDecoration(
 const bool isModerator = true;
 
 Map<String, Color> colorMap = {
-  'Color red': Colors.red,
-  'Color blue': Colors.blue,
-  'Color green': Colors.green,
-  'Color black': Colors.black,
-  'Color yellow': Colors.yellow,
-  'Color teal': Colors.teal,
-  'Color purple': Colors.purple,
+  'Color red': const Color.fromARGB(255, 255, 0, 0),
+  'Color blue': const Color.fromARGB(255, 0, 68, 255),
+  'Color green': const Color.fromARGB(255, 0, 255, 0),
+  'Color black': const Color.fromARGB(255, 0, 0, 0),
+  'Color yellow': const Color.fromARGB(255, 255, 251, 0),
+  'Color light blue': const Color.fromARGB(255, 0, 225, 255),
+  'Color Orange': const Color.fromARGB(255, 255, 145, 0),
 };

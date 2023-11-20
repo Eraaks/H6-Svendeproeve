@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_helper.dart';
-import 'package:svendeproeve_klatreapp/flows/moderator/overview/widgets/moderator_dialog_widget.dart';
+import 'package:svendeproeve_klatreapp/flows/moderator/overview/widgets/moderator_datatable_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
