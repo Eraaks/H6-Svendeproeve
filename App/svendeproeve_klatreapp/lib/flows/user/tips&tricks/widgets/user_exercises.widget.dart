@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
@@ -17,11 +18,12 @@ class ExercisePage extends StatefulWidget {
 
 class _ExercisePageState extends State<ExercisePage> {
   static final APIService _apiService = APIService();
-  late Future<List<ExerciseModel>> includedIn;
+  late Future<List<ExerciseModel>>? includedIn;
 
   @override
   void initState() {
     super.initState();
+
     includedIn =
         _apiService.getIncludedInExercises(widget.exercise.overallTarget);
   }
@@ -39,7 +41,9 @@ class _ExercisePageState extends State<ExercisePage> {
             padding: const EdgeInsets.only(top: 5, left: 15),
             alignment: Alignment.topLeft,
             child: GestureDetector(
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: const Icon(
                 Icons.arrow_back,
                 size: 26,
@@ -64,7 +68,7 @@ class _ExercisePageState extends State<ExercisePage> {
                 return Center(
                   child: Text('Error: ${includedInSnapshot.error}'),
                 );
-              } else {
+              } else if (includedInSnapshot.hasData) {
                 final includedInList = includedInSnapshot.data;
                 return SizedBox(
                   height: 700,
@@ -77,6 +81,7 @@ class _ExercisePageState extends State<ExercisePage> {
                     },
                     itemBuilder: (context, index) {
                       final exercise = includedInList[index];
+
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -132,11 +137,20 @@ class _ExercisePageState extends State<ExercisePage> {
                     },
                   ),
                 );
+              } else {
+                return Center(
+                  child: Text('Error: ${includedInSnapshot.error}'),
+                );
               }
             },
           )
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
