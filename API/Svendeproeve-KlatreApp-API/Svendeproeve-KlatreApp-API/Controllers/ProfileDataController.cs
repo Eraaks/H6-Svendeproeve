@@ -24,22 +24,22 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         [HttpPost("/NewProfileDataAsync/{userUID}&{email}")]
         public async Task NewProfileDataAsync(string userUID, string email, string moderatorCode = "Empty")
         {
-            Send_Collection send_Collection = new Send_Collection()
+            Send_Collection send_CollectionSouth = new Send_Collection()
             {
                 ID = Guid.NewGuid().ToString(),
-                Area = "BetaBouldersSouth",
+                Area = "",
                 Grade = "2",
                 Points = 200,
                 Tries = 2,
                 SendDate = DateTime.Today.Ticks,
             };
-            Climbing_History history = new Climbing_History()
+            Climbing_History historySouth = new Climbing_History()
             {
                 ID = userUID,
                 Estimated_Grade = "2",
-                Location = "BetaBouldersSouth",
+                Location = "",
                 Total_Points = 200,
-                Send_Collections = new List<Send_Collection>(){ send_Collection }
+                Send_Collections = new List<Send_Collection>(){ send_CollectionSouth }
             };
             await _fireStoreService.AddProfileData(new ProfileDataDocument
             {
@@ -50,7 +50,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Saved_Workouts = new List<string>() { },
                 User_Email = email,
                 Selected_Gym = "BetaBouldersSouth",
-                Climbing_History = new List<Climbing_History>() { history }
+                Climbing_History = new List<Climbing_History>() { historySouth }
             });
 
             if(moderatorCode != null && moderatorCode != "Empty") await _fireStoreService.CheckModeratorCodeAndAddToCenter(moderatorCode, userUID);

@@ -28,6 +28,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 var collection = _firestoreDb.Collection("Profile_data").Document(profileID).Collection("Climbing_History").Document(document.CenterName);
                 foreach(var history in climbing_History)
                 {
+                    history.Location = document.CenterName;
                     await collection.SetAsync(history);
                     if (history.Send_Collections != null) await AddSendCollections(profileID, document.CenterName, history.Send_Collections);
                 }
