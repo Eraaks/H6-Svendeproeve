@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignInPage extends StatelessWidget {
   final Function toggleView;
-  const SignUpPage({Key? key, required this.toggleView}) : super(key: key);
+  const SignInPage({Key? key, required this.toggleView}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +14,11 @@ class SignUpPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.brown[400],
           elevation: 0.0,
-          title: const Text('Sign Up for Climbing App'),
+          title: const Text('Sign In for Climbing App'),
           actions: <Widget>[
             TextButton.icon(
               icon: const Icon(Icons.person),
-              label: const Text('Sign In'),
+              label: const Text('Sign Up'),
               onPressed: () {
                 toggleView();
               },
@@ -32,7 +31,7 @@ class SignUpPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _Logo(),
-                      SignUpPageContent(),
+                      _SignInPageContent(),
                     ],
                   )
                 : Container(
@@ -42,7 +41,7 @@ class SignUpPage extends StatelessWidget {
                       children: [
                         Expanded(child: _Logo()),
                         Expanded(
-                          child: Center(child: SignUpPageContent()),
+                          child: Center(child: _SignInPageContent()),
                         ),
                       ],
                     ),
@@ -79,22 +78,21 @@ class _Logo extends StatelessWidget {
   }
 }
 
-class SignUpPageContent extends StatefulWidget {
-  const SignUpPageContent({Key? key}) : super(key: key);
+class _SignInPageContent extends StatefulWidget {
+  const _SignInPageContent({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPageContent> createState() => _SignUpPageContentState();
+  State<_SignInPageContent> createState() => __SignInPageContentState();
 }
 
-class _SignUpPageContentState extends State<SignUpPageContent> {
+class __SignInPageContentState extends State<_SignInPageContent> {
   bool _isPasswordVisible = false;
   final AuthService _auth = AuthService();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static const FlutterSecureStorage storage = FlutterSecureStorage();
 
   String email = '';
   String password = '';
-  String moderatorCode = '';
   String error = '';
 
   @override
@@ -170,20 +168,6 @@ class _SignUpPageContentState extends State<SignUpPageContent> {
               },
             ),
             _gap(),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Moderator Code',
-                hintText: 'Enter a Moderator Code if you have one',
-                prefixIcon: Icon(Icons.accessibility_new_outlined),
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  moderatorCode = value;
-                });
-              },
-            ),
-            _gap(),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -194,31 +178,31 @@ class _SignUpPageContentState extends State<SignUpPageContent> {
                 child: const Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text(
-                    'Register',
+                    'Sign in',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
-                    if (moderatorCode == '') {
-                      await storage.write(key: 'ModeratorCode', value: 'Empty');
-                    } else {
-                      await storage.write(
-                          key: 'ModeratorCode', value: moderatorCode);
-                    }
-
-                    dynamic result = await _auth.registerWithEmailAndPassword(
-                        email, password);
+                    /// do something
+                    dynamic result =
+                        await _auth.signInWithEmailAndPassword(email, password);
 
                     if (result == null) {
                       setState(() {
-                        error = 'Please supply a valid email';
+                        error = 'Could not sign in with those credentials';
                       });
                     }
                   }
                 },
               ),
             ),
+            _gap(),
+            const SizedBox(height: 12.0),
+            Text(
+              error,
+              style: const TextStyle(color: Colors.red, fontSize: 14.0),
+            )
           ],
         ),
       ),

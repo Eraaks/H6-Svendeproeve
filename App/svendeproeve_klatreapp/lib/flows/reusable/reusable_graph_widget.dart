@@ -79,9 +79,9 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
                     SplineSeries<SendCollections, String>(
                         dataSource: data,
                         xValueMapper: (SendCollections sales, _) =>
-                            'Month ' +
+                            'Day ' +
                             DateTime.fromMicrosecondsSinceEpoch(sales.sendDate!)
-                                .month
+                                .day
                                 .toString(),
                         yValueMapper: (SendCollections sales, _) =>
                             sales.points,

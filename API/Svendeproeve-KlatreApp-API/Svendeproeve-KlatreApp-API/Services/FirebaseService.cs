@@ -107,9 +107,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _klatrecentreService.GetCenterRoutes(centerName);
         }
 
-        public async Task UpdateRouteCompleters(string climbingCenterName, string areaName, string routeID, string userUID, bool flashed)
+        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string areaName, string userUID, bool flashed)
         {
-            await _klatrecentreService.UpdateRouteCompleters(climbingCenterName, areaName, routeID, userUID, flashed);
+            await _klatrecentreService.UpdateRouteCompleters(routes, climbingCenterName, areaName, userUID, flashed);
         }
 
         public async Task<bool> CheckIfUserModerator(string userUID)

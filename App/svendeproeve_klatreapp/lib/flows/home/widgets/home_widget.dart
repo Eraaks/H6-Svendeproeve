@@ -4,13 +4,18 @@ import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 
 class HomeWidgets extends StatefulWidget {
-  const HomeWidgets({Key? key}) : super(key: key);
+  final String SelectedGym;
+  const HomeWidgets({Key? key, required this.SelectedGym}) : super(key: key);
 
   @override
-  State<HomeWidgets> createState() => _HomeWidgetsState();
+  State<HomeWidgets> createState() =>
+      _HomeWidgetsState(SelectedGym: SelectedGym);
 }
 
 class _HomeWidgetsState extends State<HomeWidgets> {
+  final String SelectedGym;
+  _HomeWidgetsState({required this.SelectedGym});
+
   var selectedClimbingPlace = 'Please Select Climbing Place';
   final _controller = TextEditingController();
 
@@ -30,7 +35,7 @@ class _HomeWidgetsState extends State<HomeWidgets> {
         child: Column(
           children: <Widget>[
             Text(
-              selectedClimbingPlace,
+              SelectedGym,
               style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
