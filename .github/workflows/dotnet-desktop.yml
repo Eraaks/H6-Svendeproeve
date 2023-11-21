@@ -8,16 +8,19 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    working-directory: \API\Svendeproeve-KlatreApp-API
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
+      working-directory: ./API/Svendeproeve-KlatreApp-API
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
+      working-directory: ./API/Svendeproeve-KlatreApp-API
       run: dotnet restore
     - name: Build
+      working-directory: ./API/Svendeproeve-KlatreApp-API
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./API/Svendeproeve-KlatreApp-API
       run: dotnet test --no-build --verbosity normal
