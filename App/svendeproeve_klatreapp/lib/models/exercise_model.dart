@@ -78,7 +78,7 @@ class ExerciseModel {
         _reps = json['reps'],
         _sets = json['sets'],
         _howToLocation = json['howto_Location'],
-        _muscleGroupLocation = json['howto_Location'];
+        _muscleGroupLocation = json['musclegroup_Location'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
