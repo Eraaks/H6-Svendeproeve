@@ -26,8 +26,8 @@ extension StringExtensions on String {
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
-  static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
-  //static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
+  //static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
