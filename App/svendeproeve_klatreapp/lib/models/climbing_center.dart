@@ -136,6 +136,7 @@ class AreaRoutes {
   List<String>? _usersWhoCompleted;
   List<String>? _usersWhoFlashed;
   int? _number;
+  String? _assignedArea;
 
   AreaRoutes(
       {String? id,
@@ -143,7 +144,8 @@ class AreaRoutes {
       String? grade,
       List<String>? usersWhoCompleted,
       List<String>? usersWhoFlashed,
-      int? number}) {
+      int? number,
+      String? assignedArea}) {
     if (id != null) {
       this._id = id;
     }
@@ -162,6 +164,9 @@ class AreaRoutes {
     if (number != null) {
       this._number = number;
     }
+    if (assignedArea != null) {
+      this._assignedArea = assignedArea;
+    }
   }
 
   String? get id => _id;
@@ -178,6 +183,8 @@ class AreaRoutes {
       _usersWhoFlashed = usersWhoFlashed;
   int? get number => _number;
   set number(int? number) => _number = number;
+  String? get assignedArea => _assignedArea;
+  set assignedArea(String? assignedArea) => _assignedArea = assignedArea;
 
   AreaRoutes.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -186,6 +193,7 @@ class AreaRoutes {
     _usersWhoCompleted = json['usersWhoCompleted'].cast<String>();
     _usersWhoFlashed = json['usersWhoFlashed'].cast<String>();
     _number = json['number'];
+    _assignedArea = json['assignedArea'];
   }
 
   Map<String, dynamic> toJson() {
@@ -196,6 +204,7 @@ class AreaRoutes {
     data['usersWhoCompleted'] = this._usersWhoCompleted;
     data['usersWhoFlashed'] = this._usersWhoFlashed;
     data['number'] = this._number;
+    data['assignedArea'] = this._assignedArea;
     return data;
   }
 }
