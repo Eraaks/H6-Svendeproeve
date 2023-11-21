@@ -3,6 +3,7 @@ class ExerciseModel {
   late String _description;
   late String _assetLocation;
   late String _howToLocation;
+  late String _muscleGroupLocation;
   late String _benefits;
   late List<String> _includedIn;
   late String _overallTarget;
@@ -14,6 +15,7 @@ class ExerciseModel {
   ExerciseModel({
     required String name,
     required String description,
+    required String muscleGroupLocation,
     required String assetLocation,
     required String howToLocation,
     required String benefits,
@@ -36,6 +38,10 @@ class ExerciseModel {
 
   String get howToLocation => _howToLocation;
   set howToLocation(String? howToLocation) => _howToLocation = howToLocation!;
+
+  String get muscleGroupLocation => _muscleGroupLocation;
+  set muscleGroupLocation(String? muscleGroupLocation) =>
+      _muscleGroupLocation = muscleGroupLocation!;
 
   String get benefits => _benefits;
   set benefits(String? benefits) => _benefits = benefits!;
@@ -71,7 +77,8 @@ class ExerciseModel {
         _secondaryActivation = List<String>.from(json['secondary_Activation']),
         _reps = json['reps'],
         _sets = json['sets'],
-        _howToLocation = json['howto_Location'];
+        _howToLocation = json['howto_Location'],
+        _muscleGroupLocation = json['howto_Location'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
@@ -85,7 +92,8 @@ class ExerciseModel {
       'secondary_Activation': _secondaryActivation,
       'reps': _reps,
       'sets': _sets,
-      'howto_location': _howToLocation,
+      'howto_Location': _howToLocation,
+      'musclegroup_Location': _muscleGroupLocation,
     };
     return data;
   }
