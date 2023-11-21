@@ -86,7 +86,8 @@ class _PersonPageWidgetState extends State<PersonPageWidget> {
                     const SizedBox(width: 16.0),
                     FloatingActionButton.extended(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.pop(context,
+                            {'following': following, 'userUID': userUID});
                       },
                       heroTag: 'back',
                       elevation: 0,
