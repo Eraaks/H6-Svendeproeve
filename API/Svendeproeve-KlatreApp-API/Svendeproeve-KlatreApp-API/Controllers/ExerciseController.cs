@@ -51,5 +51,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         {
             await _firebaseService.DeleteExercise(exerciseName);
         }
+
+  
     }
 }

@@ -77,9 +77,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _profileDataService.GetClimbingScores(climbingCenter);
         }
 
-        public async Task SubmitUserClimb(string userUID, string climbingCenterName, string areaName, string grade, bool flash, string problemID)
+        public async Task SubmitUserClimb(List<AreaRoutes> routes, string userUID, string climbingCenterName)
         {
-            await _profileDataService.SubmitUserClimb(userUID, climbingCenterName, areaName, grade, flash, problemID);
+            await _profileDataService.SubmitUserClimb(routes, userUID, climbingCenterName);
         }
 
         public async Task UpdateSelectedGym(string userUID, string newSelectedGym)
@@ -117,9 +117,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _klatrecentreService.GetCenterRoutes(centerName);
         }
 
-        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string areaName, string userUID, bool flashed)
+        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string userUID)
         {
-            await _klatrecentreService.UpdateRouteCompleters(routes, climbingCenterName, areaName, userUID, flashed);
+            await _klatrecentreService.UpdateRouteCompleters(routes, climbingCenterName, userUID);
         }
 
         public async Task<bool> CheckIfUserModerator(string userUID)
@@ -197,6 +197,7 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _exerciseService.DeleteExercise(exerciseName);
         }
 
+
         public async Task CreateNewWorkout(WorkoutDocument workoutDocument)
         {
             await _workoutService.CreateNewWorkout(workoutDocument);
@@ -255,6 +256,8 @@ namespace Svendeproeve_KlatreApp_API.Services
         {
             return await _klatrecentreService.GetSelectedClimbingCenter(climbingCenterName);
         }
+
+  
 
     }
 }

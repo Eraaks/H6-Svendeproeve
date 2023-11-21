@@ -22,10 +22,10 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             return await _fireBaseService.GetCenterRoutes(centerName);
         }
 
-        [HttpPatch("/UpdateRouteCompleters/{climbingCenterName}&{areaName}&{routeID}&{userUID}&{flashed}")]
-        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string areaName, string userUID, bool flashed)
+        [HttpPatch("/UpdateRouteCompleters/{climbingCenterName}&{userUID}")]
+        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string userUID)
         {
-            await _fireBaseService.UpdateRouteCompleters(routes, climbingCenterName, areaName, userUID, flashed);
+            await _fireBaseService.UpdateRouteCompleters(routes, climbingCenterName, userUID);
         }
 
         [HttpGet("/GetClimbingCentre/")]

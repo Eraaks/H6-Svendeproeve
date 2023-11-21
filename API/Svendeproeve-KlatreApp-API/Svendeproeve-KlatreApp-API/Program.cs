@@ -22,16 +22,16 @@ namespace Svendeproeve_KlatreApp_API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-           // Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Eraaks\Downloads\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
-             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Skole\Firebase key\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+            //Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Eraaks\Downloads\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Skole\Firebase key\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
 
 
             var fireStoreDB = FirestoreDb.Create("h6-svendeproeve-klatreapp");
             var githubClient = new GitHubClient(new ProductHeaderValue("H6-Svendeproeve-KlatreApp"));
             var fireStoreService = new FirebaseService(
-                new ProfileDataService(fireStoreDB), 
-                new KlatrecentreService(fireStoreDB), 
-                new ModeratorService(fireStoreDB), 
+                new ProfileDataService(fireStoreDB),
+                new KlatrecentreService(fireStoreDB),
+                new ModeratorService(fireStoreDB),
                 new LoginVerificationService(fireStoreDB),
                 new GripsService(fireStoreDB),
                 new ExerciseService(fireStoreDB),

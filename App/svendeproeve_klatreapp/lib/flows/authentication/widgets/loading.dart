@@ -39,8 +39,10 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           // set Moderator = True in Constants to test Mod page.
           String selectedGym = snapshot.data!.selectedGym;
           return isModerator
-              ? ModOverviewPage(selectedGym: selectedGym)
-              : NavBarPage(selectedGym: selectedGym);
+              ? const ModOverviewPage()
+              : NavBarPage(
+                  SelectedGym: selectedGym,
+                  profileData: snapshot.data!.profileData);
         } else {
           return const Center(
             child: Text('Something went wrong'),
