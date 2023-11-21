@@ -16,22 +16,17 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         {
             var exercise = _firestoreDb.Collection("Exercises").Document(exerciseDocument.Name);
             await exercise.SetAsync(exerciseDocument);
-            await AddHowTo(exerciseDocument.Name, exerciseDocument.how_To);
+            
         }
 
-        private async Task AddHowTo(string exerciseName, How_To howTo)
-        {
-            var howToCollection = _firestoreDb.Collection("Exercises").Document(exerciseName).Collection("How_To").Document($"{exerciseName}-HowTo");
-            await howToCollection.SetAsync(howTo);
-        }
+
 
         public async Task<ExerciseDocument> GetExercise(string exerciseName)
         {
-            var howToDocument = await _firestoreDb.Collection("Exercises").Document(exerciseName).Collection("How_To").Document($"{exerciseName}-HowTo").GetSnapshotAsync();
-            var howToData = howToDocument.ConvertTo<How_To>();
+       
             var exerciseDocument = await _firestoreDb.Collection("Exercises").Document(exerciseName).GetSnapshotAsync();
             var exerciseData = exerciseDocument.ConvertTo<ExerciseDocument>();
-            exerciseData.how_To = howToData;
+      
             return exerciseData;
         }
 
@@ -41,8 +36,8 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             var exerciseData = exerciseDocuments.Documents.Select(s => s.ConvertTo<ExerciseDocument>()).ToList();
             foreach(var data in exerciseData)
             {
-                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).Collection("How_To").Document($"{data.Name}-HowTo").GetSnapshotAsync();
-                data.how_To = howToData.ConvertTo<How_To>();
+                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).GetSnapshotAsync();
+               
             }
             return exerciseData;
         }
@@ -53,8 +48,8 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             var exerciseData = exerciseDocuments.Documents.Select(e => e.ConvertTo<ExerciseDocument>()).ToList();
             foreach (var data in exerciseData)
             {
-                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).Collection("How_To").Document($"{data.Name}-HowTo").GetSnapshotAsync();
-                data.how_To = howToData.ConvertTo<How_To>();
+                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).GetSnapshotAsync();
+               
             }
             return exerciseData;
         }
@@ -72,5 +67,10 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             var exerciseDocument = _firestoreDb.Collection("Exercises").Document(exerciseName);
             await exerciseDocument.DeleteAsync();
         }
+
+
+
+
+
     }
 }
