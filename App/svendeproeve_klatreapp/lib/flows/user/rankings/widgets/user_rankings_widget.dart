@@ -99,8 +99,8 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
               Text('Rank: ${snapshotData.rank}, Score: ${snapshotData.score}'),
           children: [
             TextButton(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => PersonPage(
@@ -112,6 +112,14 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
                                         : false,
                                 selectedGym: SelectedGym,
                               )));
+
+                  if (result != null) {
+                    if (result['following'] == true) {
+                      followList!.add(result['userUID']);
+                    } else {
+                      followList!.remove(result['userUID']);
+                    }
+                  }
                 },
                 child: const Text('View User'))
           ],

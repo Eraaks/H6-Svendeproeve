@@ -14,8 +14,12 @@ import '../models/climbing_score.dart';
 class TokenResult {
   final bool success;
   final String selectedGym;
+  final ProfileData profileData;
 
-  TokenResult({required this.success, required this.selectedGym});
+  TokenResult(
+      {required this.success,
+      required this.selectedGym,
+      required this.profileData});
 }
 
 extension StringExtensions on String {
@@ -56,9 +60,11 @@ class APIService {
           selectedGym: profile.selectedGym!
               .split(' ')
               .map((word) => word.capitalize())
-              .join(' '));
+              .join(' '),
+          profileData: profile);
     } else {
-      return TokenResult(success: false, selectedGym: '');
+      return TokenResult(
+          success: false, selectedGym: '', profileData: ProfileData());
     }
   }
 

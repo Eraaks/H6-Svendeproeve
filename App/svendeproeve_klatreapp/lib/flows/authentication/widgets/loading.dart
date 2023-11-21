@@ -40,7 +40,9 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           String selectedGym = snapshot.data!.selectedGym;
           return isModerator
               ? const ModOverviewPage()
-              : NavBarPage(SelectedGym: selectedGym);
+              : NavBarPage(
+                  SelectedGym: selectedGym,
+                  profileData: snapshot.data!.profileData);
         } else {
           return const Center(
             child: Text('Something went wrong'),
