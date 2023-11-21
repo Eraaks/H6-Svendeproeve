@@ -197,6 +197,7 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _exerciseService.DeleteExercise(exerciseName);
         }
 
+
         public async Task CreateNewWorkout(WorkoutDocument workoutDocument)
         {
             await _workoutService.CreateNewWorkout(workoutDocument);
@@ -255,6 +256,8 @@ namespace Svendeproeve_KlatreApp_API.Services
         {
             return await _klatrecentreService.GetSelectedClimbingCenter(climbingCenterName);
         }
+
+  
 
     }
 }

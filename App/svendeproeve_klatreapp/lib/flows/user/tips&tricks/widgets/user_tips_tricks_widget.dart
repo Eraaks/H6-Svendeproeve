@@ -20,6 +20,7 @@ class TipsTricksWidgets extends StatefulWidget {
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
   late Future<List<ExerciseModel>> exercises;
+
   //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
   late Future<List<GripsModel>> grips;
 
@@ -102,6 +103,62 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
           ),
           const Text(
             "Grips",
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          FutureBuilder<List<GripsModel>>(
+            future: grips,
+            builder: (context, gripSnapshot) {
+              if (gripSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (gripSnapshot.hasError) {
+                return Center(child: Text('Error: ${gripSnapshot.error}'));
+              } else {
+                final gripList = gripSnapshot.data;
+                return SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.all(12),
+                    itemCount: gripList!.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 12);
+                    },
+                    itemBuilder: (context, index) {
+                      final grip = gripList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GripPage(grip: grip),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                grip.gripImg,
+                                height: 150,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(grip.gripName),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+          const Text(
+            "Favorite Exercises",
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),

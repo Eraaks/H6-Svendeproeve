@@ -59,8 +59,8 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
         backgroundColor: Colors.black,
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-              icon: const Icon(Icons.live_help_outlined),
-              title: const Text('Tips & Exercises'),
+              icon: const Icon(Icons.fitness_center),
+              title: const Text('Exercises'),
               activeColor: Colors.blue,
               inactiveColor: inactiveColor,
               textAlign: TextAlign.center),

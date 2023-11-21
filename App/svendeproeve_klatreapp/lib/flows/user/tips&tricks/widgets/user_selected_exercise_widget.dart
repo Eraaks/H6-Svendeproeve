@@ -84,7 +84,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            widget.exercise.assetLocation,
+                            widget.exercise.howToLocation,
                             height: 400,
                             width: 400,
                             fit: BoxFit.cover,
@@ -103,7 +103,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
                               style: TextStyle(
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
-                            Text('HowTo Link goes here:'),
+                            Text(widget.exercise.description),
                           ],
                         ),
                       ),
