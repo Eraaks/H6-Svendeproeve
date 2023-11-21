@@ -1,6 +1,8 @@
 class ExerciseModel {
   late String _name;
+  late String _description;
   late String _assetLocation;
+  late String _howToLocation;
   late String _benefits;
   late List<String> _includedIn;
   late String _overallTarget;
@@ -8,11 +10,12 @@ class ExerciseModel {
   late List<String> _secondaryActivation;
   late int _reps;
   late int _sets;
-  late HowTo? _howTo;
 
   ExerciseModel({
     required String name,
+    required String description,
     required String assetLocation,
+    required String howToLocation,
     required String benefits,
     required List<String> includedIn,
     required String overallTarget,
@@ -20,15 +23,19 @@ class ExerciseModel {
     required List<String> secondaryActivation,
     required int reps,
     required int sets,
-    required HowTo howTo,
   });
 
   String get name => _name;
-
   set name(String? name) => _name = name!;
+
+  String get description => _description;
+  set description(String? description) => _description = description!;
 
   String get assetLocation => _assetLocation;
   set assetLocation(String? assetLocation) => _assetLocation = assetLocation!;
+
+  String get howToLocation => _howToLocation;
+  set howToLocation(String? howToLocation) => _howToLocation = howToLocation!;
 
   String get benefits => _benefits;
   set benefits(String? benefits) => _benefits = benefits!;
@@ -55,6 +62,7 @@ class ExerciseModel {
 
   ExerciseModel.fromJson(Map<String, dynamic> json)
       : _name = json['name'],
+        _description = json['description'],
         _assetLocation = json['asset_Location'],
         _benefits = json['benefits'],
         _includedIn = List<String>.from(json['included_In']),
@@ -63,11 +71,12 @@ class ExerciseModel {
         _secondaryActivation = List<String>.from(json['secondary_Activation']),
         _reps = json['reps'],
         _sets = json['sets'],
-        _howTo = HowTo.fromJson(json['how_To'] ?? {});
+        _howToLocation = json['howto_Location'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
       'name': _name,
+      'description': _description,
       'asset_location': _assetLocation,
       'benefits': _benefits,
       'included_In': _includedIn,
@@ -76,28 +85,8 @@ class ExerciseModel {
       'secondary_Activation': _secondaryActivation,
       'reps': _reps,
       'sets': _sets,
-      'how_To': _howTo?.toJson() ?? {},
+      'howto_location': _howToLocation,
     };
     return data;
-  }
-}
-
-class HowTo {
-  late String _videoLink;
-
-  HowTo({
-    required String videoLink,
-  });
-
-  factory HowTo.fromJson(Map<String, dynamic> json) {
-    return HowTo(
-      videoLink: json['video_Link'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'video_Link': _videoLink,
-    };
   }
 }

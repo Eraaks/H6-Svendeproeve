@@ -20,6 +20,7 @@ class TipsTricksWidgets extends StatefulWidget {
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
   late Future<List<ExerciseModel>> exercises;
+
   //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
   late Future<List<GripsModel>> grips;
 
@@ -155,6 +156,11 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
                 );
               }
             },
+          ),
+          const Text(
+            "Favorite Exercises",
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

@@ -15,6 +15,12 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         public string Asset_Location { get; set; }
 
         [FirestoreProperty]
+        public string Howto_Location { get; set; }
+
+        [FirestoreProperty]
+        public string Musclegroup_Location { get; set; }
+
+        [FirestoreProperty]
         public string Benefits { get; set; }
 
         [FirestoreProperty]
@@ -35,13 +41,8 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         [FirestoreProperty]
         public List<string> Secondary_Activation { get; set; }
 
-        public How_To how_To { get; set; }
+
     }
 
-    [FirestoreData]
-    public class How_To
-    {
-        [FirestoreProperty]
-        public string Video_Link { get; set; }
-    }
+
 }
