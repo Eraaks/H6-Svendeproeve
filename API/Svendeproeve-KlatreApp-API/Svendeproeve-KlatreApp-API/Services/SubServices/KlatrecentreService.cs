@@ -21,6 +21,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 {
                     route.ID = Guid.NewGuid().ToString();
                     route.Number = number++;
+                    route.AssignedArea = area.Name;
                 }
             }
             var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName);
@@ -280,24 +281,24 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             return area;
         }
 
-        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string areaName, string userUID, bool flashed)
+        public async Task UpdateRouteCompleters(List<AreaRoutes> routes, string climbingCenterName, string userUID)
         {
             foreach(var route in routes)
             {
-                var routeDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").Document(route.ID).GetSnapshotAsync();
+                var routeDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(route.AssignedArea).Document(route.AssignedArea).Collection("Routes").Document(route.ID).GetSnapshotAsync();
                 var routeData = routeDocument.ConvertTo<AreaRoutes>();
 
-                if(flashed)
+                if(route.UsersWhoFlashed.Contains(userUID))
                 {
                     if(!routeData.UsersWhoFlashed.Contains(userUID)) routeData.UsersWhoFlashed.Add(userUID);
                     if (routeData.UsersWhoFlashed.Contains("string")) routeData.UsersWhoFlashed.Remove("string");
-                    await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").Document(route.ID).UpdateAsync("UsersWhoFlashed", routeData.UsersWhoFlashed);
+                    await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(route.AssignedArea).Document(route.AssignedArea).Collection("Routes").Document(route.ID).UpdateAsync("UsersWhoFlashed", routeData.UsersWhoFlashed);
                 }
                 else
                 {
                     if (!routeData.UsersWhoCompleted.Contains(userUID)) routeData.UsersWhoCompleted.Add(userUID);
                     if (routeData.UsersWhoCompleted.Contains("string")) routeData.UsersWhoCompleted.Remove("string");
-                    await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").Document(route.ID).UpdateAsync("UsersWhoCompleted", routeData.UsersWhoCompleted);
+                    await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(route.AssignedArea).Document(route.AssignedArea).Collection("Routes").Document(route.ID).UpdateAsync("UsersWhoCompleted", routeData.UsersWhoCompleted);
                 }
             }
         }   

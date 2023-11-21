@@ -24,6 +24,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<List<Areas>>? areas;
+  List<AreaRoutes> routesAffected = [];
 
   List<ProblemsModel> problemsList = getAllProblems();
   List<ClimbingAreaModel> climbingAreas = getAllClimbingAreas();
@@ -84,6 +85,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                                 userUID: _auth.currentUser!.uid,
                                 climbingCenterName: SelectedGym,
                                 areaName: data[index].name!,
+                                routesAffected: routesAffected,
                               ),
                             ],
                           );
@@ -97,9 +99,19 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                         Text('Submit:'),
                         IconButton(
                           icon: const Icon(Icons.add),
-                          onPressed: () {
-                            //addRoute(grade);
+                          onPressed: () async {
                             print('Submitting');
+                            await _apiService.updateRouteCompleters(
+                                routesAffected,
+                                SelectedGym,
+                                _auth.currentUser!.uid);
+
+                            await _apiService.submitUserClimb(routesAffected,
+                                _auth.currentUser!.uid, SelectedGym);
+
+                            // Restart Appen
+                            RestartWidget.restartApp(context);
+                            //addRoute(grade);
                           },
                         ),
                       ],
@@ -115,20 +127,46 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
   }
 }
 
-class DataTableBuilder extends StatelessWidget {
+class DataTableBuilder extends StatefulWidget {
   final List<AreaRoutes> problems;
   final Function updateState;
   final String userUID;
   final String climbingCenterName;
   final String areaName;
-  static final APIService _apiService = APIService();
+  final List<AreaRoutes> routesAffected;
+  const DataTableBuilder(
+      {super.key,
+      required this.problems,
+      required this.updateState,
+      required this.userUID,
+      required this.climbingCenterName,
+      required this.areaName,
+      required this.routesAffected});
 
-  DataTableBuilder(
+  @override
+  State<DataTableBuilder> createState() => _DataTableBuilderState(
+      problems: problems,
+      updateState: updateState,
+      userUID: userUID,
+      climbingCenterName: climbingCenterName,
+      areaName: areaName,
+      routesAffected: routesAffected);
+}
+
+class _DataTableBuilderState extends State<DataTableBuilder> {
+  final List<AreaRoutes> problems;
+  final Function updateState;
+  final String userUID;
+  final String climbingCenterName;
+  final String areaName;
+  final List<AreaRoutes> routesAffected;
+  _DataTableBuilderState(
       {required this.problems,
       required this.updateState,
       required this.userUID,
       required this.climbingCenterName,
-      required this.areaName});
+      required this.areaName,
+      required this.routesAffected});
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +221,19 @@ class DataTableBuilder extends StatelessWidget {
                   } else {
                     problem.usersWhoCompleted!.add(userUID);
                   }
+
+                  setState(() {
+                    AreaRoutes test = new AreaRoutes(
+                      id: problem.id,
+                      color: problem.color,
+                      grade: problem.grade,
+                      usersWhoCompleted: problem.usersWhoCompleted,
+                      usersWhoFlashed: problem.usersWhoFlashed,
+                      number: problem.number,
+                      assignedArea: problem.assignedArea,
+                    );
+                    routesAffected.add(test);
+                  });
                   updateState();
                 },
               ),
@@ -193,12 +244,25 @@ class DataTableBuilder extends StatelessWidget {
                 color: problem.usersWhoFlashed!.contains(userUID)
                     ? Colors.green
                     : null,
-                onPressed: () {
+                onPressed: () async {
                   if (problem.usersWhoFlashed!.contains(userUID)) {
                     problem.usersWhoFlashed!.remove(userUID);
                   } else {
                     problem.usersWhoFlashed!.add(userUID);
                   }
+
+                  setState(() {
+                    AreaRoutes test = new AreaRoutes(
+                      id: problem.id,
+                      color: problem.color,
+                      grade: problem.grade,
+                      usersWhoCompleted: problem.usersWhoCompleted,
+                      usersWhoFlashed: problem.usersWhoFlashed,
+                      number: problem.number,
+                      assignedArea: problem.assignedArea,
+                    );
+                    routesAffected.add(test);
+                  });
                   updateState();
                 },
               ),
