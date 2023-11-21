@@ -37,7 +37,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public UnitTest1()
         {
             // Arrange
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"H6-Svendeproeve-KlatreApp\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @".\API\Svendeproeve-KlatreApp-API\h6-svendeproeve-klatreapp-firebase-adminsdk-7l50x-662b9ddd66.json");
             _firestoreDB = FirestoreDb.Create("h6-svendeproeve-klatreapp");
         }
 
