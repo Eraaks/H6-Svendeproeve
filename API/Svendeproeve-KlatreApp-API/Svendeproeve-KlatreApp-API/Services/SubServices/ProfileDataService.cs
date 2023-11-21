@@ -147,19 +147,22 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
             return climbingScores;
         }
-        public async Task SubmitUserClimb(string userUID, string climbingCenterName, string areaName, string grade, bool flash, string problemID)
+        public async Task SubmitUserClimb(List<AreaRoutes> routes, string userUID, string climbingCenterName)
         {
-            var newSendCollection = new Send_Collection()
+            foreach (var route in routes)
             {
-                ID = problemID,
-                Area = areaName,
-                Grade = grade.Replace("Plus", "+"),
-                Points = CalculatePoints(grade) + (flash ? 17 : 0),
-                Tries = flash ? 1 : 2,
-                SendDate = DateTime.Today.Ticks
-            };
+                var newSendCollection = new Send_Collection()
+                {
+                    ID = route.ID,
+                    Area = route.AssignedArea,
+                    Grade = route.Grade.Replace("Plus", "+"),
+                    Points = CalculatePoints(route.Grade) + (route.UsersWhoFlashed.Contains(userUID) ? 17 : 0),
+                    Tries = route.UsersWhoFlashed.Contains(userUID) ? 1 : 2,
+                    SendDate = DateTime.Today.Ticks
+                };
 
-            await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(problemID).SetAsync(newSendCollection);
+                await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(route.ID).SetAsync(newSendCollection);
+            }
 
             await UpdateTotalPointsAndEstimatedGrade(userUID, climbingCenterName);
         }

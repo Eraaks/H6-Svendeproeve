@@ -57,5 +57,7 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
 
         [FirestoreProperty]
         public int Number { get; set; }
+        [FirestoreProperty]
+        public string AssignedArea { get; set; }
     }
 }

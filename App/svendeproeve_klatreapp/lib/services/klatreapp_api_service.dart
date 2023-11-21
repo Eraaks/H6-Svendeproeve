@@ -14,8 +14,12 @@ import '../models/climbing_score.dart';
 class TokenResult {
   final bool success;
   final String selectedGym;
+  final ProfileData profileData;
 
-  TokenResult({required this.success, required this.selectedGym});
+  TokenResult(
+      {required this.success,
+      required this.selectedGym,
+      required this.profileData});
 }
 
 extension StringExtensions on String {
@@ -26,8 +30,8 @@ extension StringExtensions on String {
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
-  //static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
-  static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
+  static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  // static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
@@ -56,9 +60,11 @@ class APIService {
           selectedGym: profile.selectedGym!
               .split(' ')
               .map((word) => word.capitalize())
-              .join(' '));
+              .join(' '),
+          profileData: profile);
     } else {
-      return TokenResult(success: false, selectedGym: '');
+      return TokenResult(
+          success: false, selectedGym: '', profileData: ProfileData());
     }
   }
 
@@ -319,20 +325,22 @@ class APIService {
     }
   }
 
-  Future<void> updateRouteCompleters(String climbingCenterName, String areaName,
-      String routeID, String userUID, bool flashed) async {
+  Future<void> updateRouteCompleters(List<AreaRoutes> routes,
+      String climbingCenterName, String userUID) async {
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
     };
+
     await http.patch(
         Uri.parse(
-            '${_baseUrlLocal}UpdateRouteCompleters/$climbingCenterName&$areaName&$routeID&$userUID&$flashed'),
-        headers: headers);
+            '${_baseUrlLocal}UpdateRouteCompleters/$climbingCenterName&$userUID'),
+        headers: headers,
+        body: jsonEncode(routes));
   }
 
-  Future<void> submitUserClimb(String userUID, String climbingCenterName,
-      String areaName, String grade, bool flash, String problemID) async {
+  Future<void> submitUserClimb(List<AreaRoutes> routes, String userUID,
+      String climbingCenterName) async {
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
@@ -340,8 +348,9 @@ class APIService {
 
     await http.post(
         Uri.parse(
-            '${_baseUrlLocal}SubmitUserClimb/$userUID&$climbingCenterName&$areaName&$grade&$problemID?flash=$flash'),
-        headers: headers);
+            '${_baseUrlLocal}SubmitUserClimb/$userUID&$climbingCenterName'),
+        headers: headers,
+        body: jsonEncode(routes));
   }
 
   Future<void> updateSelectedGym(String userUID, String newSelectedGym) async {

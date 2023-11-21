@@ -13,6 +13,7 @@ import 'package:svendeproeve_klatreapp/flows/user/personal/user_personal_page.da
 import 'package:svendeproeve_klatreapp/flows/user/rankings/user_rankings_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/user_tips_tricks_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
+import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,16 +21,20 @@ final AuthService _auth = AuthService();
 
 class NavBarWidgets extends StatefulWidget {
   final String SelectedGym;
-  const NavBarWidgets({Key? key, required this.SelectedGym}) : super(key: key);
+  final ProfileData profileData;
+  const NavBarWidgets(
+      {Key? key, required this.SelectedGym, required this.profileData})
+      : super(key: key);
 
   @override
   State<NavBarWidgets> createState() =>
-      _NavBarWidgetsState(SelectedGym: SelectedGym);
+      _NavBarWidgetsState(SelectedGym: SelectedGym, profileData: profileData);
 }
 
 class _NavBarWidgetsState extends State<NavBarWidgets> {
   final String SelectedGym;
-  _NavBarWidgetsState({required this.SelectedGym});
+  final ProfileData profileData;
+  _NavBarWidgetsState({required this.SelectedGym, required this.profileData});
 
   int currentIndex = 2;
   late List<StatefulWidget> screens = [
@@ -37,7 +42,7 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
     OverviewPage(SelectedGym: SelectedGym),
     HomePage(SelectedGym: SelectedGym),
     RankingsPage(SelectedGym: SelectedGym),
-    PersonalPage(SelectedGym: SelectedGym),
+    PersonalPage(SelectedGym: SelectedGym, profileData: profileData),
   ];
 
   @override
@@ -59,8 +64,8 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
         backgroundColor: Colors.black,
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-              icon: const Icon(Icons.live_help_outlined),
-              title: const Text('Tips & Exercises'),
+              icon: const Icon(Icons.fitness_center),
+              title: const Text('Exercises'),
               activeColor: Colors.blue,
               inactiveColor: inactiveColor,
               textAlign: TextAlign.center),
