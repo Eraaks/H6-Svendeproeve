@@ -19,10 +19,10 @@ class TipsTricksWidgets extends StatefulWidget {
 
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
-  late Future<List<ExerciseModel>> exercises;
+  late Future<List<ExerciseModel>?> exercises;
 
   //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
-  late Future<List<GripsModel>> grips;
+  late Future<List<GripsModel>?> grips;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          FutureBuilder<List<ExerciseModel>>(
+          FutureBuilder<List<ExerciseModel>?>(
             future: exercises,
             builder: (context, exerciseSnapshot) {
               if (exerciseSnapshot.connectionState == ConnectionState.waiting) {
@@ -106,7 +106,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          FutureBuilder<List<GripsModel>>(
+          FutureBuilder<List<GripsModel>?>(
             future: grips,
             builder: (context, gripSnapshot) {
               if (gripSnapshot.connectionState == ConnectionState.waiting) {

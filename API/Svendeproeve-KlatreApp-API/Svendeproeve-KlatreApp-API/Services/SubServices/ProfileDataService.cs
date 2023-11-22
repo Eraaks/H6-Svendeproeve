@@ -381,5 +381,6 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         {
             await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Selected_Gym", newSelectedGym);
         }
+
     }
 }

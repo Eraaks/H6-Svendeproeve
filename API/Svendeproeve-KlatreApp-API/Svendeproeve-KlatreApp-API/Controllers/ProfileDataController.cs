@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 using Svendeproeve_KlatreApp_API.Services;
+using Svendeproeve_KlatreApp_API.Services.SubServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -39,7 +40,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Estimated_Grade = "2",
                 Location = "",
                 Total_Points = 200,
-                Send_Collections = new List<Send_Collection>(){ send_CollectionSouth }
+                Send_Collections = new List<Send_Collection>() { send_CollectionSouth }
             };
             await _fireStoreService.AddProfileData(new ProfileDataDocument
             {
@@ -53,7 +54,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Climbing_History = new List<Climbing_History>() { historySouth }
             });
 
-            if(moderatorCode != null && moderatorCode != "Empty") await _fireStoreService.CheckModeratorCodeAndAddToCenter(moderatorCode, userUID);
+            if (moderatorCode != null && moderatorCode != "Empty") await _fireStoreService.CheckModeratorCodeAndAddToCenter(moderatorCode, userUID);
         }
 
         [HttpGet("/GetProfileData/{userUID}")]
@@ -108,8 +109,8 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         [HttpPost("/SubmitUserClimb/{userUID}&{climbingCenterName}")]
         public async Task SubmitUserClimb(List<AreaRoutes> routes, string userUID, string climbingCenterName)
         {
-           climbingCenterName = climbingCenterName.Replace(" ", "");
-           await _fireStoreService.SubmitUserClimb(routes, userUID, climbingCenterName);
+            climbingCenterName = climbingCenterName.Replace(" ", "");
+            await _fireStoreService.SubmitUserClimb(routes, userUID, climbingCenterName);
         }
 
         [HttpPatch("/UpdateSelectedGym/{userUID}&{newSelectedGym}")]
@@ -117,6 +118,12 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         {
             newSelectedGym = newSelectedGym.Replace(" ", "");
             await _fireStoreService.UpdateSelectedGym(userUID, newSelectedGym);
+        }
+
+        [HttpGet("/CheckIfUserModerator/{userUID}&{climbingCenterName}")]
+        public async Task<bool> CheckIfUserModerator(string userUID)
+        {
+            return await _fireStoreService.CheckIfUserModerator(userUID);
         }
     }
 }

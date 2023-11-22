@@ -46,11 +46,11 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         {
             var exerciseDocuments = await _firestoreDb.Collection("Exercises").WhereArrayContains("Included_In", musclegroups).GetSnapshotAsync();
             var exerciseData = exerciseDocuments.Documents.Select(e => e.ConvertTo<ExerciseDocument>()).ToList();
-            foreach (var data in exerciseData)
-            {
-                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).GetSnapshotAsync();
+            //foreach (var data in exerciseData)
+            //{
+            //    var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).GetSnapshotAsync();
                
-            }
+            //}
             return exerciseData;
         }
 

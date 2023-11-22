@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
+import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
+import 'package:svendeproeve_klatreapp/models/problems_model.dart';
+import 'package:svendeproeve_klatreapp/models/profile_data.dart';
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
-Widget areaDialog(context) {
+Widget areaDialog(edit, context, centerName, area, userUID) {
   TextEditingController editAreaController = TextEditingController();
+  final APIService _apiService = APIService();
+
+  Future<void> _editArea(
+      centerName, climbingArea, userUID, fieldToChange, newValue) async {
+    await _apiService.updateClimbingArea(
+        centerName, climbingArea, userUID, fieldToChange, newValue);
+  }
+
+  // Future<void> _addArea(centerName, climbingArea, userUID, areaName) async {
+  //   await _apiService.createClimbingArea(
+  //       centerName, climbingArea, userUID, areaName);
+  // }
 
   return StatefulBuilder(
     builder: (context, setState) {
@@ -28,6 +44,15 @@ Widget areaDialog(context) {
           TextButton(
             onPressed: () {
               print('Confirmed editing');
+              print(editAreaController.text);
+              if (edit = true) {
+                _editArea(
+                    centerName, area, userUID, area, editAreaController.text);
+                print('edit area');
+              } else {
+                // _addArea();
+                print('add area');
+              }
               Navigator.pop(context, editAreaController.text);
             },
             style: TextButton.styleFrom(
@@ -51,16 +76,32 @@ Widget areaDialog(context) {
   );
 }
 
-Widget routeDialog(selectedValue) {
+Widget problemDialog(
+    climbingArea, selectedGym, edit, selectedGrade, selectedColor, userUID) {
+  final APIService _apiService = APIService();
+
+  Future<void> _editProblem(centerName, climbingArea, userUID, route) async {
+    await _apiService.updateClimbingRoute(
+        centerName, climbingArea, userUID, route);
+  }
+
+  Future<void> _addProblem(
+      centerName, climbingArea, userUID, problemName) async {
+    await _apiService.createClimbingRoute(
+        centerName, climbingArea, userUID, problemName);
+  }
+
+  TextEditingController editProblemController = TextEditingController();
   return StatefulBuilder(
     builder: (context, setState) {
       return AlertDialog(
         title: const Text('Please fill out the data:'),
-        content: Container(
-          height: 200,
+        content: SizedBox(
+          height: 300,
           child: Column(
             children: [
               TextFormField(
+                controller: editProblemController,
                 decoration: InputDecoration(
                   labelText: 'Grade',
                   labelStyle: const TextStyle(color: Colors.grey),
@@ -78,14 +119,14 @@ Widget routeDialog(selectedValue) {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               DropdownButton<String>(
-                value: selectedValue,
+                value: selectedColor,
                 onChanged: (String? value) {
                   setState(() {
-                    selectedValue = value!;
+                    selectedColor = value!;
                   });
                 },
                 items: colorMap.keys.map<DropdownMenuItem<String>>(
@@ -115,7 +156,19 @@ Widget routeDialog(selectedValue) {
           TextButton(
             onPressed: () {
               // Implement logic when Confirm is pressed
-              print('Confirmed editing');
+              final ProblemsModel route = ProblemsModel(
+                  grade: editProblemController.text,
+                  color: Color.fromARGB(255, 0, 68, 255));
+
+              if (edit = true) {
+                _editProblem(selectedGym, climbingArea, userUID, route);
+                print('Edit problem');
+              } else {
+                _addProblem(selectedGym, climbingArea, userUID, route);
+                print('Add problem');
+              }
+
+              print(editProblemController.text);
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
@@ -140,7 +193,14 @@ Widget routeDialog(selectedValue) {
   );
 }
 
-Widget deleteDialog() {
+Widget deleteProblemDialog(problem) {
+  final APIService _apiService = APIService();
+
+  // Future<void> _deleteProblem(problemID) async {
+  //   await _apiService.deleteClimbingRoute(
+  //       userUID, centerName, climbingArea, problemID);
+  // }
+
   return StatefulBuilder(
     builder: (context, setState) {
       return AlertDialog(
@@ -149,6 +209,7 @@ Widget deleteDialog() {
           TextButton(
             onPressed: () {
               print('Confirmed deleting');
+              //print(problem.id);
               Navigator.pop(context); // Close the AlertDialog
             },
             style: TextButton.styleFrom(
@@ -160,7 +221,6 @@ Widget deleteDialog() {
             onPressed: () {
               print('Cancel deleting');
               Navigator.pop(context);
-              // Close the AlertDialog
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.black,

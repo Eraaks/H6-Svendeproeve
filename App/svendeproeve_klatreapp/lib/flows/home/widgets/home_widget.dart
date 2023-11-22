@@ -22,7 +22,7 @@ class _HomeWidgetsState extends State<HomeWidgets> {
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   final _controller = TextEditingController();
-  Future<List<String>>? centerNames;
+  Future<List<String>?>? centerNames;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _HomeWidgetsState extends State<HomeWidgets> {
           ),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 500),
-            child: FutureBuilder<List<String>>(
+            child: FutureBuilder<List<String>?>(
               future: centerNames,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -98,7 +98,8 @@ class _HomeWidgetsState extends State<HomeWidgets> {
                     },
                     child: const Text('Switch to this climbing gym'))
               ],
-            ))
+            ),
+          )
         : const Card();
   }
 }

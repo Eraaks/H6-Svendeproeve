@@ -18,7 +18,7 @@ class ExercisePage extends StatefulWidget {
 
 class _ExercisePageState extends State<ExercisePage> {
   static final APIService _apiService = APIService();
-  late Future<List<ExerciseModel>>? includedIn;
+  late Future<List<ExerciseModel>?> includedIn;
 
   @override
   void initState() {

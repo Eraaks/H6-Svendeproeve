@@ -32,7 +32,7 @@ class _PersonPageWidgetState extends State<PersonPageWidget> {
   final String email;
   final String userUID;
   final String selectedGym;
-  bool following;
+  bool? following;
   final User user = FirebaseAuth.instance.currentUser!;
   final APIService _apiService = APIService();
 

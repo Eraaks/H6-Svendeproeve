@@ -25,7 +25,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
 
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<List<ClimbingScore>>? climbingScoreList;
+  Future<List<ClimbingScore>?>? climbingScoreList;
   List<String>? followList;
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
               )),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 500),
-            child: FutureBuilder<List<ClimbingScore>>(
+            child: FutureBuilder<List<ClimbingScore>?>(
               future: climbingScoreList,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

@@ -10,30 +10,36 @@ import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 final Sidebar _Sidebar = Sidebar();
 
 class PersonalWidgets extends StatefulWidget {
-  final String SelectedGym;
+  final String selectedGym;
   final ProfileData profileData;
   const PersonalWidgets(
-      {Key? key, required this.SelectedGym, required this.profileData})
+      {Key? key, required this.selectedGym, required this.profileData})
       : super(key: key);
 
   @override
   State<PersonalWidgets> createState() =>
-      _PersonalWidgetsState(SelectedGym: SelectedGym, profileData: profileData);
+      _PersonalWidgetsState(selectedGym: selectedGym, profileData: profileData);
 }
 
 class _PersonalWidgetsState extends State<PersonalWidgets> {
-  final String SelectedGym;
+  final String selectedGym;
   final ProfileData profileData;
-  _PersonalWidgetsState({required this.SelectedGym, required this.profileData});
+  _PersonalWidgetsState({required this.selectedGym, required this.profileData});
   late String? estimatedGrade = profileData.climbingHistory!
-      .where((element) => element.location == SelectedGym)
+      .where((element) => element.location == selectedGym)
       .first
       .estimatedGrade;
   late List<SendCollections> sendCollections = profileData.climbingHistory!
-      .where((element) => element.location == SelectedGym)
+      .where((element) => element.location == selectedGym)
       .first
       .sendCollections!
-      .getRange(0, 9)
+      .getRange(
+          0,
+          profileData.climbingHistory!
+              .where((element) => element.location == selectedGym)
+              .first
+              .sendCollections!
+              .length)
       .toList()
     ..sort((a, b) => a.sendDate!.compareTo(b.sendDate!));
   @override
@@ -48,7 +54,7 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
           Text('Overview for $selectedGym'),
           Reusable_Graph_Widget(
             userUID: FirebaseAuth.instance.currentUser!.uid,
-            selectedGym: SelectedGym,
+            selectedGym: selectedGym,
           ),
           SizedBox(
             height: 20,

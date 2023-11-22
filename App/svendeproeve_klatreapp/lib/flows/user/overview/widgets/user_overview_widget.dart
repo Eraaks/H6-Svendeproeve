@@ -23,7 +23,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
   _OverviewWidgetsState({required this.selectedGym});
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<List<Areas>>? areas;
+  Future<List<Areas>?>? areas;
   List<AreaRoutes> routesAffected = [];
 
   @override
@@ -49,7 +49,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
         appBar: const Topbar(),
         drawer: const Sidebar(),
         body: Center(
-          child: FutureBuilder<List<Areas>>(
+          child: FutureBuilder<List<Areas>?>(
             future: areas,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -100,11 +100,11 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                             print('Submitting');
                             await _apiService.updateRouteCompleters(
                                 routesAffected,
-                                SelectedGym,
+                                selectedGym,
                                 _auth.currentUser!.uid);
 
                             await _apiService.submitUserClimb(routesAffected,
-                                _auth.currentUser!.uid, SelectedGym);
+                                _auth.currentUser!.uid, selectedGym);
 
                             // Restart Appen
                             RestartWidget.restartApp(context);

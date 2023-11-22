@@ -13,14 +13,14 @@ class ClimbingAreaModel {
 class ProblemsModel {
   final String grade;
   Color color;
-  bool isFlashed;
-  bool isCompleted;
+  bool? isFlashed;
+  bool? isCompleted;
 
   ProblemsModel(
       {required this.grade,
       required this.color,
-      required this.isFlashed,
-      required this.isCompleted});
+      this.isFlashed,
+      this.isCompleted});
 
   ProblemsModel copy({String? grade}) => ProblemsModel(
       grade: grade ?? this.grade,

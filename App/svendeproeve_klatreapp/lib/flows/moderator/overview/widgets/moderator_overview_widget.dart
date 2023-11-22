@@ -1,32 +1,33 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_helper.dart';
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/widgets/moderator_datatable_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
-import 'package:svendeproeve_klatreapp/models/problems_model.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
+import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class ModOverviewWidgets extends StatefulWidget {
   final String selectedGym;
-  const ModOverviewWidgets({Key? key, required this.selectedGym})
+  final ProfileData profileData;
+  const ModOverviewWidgets(
+      {Key? key, required this.selectedGym, required this.profileData})
       : super(key: key);
 
   @override
-  State<ModOverviewWidgets> createState() =>
-      _ModOverviewWidgetsState(selectedGym: selectedGym);
+  State<ModOverviewWidgets> createState() => _ModOverviewWidgetsState(
+      selectedGym: selectedGym, profileData: profileData);
 }
 
 class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
   final String selectedGym;
   late String selectedValue;
-  _ModOverviewWidgetsState({required this.selectedGym});
+  final ProfileData profileData;
+  _ModOverviewWidgetsState(
+      {required this.selectedGym, required this.profileData});
   static final APIService _apiService = APIService();
-  Future<List<Areas>>? areas;
+  Future<List<Areas>?>? areas;
   var editArea = TextEditingController();
 
   @override
@@ -47,7 +48,7 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
       appBar: const Topbar(),
       drawer: const Sidebar(),
       body: Center(
-        child: FutureBuilder<List<Areas>>(
+        child: FutureBuilder<List<Areas>?>(
           future: areas,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -84,12 +85,20 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 //Edit Area
+                                //areaDialog(edit, context, centerName, area, userUID)
                                 IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
+                                    var edit = true;
                                     showDialog(
                                       context: context,
-                                      builder: (_) => areaDialog(context),
+                                      builder: (_) => areaDialog(
+                                        edit,
+                                        context,
+                                        selectedGym,
+                                        'Gorilla Right',
+                                        profileData.id,
+                                      ),
                                     );
                                     setState(() {});
                                   },
@@ -97,6 +106,8 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                               ],
                             ),
                             DataTableBuilder(
+                              profileData: widget.profileData,
+                              selectedGym: selectedGym,
                               problems: data[index].areaRoutes!,
                               updateState: () {
                                 setState(() {});
@@ -106,14 +117,22 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 //Add Problem
+                                //problemDialog(climbingArea, selectedGym, edit, selectedGrade, selectedColor)
                                 const Text('Add Route:'),
                                 IconButton(
                                   icon: const Icon(Icons.add),
                                   onPressed: () {
+                                    var edit = false;
                                     showDialog(
-                                        context: context,
-                                        builder: (_) =>
-                                            routeDialog(selectedValue));
+                                      context: context,
+                                      builder: (_) => problemDialog(
+                                          'Gorilla Right',
+                                          selectedGym,
+                                          edit,
+                                          '',
+                                          selectedValue,
+                                          profileData.id),
+                                    );
                                     print('add problem');
                                   },
                                 ),
@@ -130,12 +149,16 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                     children: [
                       const Text('Add Area:'),
                       //Add Area
+                      //areaDialog(edit, context, centerName, area, userUID)
                       IconButton(
                         icon: const Icon(Icons.add),
                         onPressed: () {
+                          var edit = false;
                           showDialog(
-                              context: context,
-                              builder: (_) => areaDialog(context));
+                            context: context,
+                            builder: (_) => areaDialog(edit, context,
+                                selectedGym, selectedValue, profileData),
+                          );
                           print('add area');
                         },
                       ),

@@ -14,7 +14,6 @@ const textInputDecoration = InputDecoration(
     borderSide: BorderSide(color: Colors.pink, width: 2.0),
   ),
 );
-const bool isModerator = false;
 
 Map<String, Color> colorMap = {
   'Color red': const Color.fromARGB(255, 255, 0, 0),

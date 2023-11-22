@@ -3,12 +3,19 @@ import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overvi
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
 import 'package:svendeproeve_klatreapp/models/problems_model.dart';
+import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 
 class DataTableBuilder extends StatefulWidget {
   final List<AreaRoutes> problems;
   final Function updateState;
+  final String selectedGym;
+  final ProfileData profileData;
 
-  DataTableBuilder({required this.problems, required this.updateState});
+  DataTableBuilder(
+      {required this.problems,
+      required this.updateState,
+      required this.selectedGym,
+      required this.profileData});
 
   @override
   _DataTableBuilderState createState() => _DataTableBuilderState();
@@ -69,13 +76,21 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
           cells: <DataCell>[
             DataCell(
               //Edit Problem
+              // problemDialog(climbingArea, selectedGym, edit, selectedGrade, selectedColor)
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  //        _apiService.updateClimbingRoute(_auth.currentUser!.uid, this.climbingAreaName, this.climbingArea, this.problem);
+                  var edit = true;
                   showDialog(
-                      context: context,
-                      builder: (_) => routeDialog(selectedValue));
+                    context: context,
+                    builder: (_) => problemDialog(
+                        'Gorilla Right',
+                        widget.selectedGym,
+                        edit,
+                        problem.grade,
+                        selectedValue,
+                        widget.profileData.id),
+                  );
                 },
               ),
             ),
@@ -86,7 +101,7 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (_) => deleteDialog(),
+                    builder: (_) => deleteProblemDialog(problem.id!),
                   );
                 },
               ),

@@ -170,7 +170,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         }
         public async Task UpdateClimbingArea(string climbingCenterName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
         {
-            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).GetSnapshotAsync();
+            var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
             var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
             if (centerData.Moderators.Contains(changerUserUID))
