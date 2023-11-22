@@ -384,5 +384,9 @@ class APIService {
     } else {
       return [];
     }
+
+    if (request.statusCode == 200) {
+      return json.decode(request.body);
+    }
   }
 }
