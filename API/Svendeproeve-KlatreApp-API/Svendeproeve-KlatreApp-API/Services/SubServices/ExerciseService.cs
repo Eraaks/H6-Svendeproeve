@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Grpc.Core;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 
 namespace Svendeproeve_KlatreApp_API.Services.SubServices
@@ -12,65 +13,98 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             _firestoreDb = firestoreDb;
         }
 
-        public async Task CreateNewExercise(ExerciseDocument exerciseDocument)
+        public async Task<StatusCode> CreateNewExercise(ExerciseDocument exerciseDocument)
         {
-            var exercise = _firestoreDb.Collection("Exercises").Document(exerciseDocument.Name);
-            await exercise.SetAsync(exerciseDocument);
-            
+            try
+            {
+                var exercise = _firestoreDb.Collection("Exercises").Document(exerciseDocument.Name);
+                await exercise.SetAsync(exerciseDocument);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
-
-
 
         public async Task<ExerciseDocument> GetExercise(string exerciseName)
         {
-       
-            var exerciseDocument = await _firestoreDb.Collection("Exercises").Document(exerciseName).GetSnapshotAsync();
-            var exerciseData = exerciseDocument.ConvertTo<ExerciseDocument>();
+            try
+            {
+                var exerciseDocument = await _firestoreDb.Collection("Exercises").Document(exerciseName).GetSnapshotAsync();
+                var exerciseData = exerciseDocument.ConvertTo<ExerciseDocument>();
       
-            return exerciseData;
+                return exerciseData;
+            }
+            catch (Exception)
+            {
+                return new ExerciseDocument();
+                throw;
+            }
         }
 
         public async Task<List<ExerciseDocument>> GetExercises()
         {
-            var exerciseDocuments = await _firestoreDb.Collection("Exercises").GetSnapshotAsync();
-            var exerciseData = exerciseDocuments.Documents.Select(s => s.ConvertTo<ExerciseDocument>()).ToList();
-            foreach(var data in exerciseData)
+            try
             {
-                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).GetSnapshotAsync();
-               
+                var exerciseDocuments = await _firestoreDb.Collection("Exercises").GetSnapshotAsync();
+                var exerciseData = exerciseDocuments.Documents.Select(s => s.ConvertTo<ExerciseDocument>()).ToList();
+                return exerciseData;
             }
-            return exerciseData;
+            catch (Exception)
+            {
+                return new List<ExerciseDocument>();
+                throw;
+            }
+
         }
 
         public async Task<List<ExerciseDocument>> GetExercisesIncludedIn(string musclegroups)
         {
-            var exerciseDocuments = await _firestoreDb.Collection("Exercises").WhereArrayContains("Included_In", musclegroups).GetSnapshotAsync();
-            var exerciseData = exerciseDocuments.Documents.Select(e => e.ConvertTo<ExerciseDocument>()).ToList();
-            foreach (var data in exerciseData)
+            try
             {
-                var howToData = await _firestoreDb.Collection("Exercises").Document(data.Name).GetSnapshotAsync();
-               
+                var exerciseDocuments = await _firestoreDb.Collection("Exercises").WhereArrayContains("Included_In", musclegroups).GetSnapshotAsync();
+                var exerciseData = exerciseDocuments.Documents.Select(e => e.ConvertTo<ExerciseDocument>()).ToList();
+                return exerciseData;
             }
-            return exerciseData;
+            catch (Exception)
+            {
+                return new List<ExerciseDocument>();
+                throw;
+            }
+
         }
 
-        public async Task UpdateExercise(ExerciseDocument newExercise, string exerciseName)
+        public async Task<StatusCode> UpdateExercise(ExerciseDocument newExercise, string exerciseName)
         {
-            await DeleteExercise(exerciseName);
-            await CreateNewExercise(newExercise);
+            try
+            {
+                await DeleteExercise(exerciseName);
+                await CreateNewExercise(newExercise);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
+
         }
 
-        public async Task DeleteExercise(string exerciseName)
+        public async Task<StatusCode> DeleteExercise(string exerciseName)
         {
-            var howToDocument = _firestoreDb.Collection("Exercises").Document(exerciseName).Collection("How_To").Document($"{exerciseName}-HowTo");
-            await howToDocument.DeleteAsync();
-            var exerciseDocument = _firestoreDb.Collection("Exercises").Document(exerciseName);
-            await exerciseDocument.DeleteAsync();
+            try
+            {
+                var exerciseDocument = _firestoreDb.Collection("Exercises").Document(exerciseName);
+                await exerciseDocument.DeleteAsync();
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
-
-
-
-
-
     }
 }

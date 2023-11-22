@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Grpc.Core;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 
 namespace Svendeproeve_KlatreApp_API.Services.SubServices
@@ -13,43 +14,90 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
         public async Task<bool> CheckIfUserModerator(string userUID)
         {
-            var centerDocument = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
-            var centerData = centerDocument.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
-            foreach (var area in centerData)
+            try
             {
-                if (area.Moderators.Contains(userUID)) return true;
+                var centerDocument = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
+                var centerData = centerDocument.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
+                foreach (var area in centerData)
+                {
+                    if (area.Moderators.Contains(userUID)) return true;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
             }
 
-            return false;
         }
 
         public async Task<string> RequestModeratorCode(string climbingCenterName, string userUID)
         {
-            var centerDocument = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
-            var centerData = centerDocument.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
-            foreach (var area in centerData)
+            try
             {
-                if (area.CenterName == climbingCenterName)
+                var centerDocument = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
+                var centerData = centerDocument.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
+                foreach (var area in centerData)
                 {
-                    if (area.Moderators.Contains(userUID)) return area.Moderator_Code;
+                    if (area.CenterName == climbingCenterName)
+                    {
+                        if (area.Moderators.Contains(userUID)) return area.Moderator_Code;
+                    }
                 }
+                return "";
             }
-            return "";
+            catch (Exception)
+            {
+                return "";
+                throw;
+            }
+
         }
 
-        public async Task CheckModeratorCodeAndAddToCenter(string moderatorCode, string userUID)
+        public async Task<StatusCode> CheckModeratorCodeAndAddToCenter(string moderatorCode, string userUID)
         {
-            var centerData = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
-            var centerDocuments = centerData.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
-            foreach (var document in centerDocuments)
+            try
             {
-                if (moderatorCode == document.Moderator_Code)
+                var centerData = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
+                var centerDocuments = centerData.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
+                foreach (var document in centerDocuments)
                 {
-                    var centerDocument = _firestoreDb.Collection("Klatrecentre").Document(document.CenterName);
-                    var moderators = document.Moderators;
-                    moderators.Add(userUID);
-                    await centerDocument.UpdateAsync("Moderators", moderators);
+                    if (moderatorCode == document.Moderator_Code)
+                    {
+                        var centerDocument = _firestoreDb.Collection("Klatrecentre").Document(document.CenterName);
+                        var moderators = document.Moderators;
+                        moderators.Add(userUID);
+                        await centerDocument.UpdateAsync("Moderators", moderators);
+                    }
                 }
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
+        }
+
+        public async Task<StatusCode> RemoveModerator(string userUID, string moderatorToRemoveUID, string climbingCenterName)
+        {
+            try
+            {
+                var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+                var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+                if (centerData.Moderators.Contains(userUID))
+                {
+                    centerData.Moderators.Remove(moderatorToRemoveUID);
+                    await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).UpdateAsync("Moderators", centerData.Moderators);
+                }
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
             }
         }
     }

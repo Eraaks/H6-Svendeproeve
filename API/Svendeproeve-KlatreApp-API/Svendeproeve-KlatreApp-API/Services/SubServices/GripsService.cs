@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Grpc.Core;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 
 namespace Svendeproeve_KlatreApp_API.Services.SubServices
@@ -11,16 +12,33 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             _firestoreDb = firestoreDb;
         }
 
-        public async Task CreateNewGripsCollection(GripsDocument grip)
+        public async Task<StatusCode> CreateNewGripsCollection(GripsDocument grip)
         {
-            await _firestoreDb.Collection("Grips").Document(grip.Name).SetAsync(grip);
+            try
+            {
+                await _firestoreDb.Collection("Grips").Document(grip.Name).SetAsync(grip);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
         public async Task<GripsDocument> GetGrip(string gripName)
         {
-            var gripDocument = await _firestoreDb.Collection("Grips").Document(gripName).GetSnapshotAsync();
-            var gripData = gripDocument.ConvertTo<GripsDocument>();
-            return gripData;
+            try
+            {
+                var gripDocument = await _firestoreDb.Collection("Grips").Document(gripName).GetSnapshotAsync();
+                var gripData = gripDocument.ConvertTo<GripsDocument>();
+                return gripData;
+            }
+            catch (Exception)
+            {
+                return new GripsDocument();
+                throw;
+            }
         }
 
         public async Task<List<GripsDocument>> GetGrips()
@@ -32,12 +50,29 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
         public async Task UpdateGrip(string gripName, string fieldToChange, string newValue)
         {
-            await _firestoreDb.Collection("Grips").Document(gripName).UpdateAsync(fieldToChange, newValue);
+            try
+            {
+                await _firestoreDb.Collection("Grips").Document(gripName).UpdateAsync(fieldToChange, newValue);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
-        public async Task DeleteGrip(string gripName)
+        public async Task<StatusCode> DeleteGrip(string gripName)
         {
-            await _firestoreDb.Collection("Grips").Document(gripName).DeleteAsync();
+            try
+            {
+                await _firestoreDb.Collection("Grips").Document(gripName).DeleteAsync();
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Grpc.Core;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 
 namespace Svendeproeve_KlatreApp_API.Services.SubServices
@@ -12,37 +13,77 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             _firestoreDb = firestoreDb;
         }
 
-        public async Task CreateNewWorkout(WorkoutDocument workoutDocument)
+        public async Task<StatusCode> CreateNewWorkout(WorkoutDocument workoutDocument)
         {
-            await _firestoreDb.Collection("Workouts").AddAsync(workoutDocument);
+            try
+            {
+                await _firestoreDb.Collection("Workouts").Document(workoutDocument.Name).SetAsync(workoutDocument);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
-        public async Task<WorkoutDocument> GetWorkout(string workoutID)
+        public async Task<WorkoutDocument> GetWorkout(string workoutName)
         {
-            var document = await _firestoreDb.Collection("Workouts").Document(workoutID).GetSnapshotAsync();
-            WorkoutDocument workout = document.ConvertTo<WorkoutDocument>();
-            return workout;
+            try
+            {
+                var document = await _firestoreDb.Collection("Workouts").Document(workoutName).GetSnapshotAsync();
+                WorkoutDocument workout = document.ConvertTo<WorkoutDocument>();
+                return workout;
+            }
+            catch (Exception)
+            {
+                return new WorkoutDocument();
+                throw;
+            }
         }
 
         public async Task<List<WorkoutDocument>> GetWorkouts()
         {
-            var workoutDocuments = await _firestoreDb.Collection("Workouts").GetSnapshotAsync();
-            var workoutData = workoutDocuments.Documents.Select(s => s.ConvertTo<WorkoutDocument>()).ToList();
-            return workoutData;
+            try
+            {
+                var workoutDocuments = await _firestoreDb.Collection("Workouts").GetSnapshotAsync();
+                var workoutData = workoutDocuments.Documents.Select(s => s.ConvertTo<WorkoutDocument>()).ToList();
+                return workoutData;
+            }
+            catch (Exception)
+            {
+                return new List<WorkoutDocument>();
+                throw;
+            }
         }
 
-        public async Task UpdateWorkout(WorkoutDocument newWorkout, string workoutID)
+        public async Task<StatusCode> UpdateWorkout(WorkoutDocument newWorkout, string workoutName)
         {
-            var workoutDocument = _firestoreDb.Collection("Workouts").Document(workoutID);
-            await workoutDocument.DeleteAsync();
-            workoutDocument = _firestoreDb.Collection("Workouts").Document(workoutID);
-            await workoutDocument.CreateAsync(newWorkout);
+            try
+            {
+                await _firestoreDb.Collection("Workouts").Document(workoutName).DeleteAsync();
+                await _firestoreDb.Collection("Workouts").Document(newWorkout.Name).CreateAsync(newWorkout);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
-        public async Task DeleteWorkout(string workoutID)
+        public async Task<StatusCode> DeleteWorkout(string workoutName)
         {
-            var workoutDocument = _firestoreDb.Collection("Workouts").Document(workoutID);
-            await workoutDocument.DeleteAsync();
+            try
+            {
+                await _firestoreDb.Collection("Workouts").Document(workoutName).DeleteAsync();
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
     }
 }
