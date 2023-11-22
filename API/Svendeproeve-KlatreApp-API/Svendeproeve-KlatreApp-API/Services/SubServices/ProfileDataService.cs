@@ -1,5 +1,9 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Rpc;
+using Grpc.Core;
+using Microsoft.AspNetCore.Mvc;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Svendeproeve_KlatreApp_API.Services.SubServices
@@ -12,11 +16,21 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             _firestoreDb = firestoreDb;
         }
 
-        public async Task AddProfileData(ProfileDataDocument profileData)
+        public async Task<StatusCode> AddProfileData(ProfileDataDocument profileData)
         {
-            var collection = _firestoreDb.Collection("Profile_data").Document(profileData.ID);
-            await collection.SetAsync(profileData);
-            await AddClimbingHistory(profileData.ID, profileData.Climbing_History);
+            try
+            {
+                var collection = _firestoreDb.Collection("Profile_data").Document(profileData.ID);
+                await collection.SetAsync(profileData);
+                await AddClimbingHistory(profileData.ID, profileData.Climbing_History);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
+
         }
 
         private async Task AddClimbingHistory(string profileID, List<Climbing_History> climbing_History)
@@ -67,48 +81,92 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             return profileData;
         }
 
-        public async Task UpdateProfileData(ProfileDataDocument newProfile, string userUID)
+        public async Task<StatusCode> UpdateProfileData(ProfileDataDocument newProfile, string userUID)
         {
-            await DeleteProfileData(userUID);
-            await AddProfileData(newProfile);
-        }
-
-        public async Task DeleteProfileData(string userUID)
-        {
-            var sendCollections = await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(userUID).Collection("Send_Collections").GetSnapshotAsync();
-            var sendCollectionsData = sendCollections.Documents.Select(s => s.ConvertTo<Send_Collection>()).ToList();
-            foreach (var item in sendCollectionsData)
+            try
             {
-                await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(userUID).Collection("Send_Collections").Document(item.ID).DeleteAsync();
+                await DeleteProfileData(userUID);
+                await AddProfileData(newProfile);
+                return StatusCode.OK;
             }
-            await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(userUID).DeleteAsync();
-            await _firestoreDb.Collection("Profile_data").Document(userUID).DeleteAsync();
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
-        public async Task UpdateFollow(string userUID, string userToFollowUserUID)
+        public async Task<StatusCode> DeleteProfileData(string userUID)
         {
-            var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
-            var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
-            profileData.Friend_Ids.Add(userToFollowUserUID);
-            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Friend_Ids", profileData.Friend_Ids);
+            try
+            {
+                var climbingHistoryDocuments = await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").GetSnapshotAsync();
+                var climbingHistoryData = climbingHistoryDocuments.Documents.Select(c => c.ConvertTo<Climbing_History>()).ToList();
+                foreach(var history in climbingHistoryData)
+                {
+                    var sendCollections = await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(history.Location).Collection("Send_Collections").GetSnapshotAsync();
+                    var sendCollectionsData = sendCollections.Documents.Select(s => s.ConvertTo<Send_Collection>()).ToList();
+                    foreach (var item in sendCollectionsData)
+                    {
+                        await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(history.Location).Collection("Send_Collections").Document(item.ID).DeleteAsync();
+                    }
+                    await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(history.Location).DeleteAsync();
+                }
 
-            var userToFollowDocument = await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).GetSnapshotAsync();
-            var userToFollowData = userToFollowDocument.ConvertTo<ProfileDataDocument>();
-            userToFollowData.Follows_Me.Add(userUID);
-            await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).UpdateAsync("Follows_Me", userToFollowData.Follows_Me);
+                await _firestoreDb.Collection("Profile_data").Document(userUID).DeleteAsync();
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
-        public async Task RemoveFollow(string userUID, string userToFollowUserUID)
+        public async Task<StatusCode> UpdateFollow(string userUID, string userToFollowUserUID)
         {
-            var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
-            var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
-            profileData.Friend_Ids.Remove(userToFollowUserUID);
-            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Friend_Ids", profileData.Friend_Ids);
+            try
+            {
+                var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
+                var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
+                profileData.Friend_Ids.Add(userToFollowUserUID);
+                await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Friend_Ids", profileData.Friend_Ids);
 
-            var userToFollowDocument = await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).GetSnapshotAsync();
-            var userToFollowData = userToFollowDocument.ConvertTo<ProfileDataDocument>();
-            userToFollowData.Follows_Me.Remove(userUID);
-            await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).UpdateAsync("Follows_Me", userToFollowData.Follows_Me);
+                var userToFollowDocument = await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).GetSnapshotAsync();
+                var userToFollowData = userToFollowDocument.ConvertTo<ProfileDataDocument>();
+                userToFollowData.Follows_Me.Add(userUID);
+                await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).UpdateAsync("Follows_Me", userToFollowData.Follows_Me);
+
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
+        }
+
+        public async Task<StatusCode> RemoveFollow(string userUID, string userToFollowUserUID)
+        {
+            try
+            {
+                var profileDocument = await _firestoreDb.Collection("Profile_data").Document(userUID).GetSnapshotAsync();
+                var profileData = profileDocument.ConvertTo<ProfileDataDocument>();
+                profileData.Friend_Ids.Remove(userToFollowUserUID);
+                await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Friend_Ids", profileData.Friend_Ids);
+
+                var userToFollowDocument = await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).GetSnapshotAsync();
+                var userToFollowData = userToFollowDocument.ConvertTo<ProfileDataDocument>();
+                userToFollowData.Follows_Me.Remove(userUID);
+                await _firestoreDb.Collection("Profile_data").Document(userToFollowUserUID).UpdateAsync("Follows_Me", userToFollowData.Follows_Me);
+
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
         public async Task<List<string>> GetFollowList(string userUID)
@@ -147,24 +205,33 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
             return climbingScores;
         }
-        public async Task SubmitUserClimb(List<AreaRoutes> routes, string userUID, string climbingCenterName)
+        public async Task<StatusCode> SubmitUserClimb(List<AreaRoutes> routes, string userUID, string climbingCenterName)
         {
-            foreach (var route in routes)
+            try
             {
-                var newSendCollection = new Send_Collection()
+                foreach (var route in routes)
                 {
-                    ID = route.ID,
-                    Area = route.AssignedArea,
-                    Grade = route.Grade.Replace("Plus", "+"),
-                    Points = CalculatePoints(route.Grade) + (route.UsersWhoFlashed.Contains(userUID) ? 17 : 0),
-                    Tries = route.UsersWhoFlashed.Contains(userUID) ? 1 : 2,
-                    SendDate = DateTime.Today.Ticks
-                };
+                    var newSendCollection = new Send_Collection()
+                    {
+                        ID = route.ID,
+                        Area = route.AssignedArea,
+                        Grade = route.Grade.Replace("Plus", "+"),
+                        Points = CalculatePoints(route.Grade) + (route.UsersWhoFlashed.Contains(userUID) ? 17 : 0),
+                        Tries = route.UsersWhoFlashed.Contains(userUID) ? 1 : 2,
+                        SendDate = DateTime.Today.Ticks
+                    };
 
-                await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(route.ID).SetAsync(newSendCollection);
+                    await _firestoreDb.Collection("Profile_data").Document(userUID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(route.ID).SetAsync(newSendCollection);
+                }
+
+                await UpdateTotalPointsAndEstimatedGrade(userUID, climbingCenterName);
+                return StatusCode.OK;
             }
-
-            await UpdateTotalPointsAndEstimatedGrade(userUID, climbingCenterName);
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
 
         private int CalculatePoints(string grade)
@@ -377,9 +444,18 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             }
         }
 
-        public async Task UpdateSelectedGym(string userUID, string newSelectedGym)
+        public async Task<StatusCode> UpdateSelectedGym(string userUID, string newSelectedGym)
         {
-            await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Selected_Gym", newSelectedGym);
+            try
+            {
+                await _firestoreDb.Collection("Profile_data").Document(userUID).UpdateAsync("Selected_Gym", newSelectedGym);
+                return StatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return StatusCode.Aborted;
+                throw;
+            }
         }
     }
 }

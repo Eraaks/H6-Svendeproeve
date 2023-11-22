@@ -41,8 +41,5 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         [FirestoreProperty]
         public List<string> Secondary_Activation { get; set; }
 
-
     }
-
-
 }

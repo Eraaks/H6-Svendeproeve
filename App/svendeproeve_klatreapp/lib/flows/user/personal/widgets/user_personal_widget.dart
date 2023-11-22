@@ -33,7 +33,13 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
       .where((element) => element.location == SelectedGym)
       .first
       .sendCollections!
-      .getRange(0, 9)
+      .getRange(
+          0,
+          profileData.climbingHistory!
+              .where((element) => element.location == SelectedGym)
+              .first
+              .sendCollections!
+              .length)
       .toList()
     ..sort((a, b) => a.sendDate!.compareTo(b.sendDate!));
   @override
