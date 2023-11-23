@@ -44,6 +44,13 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             return await _fireStoreService.RequestModeratorCode(climbingCenterName, userUID);
         }
 
+        [HttpGet("/CheckIfUserModeratorForCenter/{userUID}&{climbingCenterName}")]
+        public async Task<bool> CheckIfUserModeratorForCenter(string userUID, string climbingCenterName)
+        {
+            climbingCenterName = ReplaceWSpace(climbingCenterName);
+            return await _fireStoreService.CheckIfUserModeratorForCenter(userUID, climbingCenterName);
+        }
+
         [HttpPost("/AddClimbingAreas/{climbingCenterName}")]
         public async Task AddClimbingAreas(string climbingCenterName, List<Areas> areas)
         {
