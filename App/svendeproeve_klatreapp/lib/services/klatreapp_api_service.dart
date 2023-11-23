@@ -456,10 +456,6 @@ class APIService {
     } catch (e) {
       log(e.toString());
     }
-
-    if (request.statusCode == 200) {
-      return json.decode(request.body);
-    }
   }
 
   Future<List<String>?> getClimbingCentreNames() async {
