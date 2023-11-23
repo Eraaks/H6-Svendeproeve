@@ -35,11 +35,12 @@ extension StringExtensions on String {
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
-  static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
-  // static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
+  //static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
+  static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<TokenResult> GetAPIToken(storage, User user) async {
     String secret = await storage.read(key: 'Secret');
@@ -351,6 +352,25 @@ class APIService {
     return null;
   }
 
+  Future<bool?> deleteProfileData(String userUID) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+
+      var request = await http.delete(
+          Uri.parse('${_baseUrlLocal}DeleteProfileData/$userUID'),
+          headers: headers);
+      if (request.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return false;
+  }
+
   Future<void> createProfileData(
       String userUID, String username, String moderatorCode) async {
     try {
@@ -555,14 +575,12 @@ class APIService {
           headers: headers);
 
       if (request.statusCode == 200) {
-        return false;
-      } else {
         return true;
       }
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return false;
   }
 
   Future<bool?> deleteClimbingRoute(String userUID, String climbingCenterName,

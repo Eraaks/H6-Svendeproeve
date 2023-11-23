@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -11,9 +12,9 @@ class SignUpPage extends StatelessWidget {
     final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return Scaffold(
-        backgroundColor: Colors.brown[100],
+        backgroundColor: mainBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.brown[400],
+          backgroundColor: topBackgroundColor,
           elevation: 0.0,
           title: const Text('Sign Up for Climbing App'),
           actions: <Widget>[
@@ -62,11 +63,11 @@ class _Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        FlutterLogo(size: isSmallScreen ? 100 : 200),
+        Container(child: Image.asset('assets/ic_launcher.png')),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Welcome to Flutter!",
+            "Register for ClimbIT!",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headlineSmall
