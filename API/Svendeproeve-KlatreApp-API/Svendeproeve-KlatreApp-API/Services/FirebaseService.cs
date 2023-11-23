@@ -129,6 +129,11 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _moderatorService.CheckIfUserModerator(userUID);
         }
 
+        public async Task<bool> CheckIfUserModeratorForCenter(string userUID, string climbingCenterName)
+        {
+            return await _moderatorService.CheckIfUserModeratorForCenter(userUID, climbingCenterName);
+        }
+
         public async Task<string> RequestModeratorCode(string climbingCenterName, string userUID)
         {
             return await _moderatorService.RequestModeratorCode(climbingCenterName, userUID);

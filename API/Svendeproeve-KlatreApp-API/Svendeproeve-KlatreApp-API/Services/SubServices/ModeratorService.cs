@@ -17,11 +17,31 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             try
             {
                 var centerDocument = await _firestoreDb.Collection("Klatrecentre").GetSnapshotAsync();
-                var centerData = centerDocument.Documents.Select(s => s.ConvertTo<ClimbingCenterDocument>()).ToList();
-                foreach (var area in centerData)
+                var centerData = centerDocument.Documents.Select(c => c.ConvertTo<ClimbingCenterDocument>()).ToList();
+
+                foreach (var center in centerData)
                 {
-                    if (area.Moderators.Contains(userUID)) return true;
+                    if (center.Moderators.Contains(userUID)) return true;
                 }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+
+        }
+
+        public async Task<bool> CheckIfUserModeratorForCenter(string userUID, string climbingCenterName)
+        {
+            try
+            {
+                var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+                var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+
+                if (centerData.Moderators.Contains(userUID)) return true;
 
                 return false;
             }
