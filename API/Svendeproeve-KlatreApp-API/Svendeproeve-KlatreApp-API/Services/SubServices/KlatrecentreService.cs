@@ -18,9 +18,43 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         {
             try
             {
+                var profileDocuments = await _firestoreDb.Collection("Profile_data").GetSnapshotAsync();
+                var profileData = profileDocuments.Documents.Select(p => p.ConvertTo<ProfileDataDocument>()).ToList();
+                foreach (var profile in profileData)
+                {
+                    Send_Collection newSend_Collection = new Send_Collection()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        Area = "",
+                        Grade = "2",
+                        Points = 200,
+                        Tries = 2,
+                        SendDate = DateTime.Today.Ticks,
+                    };
+                    Climbing_History newHistory = new Climbing_History()
+                    {
+                        ID = profile.ID,
+                        Estimated_Grade = "2",
+                        Location = "",
+                        Total_Points = 200,
+                        Send_Collections = new List<Send_Collection>() { newSend_Collection }
+                    };
+
+                    var newCollection = _firestoreDb.Collection("Profile_data").Document(profile.ID).Collection("Climbing_History").Document(climbingCenterName);
+                    newHistory.Location = climbingCenterName;
+                    await newCollection.SetAsync(newHistory);
+                    if (newHistory.Send_Collections != null)
+                    {
+                        foreach (var sendCollection in newHistory.Send_Collections)
+                        {
+                            var registerSend = _firestoreDb.Collection("Profile_data").Document(profile.ID).Collection("Climbing_History").Document(climbingCenterName).Collection("Send_Collections").Document(sendCollection.ID);
+                            await registerSend.SetAsync(sendCollection);
+                        }
+                    }
+                }
                 var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName);
                 await collection.SetAsync(climbingCenter);
-                await AddClimbingAreas(climbingCenterName, changerUserUID,climbingCenter.Areas);
+                await AddClimbingAreas(climbingCenterName, changerUserUID, climbingCenter.Areas);
                 return StatusCode.OK;
             }
             catch (Exception)
