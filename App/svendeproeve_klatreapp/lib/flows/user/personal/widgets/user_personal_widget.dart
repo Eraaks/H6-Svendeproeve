@@ -52,6 +52,7 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
           child: Column(
         children: [
           Text('Overview for $selectedGym'),
+          Text('Username: ${profileData.userName}'),
           Reusable_Graph_Widget(
             userUID: FirebaseAuth.instance.currentUser!.uid,
             selectedGym: selectedGym,

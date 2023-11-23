@@ -16,7 +16,7 @@ namespace Svendeproeve_KlatreApp_API.FirebaseDocuments
         [FirestoreProperty]
         public List<string>? Saved_Workouts { get; set; }
         [FirestoreProperty]
-        public string User_Email { get; set; }
+        public string Username { get; set; }
         [FirestoreProperty]
         public string Selected_Gym { get; set; }
         public List<Climbing_History> Climbing_History { get; set; }
