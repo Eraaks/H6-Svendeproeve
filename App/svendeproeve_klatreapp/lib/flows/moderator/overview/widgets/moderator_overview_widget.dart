@@ -34,7 +34,7 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
   void initState() {
     super.initState();
     getCenterRoutes(selectedGym);
-    selectedValue = 'Color red'; // Set an initial value for the dropdown
+    selectedValue = 'Red'; // Set an initial value for the dropdown
   }
 
   Future<void> getCenterRoutes(String centerName) async {
@@ -85,18 +85,16 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 //Edit Area
-                                //areaDialog(edit, context, centerName, area, userUID)
                                 IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
-                                    var edit = true;
                                     showDialog(
                                       context: context,
                                       builder: (_) => areaDialog(
-                                        edit,
+                                        true,
                                         context,
                                         selectedGym,
-                                        'Gorilla Right',
+                                        data[index].name,
                                         profileData.id,
                                       ),
                                     );
@@ -106,6 +104,7 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                               ],
                             ),
                             DataTableBuilder(
+                              area: data[index].name,
                               profileData: widget.profileData,
                               selectedGym: selectedGym,
                               problems: data[index].areaRoutes!,
@@ -117,19 +116,17 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 //Add Problem
-                                //problemDialog(climbingArea, selectedGym, edit, selectedGrade, selectedColor)
                                 const Text('Add Route:'),
                                 IconButton(
                                   icon: const Icon(Icons.add),
                                   onPressed: () {
-                                    var edit = false;
                                     showDialog(
                                       context: context,
                                       builder: (_) => problemDialog(
-                                          'Gorilla Right',
+                                          data[index].name,
                                           selectedGym,
-                                          edit,
-                                          '',
+                                          false,
+                                          data[index].areaRoutes!,
                                           selectedValue,
                                           profileData.id),
                                     );

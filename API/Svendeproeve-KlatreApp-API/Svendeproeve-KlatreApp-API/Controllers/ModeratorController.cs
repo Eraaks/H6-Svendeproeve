@@ -22,11 +22,11 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             return content.Replace(" ", "");
         }
 
-        [HttpPost("/NewClimbingCenter/{climbingCenterName}&{description}&{location}&{defaultModerators}")]
-        public async Task NewClimbingCenter(string climbingCenterName, string description, string location, string defaultModerators, List<Areas> areas)
+        [HttpPost("/NewClimbingCenter/{climbingCenterName}&{description}&{location}&{defaultModerators}&{changerUserUID}")]
+        public async Task NewClimbingCenter(string climbingCenterName, string description, string location, string defaultModerators, List<Areas> areas, string changerUserUID)
         {
             climbingCenterName = ReplaceWSpace(climbingCenterName);
-            await _fireStoreService.AddClimbingCenter(new ClimbingCenterDocument
+            await _fireStoreService.AddClimbingCenter(new ClimbingCenterDocument 
             {
                 CenterName = climbingCenterName,
                 Description = description,
@@ -34,7 +34,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Moderator_Code = Guid.NewGuid().ToString(),
                 Moderators = new List<string> { defaultModerators },
                 Areas = areas
-            }, climbingCenterName);
+            }, climbingCenterName, changerUserUID);
         }
 
         [HttpGet("/RequestModeratorCode/{climbingCenterName}&{userUID}")]
@@ -51,14 +51,14 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             return await _fireStoreService.CheckIfUserModeratorForCenter(userUID, climbingCenterName);
         }
 
-        [HttpPost("/AddClimbingAreas/{climbingCenterName}")]
-        public async Task AddClimbingAreas(string climbingCenterName, List<Areas> areas)
+        [HttpPost("/AddClimbingAreas/{climbingCenterName}&{changerUserUID}")]
+        public async Task AddClimbingAreas(string climbingCenterName, string changerUserUID , List<Areas> areas)
         {
             climbingCenterName = ReplaceWSpace(climbingCenterName);
-            await _fireStoreService.AddClimbingAreas(climbingCenterName, areas);
+            await _fireStoreService.AddClimbingAreas(climbingCenterName, changerUserUID, areas);
         }
 
-        [HttpPost("/AddRoutesToArea/{climbingCenterName}&{climbingArea}&{changerUserUID}&{systemChanger}")]
+        [HttpPost("/AddRoutesToArea/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
         public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger = false, bool routesDirectly = false)
         {
             climbingCenterName = ReplaceWSpace(climbingCenterName);
@@ -84,9 +84,9 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         }
 
         [HttpPatch("/UpdateClimbingRoutes/{climbingCenterName}&{climbingArea}&{changerUserUID}")]
-        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID, bool systemChanger = false)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID, bool systemChanger = false)
         {
-            await _fireStoreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, problemId, changerUserUID, systemChanger);
+            await _fireStoreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, changerUserUID, systemChanger);
         }
         [HttpPatch("/UpdateClimbingArea/{climbingCenterName}&{climbingArea}&{newValue}&{changerUserUID}")]
         public async Task UpdateClimbingArea(string climbingCenterName, string climbingArea, string newValue, string changerUserUID, bool systemChanger = false)

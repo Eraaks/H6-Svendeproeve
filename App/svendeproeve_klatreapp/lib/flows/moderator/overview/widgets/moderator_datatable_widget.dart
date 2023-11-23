@@ -6,13 +6,15 @@ import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 
 class DataTableBuilder extends StatefulWidget {
+  final String? area;
   final List<AreaRoutes> problems;
   final Function updateState;
   final String selectedGym;
   final ProfileData profileData;
 
   DataTableBuilder(
-      {required this.problems,
+      {required this.area,
+      required this.problems,
       required this.updateState,
       required this.selectedGym,
       required this.profileData});
@@ -27,7 +29,7 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
   @override
   void initState() {
     super.initState();
-    selectedValue = 'Color red'; // Set an initial value for the dropdown
+    selectedValue = 'Red'; // Set an initial value for the dropdown
   }
 
   @override
@@ -76,7 +78,7 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
           cells: <DataCell>[
             DataCell(
               //Edit Problem
-              // problemDialog(climbingArea, selectedGym, edit, selectedGrade, selectedColor)
+
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
@@ -84,10 +86,10 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
                   showDialog(
                     context: context,
                     builder: (_) => problemDialog(
-                        'Gorilla Right',
+                        widget.area,
                         widget.selectedGym,
                         edit,
-                        problem.grade,
+                        problem,
                         selectedValue,
                         widget.profileData.id),
                   );
@@ -101,7 +103,8 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (_) => deleteProblemDialog(problem.id!),
+                    builder: (_) => deleteProblemDialog(widget.area,
+                        widget.selectedGym, problem.id, widget.profileData.id),
                   );
                 },
               ),

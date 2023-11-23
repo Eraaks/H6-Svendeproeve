@@ -16,11 +16,11 @@ const textInputDecoration = InputDecoration(
 );
 
 Map<String, Color> colorMap = {
-  'Color red': const Color.fromARGB(255, 255, 0, 0),
-  'Color blue': const Color.fromARGB(255, 0, 68, 255),
-  'Color green': const Color.fromARGB(255, 0, 255, 0),
-  'Color black': const Color.fromARGB(255, 0, 0, 0),
-  'Color yellow': const Color.fromARGB(255, 255, 251, 0),
-  'Color light blue': const Color.fromARGB(255, 0, 225, 255),
-  'Color Orange': const Color.fromARGB(255, 255, 145, 0),
+  'Red': const Color.fromARGB(255, 255, 0, 0),
+  'Blue': const Color.fromARGB(255, 0, 68, 255),
+  'Green': const Color.fromARGB(255, 0, 255, 0),
+  'Black': const Color.fromARGB(255, 0, 0, 0),
+  'Yellow': const Color.fromARGB(255, 255, 251, 0),
+  'Light Blue': const Color.fromARGB(255, 0, 225, 255),
+  'Orange': const Color.fromARGB(255, 255, 145, 0),
 };

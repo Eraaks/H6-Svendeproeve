@@ -46,35 +46,37 @@ class _HomeWidgetsState extends State<HomeWidgets> {
       backgroundColor: mainBackgroundColor,
       appBar: const Topbar(),
       drawer: const Sidebar(),
-      body: Column(
-        children: <Widget>[
-          Text(
-            'Current gym:\n $selectedGym\n\n You can switch to a different gym here:',
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 500),
-            child: FutureBuilder<List<String>?>(
-              future: centerNames,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final data = snapshot.data ?? <String>[];
-                  return ListView(
-                    padding: const EdgeInsets.all(5),
-                    children: data.map(builderCenterName).toList(),
-                  );
-                }
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Text(
+              'Current gym:\n $selectedGym\n\n You can switch to a different gym here:',
+              style: const TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 500),
+              child: FutureBuilder<List<String>?>(
+                future: centerNames,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final data = snapshot.data ?? <String>[];
+                    return ListView(
+                      padding: const EdgeInsets.all(5),
+                      children: data.map(builderCenterName).toList(),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

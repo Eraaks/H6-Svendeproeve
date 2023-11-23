@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/models/grips_model.dart';
+import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -485,12 +486,8 @@ class APIService {
     return null;
   }
 
-  Future<void> updateClimbingArea(
-      String climbingCenterName,
-      String climbingArea,
-      String userUID,
-      String fieldToChange,
-      String newValue) async {
+  Future<void> updateClimbingArea(String climbingCenterName,
+      String climbingArea, String userUID, String newValue) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -498,19 +495,15 @@ class APIService {
       };
       await http.patch(
           Uri.parse(
-              '${_baseUrlLocal}UpdateClimbingArea/$climbingCenterName&$climbingArea&$fieldToChange&$newValue&$userUID'),
+              '${_baseUrlLocal}UpdateClimbingArea/$climbingCenterName&$climbingArea&$newValue&$userUID'),
           headers: headers);
     } catch (e) {
       log(e.toString());
     }
   }
 
-  Future<void> updateClimbingRoute(
-    String climbingCenterName,
-    String climbingArea,
-    String userUID,
-    String problemID,
-  ) async {
+  Future<void> updateClimbingRoute(String climbingCenterName,
+      String climbingArea, String userUID, AreaRoutes route) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -518,19 +511,20 @@ class APIService {
       };
       await http.patch(
           Uri.parse(
-              '${_baseUrlLocal}UpdateClimbingArea/$climbingCenterName&$climbingArea&$problemID&$userUID'),
-          headers: headers);
+              '${_baseUrlLocal}UpdateClimbingRoutes/$climbingCenterName&$climbingArea&$userUID'),
+          headers: headers,
+          body: jsonEncode(route));
     } catch (e) {
       log(e.toString());
     }
   }
 
   Future<void> createClimbingRoute(
-    String climbingCenterName,
-    String climbingArea,
-    String userUID,
-    List<AreaRoutes> routes,
-  ) async {
+      String climbingCenterName,
+      String climbingArea,
+      String userUID,
+      List<AreaRoutes> routes,
+      bool routesDirectly) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -538,7 +532,7 @@ class APIService {
       };
       await http.post(
           Uri.parse(
-              '${_baseUrlLocal}AddRoutesToArea/$climbingCenterName&$climbingArea&$userUID'),
+              '${_baseUrlLocal}AddRoutesToArea/$climbingCenterName&$climbingArea&$userUID?routesDirectly=$routesDirectly'),
           headers: headers,
           body: jsonEncode(routes));
     } catch (e) {
@@ -580,18 +574,16 @@ class APIService {
 
       var request = await http.delete(
           Uri.parse(
-              '${_baseUrlLocal}DeleteClimbingArea/$climbingCenterName&$climbingArea&$problemID&$userUID'),
+              '${_baseUrlLocal}DeleteClimbingRoute/$climbingCenterName&$climbingArea&$problemID&$userUID'),
           headers: headers);
 
       if (request.statusCode == 200) {
-        return false;
-      } else {
         return true;
       }
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return false;
   }
 
   Future<bool?> checkIfUserModerator(
@@ -612,6 +604,23 @@ class APIService {
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return false;
+  }
+
+  Future<void> addClimbingAreas(
+      String climbingCenterName, String userUID, List<Areas> newArea) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      await http.post(
+          Uri.parse(
+              '${_baseUrlLocal}AddClimbingAreas/$climbingCenterName&$userUID'),
+          headers: headers,
+          body: jsonEncode(newArea));
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
