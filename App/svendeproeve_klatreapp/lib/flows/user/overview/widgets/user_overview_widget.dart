@@ -9,30 +9,27 @@ import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class OverviewWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const OverviewWidgets({Key? key, required this.SelectedGym})
+  final String selectedGym;
+  const OverviewWidgets({Key? key, required this.selectedGym})
       : super(key: key);
 
   @override
   State<OverviewWidgets> createState() =>
-      _OverviewWidgetsState(SelectedGym: SelectedGym);
+      _OverviewWidgetsState(selectedGym: selectedGym);
 }
 
 class _OverviewWidgetsState extends State<OverviewWidgets> {
-  final String SelectedGym;
-  _OverviewWidgetsState({required this.SelectedGym});
+  final String selectedGym;
+  _OverviewWidgetsState({required this.selectedGym});
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<List<Areas>>? areas;
+  Future<List<Areas>?>? areas;
   List<AreaRoutes> routesAffected = [];
-
-  List<ProblemsModel> problemsList = getAllProblems();
-  List<ClimbingAreaModel> climbingAreas = getAllClimbingAreas();
 
   @override
   void initState() {
     super.initState();
-    getCenterRoutes(SelectedGym);
+    getCenterRoutes(selectedGym);
   }
 
   @override
@@ -52,7 +49,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
         appBar: const Topbar(),
         drawer: const Sidebar(),
         body: Center(
-          child: FutureBuilder<List<Areas>>(
+          child: FutureBuilder<List<Areas>?>(
             future: areas,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -83,7 +80,7 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                                   setState(() {});
                                 },
                                 userUID: _auth.currentUser!.uid,
-                                climbingCenterName: SelectedGym,
+                                climbingCenterName: selectedGym,
                                 areaName: data[index].name!,
                                 routesAffected: routesAffected,
                               ),
@@ -103,11 +100,11 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                             print('Submitting');
                             await _apiService.updateRouteCompleters(
                                 routesAffected,
-                                SelectedGym,
+                                selectedGym,
                                 _auth.currentUser!.uid);
 
                             await _apiService.submitUserClimb(routesAffected,
-                                _auth.currentUser!.uid, SelectedGym);
+                                _auth.currentUser!.uid, selectedGym);
 
                             // Restart Appen
                             RestartWidget.restartApp(context);

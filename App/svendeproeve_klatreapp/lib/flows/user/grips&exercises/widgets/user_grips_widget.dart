@@ -73,7 +73,8 @@ class GripPage extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
-                            Text(grip.gripDescription),
+                            Text(grip.gripDescription
+                                .replaceAll("Linebreaker", "\n\n")),
                           ],
                         ),
                       ),

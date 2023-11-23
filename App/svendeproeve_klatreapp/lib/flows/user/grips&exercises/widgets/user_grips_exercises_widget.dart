@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
-import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/widgets/user_exercises.widget.dart';
-import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/widgets/user_grips_widget.dart';
+import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/widgets/user_exercises.widget.dart';
+import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/widgets/user_grips_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/models/grips_model.dart';
@@ -19,10 +19,10 @@ class TipsTricksWidgets extends StatefulWidget {
 
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
-  late Future<List<ExerciseModel>> exercises;
+  late Future<List<ExerciseModel>?> exercises;
 
   //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
-  late Future<List<GripsModel>> grips;
+  late Future<List<GripsModel>?> grips;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          FutureBuilder<List<ExerciseModel>>(
+          FutureBuilder<List<ExerciseModel>?>(
             future: exercises,
             builder: (context, exerciseSnapshot) {
               if (exerciseSnapshot.connectionState == ConnectionState.waiting) {
@@ -106,7 +106,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          FutureBuilder<List<GripsModel>>(
+          FutureBuilder<List<GripsModel>?>(
             future: grips,
             builder: (context, gripSnapshot) {
               if (gripSnapshot.connectionState == ConnectionState.waiting) {

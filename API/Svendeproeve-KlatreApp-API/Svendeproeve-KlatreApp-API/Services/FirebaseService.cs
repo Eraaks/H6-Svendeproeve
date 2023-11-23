@@ -89,14 +89,14 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _profileDataService.UpdateSelectedGym(userUID, newSelectedGym);
         }
 
-        public async Task AddClimbingCenter(ClimbingCenterDocument climbingCenter, string climbingCenterName)
+        public async Task AddClimbingCenter(ClimbingCenterDocument climbingCenter, string changerUserUID, string climbingCenterName)
         {
-            await _klatrecentreService.AddClimbingCenter(climbingCenter, climbingCenterName);
+            await _klatrecentreService.AddClimbingCenter(climbingCenter, changerUserUID,climbingCenterName);
         }
 
-        public async Task AddClimbingAreas(string climbingCenterName, List<Areas> areas)
+        public async Task AddClimbingAreas(string climbingCenterName, string changerUserUID, List<Areas> areas)
         {
-            await _klatrecentreService.AddClimbingAreas(climbingCenterName, areas);
+            await _klatrecentreService.AddClimbingAreas(climbingCenterName, changerUserUID, areas);
         }
 
         public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger, bool routesDirectly)
@@ -254,9 +254,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _klatrecentreService.DeleteClimbingCenter(climbingCenterName);
         }
 
-        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID, bool systemChanger)
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID, bool systemChanger)
         {
-            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea,  problemId, changerUserUID, systemChanger);
+            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea, changerUserUID, systemChanger);
         }
 
         public async Task UpdateClimbingArea(string centerName, string climbingArea, string newValue, string changerUserUID, bool systemChanger)

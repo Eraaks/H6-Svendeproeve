@@ -81,6 +81,49 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                 },
               ),
             ),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                child: const Text('Delete account'),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                            'WARNING - \nTHIS WILL DELETE ALL YOUR DATA'),
+                        actions: [
+                          TextButton(
+                            onPressed: () async {
+                              print('Confirmed deleting');
+                              await _auth.signOut();
+                              Navigator.pop(context); // Close the AlertDialog
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: const Text('Confirm'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              print('Cancel deleting');
+                              Navigator.pop(context);
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: const Text('Cancel'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

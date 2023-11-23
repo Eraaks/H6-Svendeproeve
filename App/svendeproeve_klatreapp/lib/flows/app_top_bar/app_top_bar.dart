@@ -16,7 +16,7 @@ class _TopbarState extends State<Topbar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: isModerator ? Text('Moderator') : const Text('Climbing App'),
+      title: const Text('Climbing App'),
       backgroundColor: topBackgroundColor,
       elevation: 0.0,
       actions: <Widget>[

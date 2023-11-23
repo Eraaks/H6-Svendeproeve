@@ -9,23 +9,23 @@ import 'package:svendeproeve_klatreapp/services/database_service.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class RankingsWidgets extends StatefulWidget {
-  final String SelectedGym;
-  const RankingsWidgets({Key? key, required this.SelectedGym})
+  final String selectedGym;
+  const RankingsWidgets({Key? key, required this.selectedGym})
       : super(key: key);
 
   @override
   State<RankingsWidgets> createState() =>
-      _RankingsWidgetsState(SelectedGym: SelectedGym);
+      _RankingsWidgetsState(selectedGym: selectedGym);
 }
 
 class _RankingsWidgetsState extends State<RankingsWidgets> {
-  final String SelectedGym;
+  final String selectedGym;
 
-  _RankingsWidgetsState({required this.SelectedGym});
+  _RankingsWidgetsState({required this.selectedGym});
 
   static final APIService _apiService = APIService();
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<List<ClimbingScore>>? climbingScoreList;
+  Future<List<ClimbingScore>?>? climbingScoreList;
   List<String>? followList;
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
 
   Future<void> _initClimbingscore() async {
     climbingScoreList =
-        _apiService.getClimbingScore(SelectedGym.replaceAll(' ', ''));
+        _apiService.getClimbingScore(selectedGym.replaceAll(' ', ''));
   }
 
   Future<void> _initFollowList() async {
@@ -57,14 +57,14 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
       drawer: const Sidebar(),
       body: Column(
         children: [
-          Text('Rankings for $SelectedGym',
+          Text('Rankings for $selectedGym',
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               )),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 500),
-            child: FutureBuilder<List<ClimbingScore>>(
+            child: FutureBuilder<List<ClimbingScore>?>(
               future: climbingScoreList,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,7 +110,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
                                     followList!.contains(snapshotData.userUID)
                                         ? true
                                         : false,
-                                selectedGym: SelectedGym,
+                                selectedGym: selectedGym,
                               )));
 
                   if (result != null) {

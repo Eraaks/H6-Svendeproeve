@@ -15,7 +15,7 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
   final controller = TextEditingController();
   final clearController = TextEditingController();
   static final APIService _apiService = APIService();
-  late Future<List<ClimbingCenter>> centers;
+  late Future<List<ClimbingCenter>?> centers;
   // int centersLength = centers.length;
 
   @override
@@ -33,7 +33,7 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
     });
   }
 
-  Future<List<ClimbingCenter>> updateAndGetList() async {
+  Future<List<ClimbingCenter>?> updateAndGetList() async {
     // return the list here
     return _apiService.getAllClimbingCenters();
   }
@@ -103,7 +103,7 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
             FutureBuilder(
                 future: centers,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<ClimbingCenter>> snapshot) {
+                    AsyncSnapshot<List<ClimbingCenter>?> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),

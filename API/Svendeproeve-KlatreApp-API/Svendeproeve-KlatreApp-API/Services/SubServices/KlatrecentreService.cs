@@ -14,13 +14,13 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             _firestoreDb = firestoreDb;
         }
 
-        public async Task<StatusCode> AddClimbingCenter(ClimbingCenterDocument climbingCenter, string climbingCenterName)
+        public async Task<StatusCode> AddClimbingCenter(ClimbingCenterDocument climbingCenter,string changerUserUID, string climbingCenterName)
         {
             try
             {
                 var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName);
                 await collection.SetAsync(climbingCenter);
-                await AddClimbingAreas(climbingCenterName, climbingCenter.Areas);
+                await AddClimbingAreas(climbingCenterName, changerUserUID,climbingCenter.Areas);
                 return StatusCode.OK;
             }
             catch (Exception)
@@ -59,32 +59,53 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             }
         }
 
-        public async Task<StatusCode> AddClimbingAreas(string climbingCenterName, List<Areas> areas)
+        public async Task<StatusCode> AddClimbingAreas(string climbingCenterName, string changerUserUID, List<Areas> areas)
         {
             try
             {
-                int number = 0;
-                foreach (var area in areas)
+                var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
+                var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
+
+                if (centerData.Moderators.Contains(changerUserUID))
                 {
-                    foreach (var route in area.AreaRoutes)
+                    int number = 0;
+                    var routeCount = await GetCenterRoutes(climbingCenterName);
+                    foreach (var area in routeCount)
                     {
-                        route.ID = Guid.NewGuid().ToString();
-                        route.Number = number++;
-                        route.AssignedArea = area.Name;
+                        foreach (var route in area.AreaRoutes)
+                        {
+                            number++;
+                        }
                     }
-                }
 
-                List<string> areaNames = new List<string>();
-                foreach (var area in areas)
+                    foreach (var area in areas)
+                    {
+                       
+                        foreach (var route in area.AreaRoutes)
+                        {
+                            route.ID = Guid.NewGuid().ToString();
+                            route.Number = number++;
+                            route.AssignedArea = area.Name;
+                        }
+                    }
+
+                    List<string> areaNames = new List<string>();
+                    areaNames.AddRange(centerData.AreaNames);
+                    foreach (var area in areas)
+                    {
+                        areaNames.Add(area.Name);
+                        var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(area.Name).Document(area.Name);
+                        await collection.SetAsync(area);
+                        await AddClimbingRoutes(climbingCenterName, area.Name, area.AreaRoutes, "", true, false);
+                    }
+
+                    await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).UpdateAsync("AreaNames", areaNames);
+                    return StatusCode.OK;
+                }
+                else
                 {
-                    areaNames.Add(area.Name);
-                    var collection = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(area.Name).Document(area.Name);
-                    await collection.SetAsync(area);
-                    await AddClimbingRoutes(climbingCenterName, area.Name, area.AreaRoutes, "", true, false);
+                    return StatusCode.Aborted;
                 }
-
-                await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).UpdateAsync("AreaNames", areaNames);
-                return StatusCode.OK;
             }
             catch (Exception)
             {
@@ -97,9 +118,17 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
         {
             try
             {
-               if (routesDirectly == true)
+                if (routesDirectly == true)
                 {
                     int number = 0;
+                    var routeCount = await GetCenterRoutes(climbingCenterName);
+                    foreach (var area in routeCount)
+                    {
+                        foreach (var route in area.AreaRoutes)
+                        {
+                            number++;
+                        }
+                    }
                     foreach (var route in areaRoutes)
                     {
                         route.ID = Guid.NewGuid().ToString();
@@ -130,7 +159,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 return StatusCode.Aborted;
                 throw;
             }
- 
+
         }
 
         public async Task<List<ClimbingCenterDocument>> GetClimbingCentre()
@@ -210,7 +239,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
             {
                 return StatusCode.Aborted;
                 throw;
-            }          
+            }
         }
 
         public async Task<StatusCode> DeleteClimbingArea(string climbingCenterName, string climbingArea, string changerUserUID, bool systemChanger)
@@ -242,9 +271,9 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 throw;
             }
         }
-        
 
-        public async Task<StatusCode> UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID, bool systemChanger)
+
+        public async Task<StatusCode> UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string changerUserUID, bool systemChanger)
         {
             try
             {
@@ -253,10 +282,10 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
 
                 if (centerData.Moderators.Contains(changerUserUID) || systemChanger)
                 {
-                        var routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("Routes").Document(problemId);
-                        await routeData.DeleteAsync();
-                        routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("Routes").Document(problemId);
-                        await routeData.CreateAsync(areaRoutes);
+                    var routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("Routes").Document(areaRoutes.ID);
+                    await routeData.DeleteAsync();
+                    routeData = _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).Collection("Routes").Document(areaRoutes.ID);
+                    await routeData.CreateAsync(areaRoutes);
                 }
                 return StatusCode.OK;
             }
@@ -298,11 +327,11 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                     await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).UpdateAsync("AreaNames", centerData.AreaNames);
                     await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(climbingArea).Document(climbingArea).DeleteAsync();
                     await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(newValue).Document(newValue).SetAsync(newArea);
-                    foreach(var route in areaRoutes)
+                    foreach (var route in areaRoutes)
                     {
                         await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(newValue).Document(newValue).Collection("Routes").Document(route.ID).SetAsync(route);
                     }
-                }  
+                }
                 return StatusCode.OK;
             }
             catch (Exception)
@@ -319,34 +348,34 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 var centerDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).GetSnapshotAsync();
                 var centerData = centerDocument.ConvertTo<ClimbingCenterDocument>();
 
-           
-                    List<Areas> area = new List<Areas>();
 
-                    if (centerData.AreaNames != null)
+                List<Areas> area = new List<Areas>();
+
+                if (centerData.AreaNames != null)
+                {
+                    foreach (var areaName in centerData.AreaNames)
                     {
-                        foreach (var areaName in centerData.AreaNames)
+                        List<AreaRoutes> areaRoutes = new List<AreaRoutes>();
+                        var areaDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).GetSnapshotAsync();
+                        var areaData = areaDocument.Select(a => a.ConvertTo<Areas>()).ToList();
+
+                        foreach (var areas in areaData)
                         {
-                            List<AreaRoutes> areaRoutes = new List<AreaRoutes>();
-                            var areaDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).GetSnapshotAsync();
-                            var areaData = areaDocument.Select(a => a.ConvertTo<Areas>()).ToList();
-
-                            foreach (var areas in areaData)
+                            var routesDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").GetSnapshotAsync();
+                            var routesData = routesDocument.Select(r => r.ConvertTo<AreaRoutes>()).ToList();
+                            if (routesData.Count != 0)
                             {
-                                var routesDocument = await _firestoreDb.Collection("Klatrecentre").Document(climbingCenterName).Collection(areaName).Document(areaName).Collection("Routes").GetSnapshotAsync();
-                                var routesData = routesDocument.Select(r => r.ConvertTo<AreaRoutes>()).ToList();
-                                if (routesData.Count != 0)
-                                {
-                                    areaRoutes.AddRange(routesData);
-                                    areas.AreaRoutes = areaRoutes;
-                                }
+                                areaRoutes.AddRange(routesData);
+                                areas.AreaRoutes = areaRoutes;
                             }
-
-                            area.AddRange(areaData);
                         }
-                    }
 
-                    centerData.Areas = area;
-                    centerData.CenterName = Regex.Replace(centerData.CenterName, "([a-z])([A-Z])", "$1 $2");
+                        area.AddRange(areaData);
+                    }
+                }
+
+                centerData.Areas = area;
+                centerData.CenterName = Regex.Replace(centerData.CenterName, "([a-z])([A-Z])", "$1 $2");
 
                 return centerData;
             }
@@ -380,9 +409,9 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                             if (routesData.Count != 0)
                             {
                                 areaRoutes.AddRange(routesData);
-                                foreach(var route in areaRoutes)
+                                foreach (var route in areaRoutes)
                                 {
-                                    switch(route.Color)
+                                    switch (route.Color)
                                     {
                                         case "Black":
                                             route.Color = "255, 0, 0, 0";
@@ -460,6 +489,6 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 return StatusCode.Aborted;
                 throw;
             }
-        }   
+        }
     }
 }
