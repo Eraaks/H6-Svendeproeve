@@ -4,7 +4,7 @@ class ProfileData {
   List<String>? _friendIds;
   List<String>? _savedExercises;
   List<String>? _savedWorkouts;
-  String? _userEmail;
+  String? _userName;
   String? _selectedGym;
   List<ClimbingHistory>? _climbingHistory;
 
@@ -14,7 +14,7 @@ class ProfileData {
       List<String>? friendIds,
       List<String>? savedExercises,
       List<String>? savedWorkouts,
-      String? userEmail,
+      String? userName,
       String? selectedGym,
       List<ClimbingHistory>? climbingHistory}) {
     if (id != null) {
@@ -32,8 +32,8 @@ class ProfileData {
     if (savedWorkouts != null) {
       this._savedWorkouts = savedWorkouts;
     }
-    if (userEmail != null) {
-      this._userEmail = userEmail;
+    if (userName != null) {
+      this._userName = userName;
     }
     if (selectedGym != null) {
       this._selectedGym = selectedGym;
@@ -55,8 +55,8 @@ class ProfileData {
   List<String>? get savedWorkouts => _savedWorkouts;
   set savedWorkouts(List<String>? savedWorkouts) =>
       _savedWorkouts = savedWorkouts;
-  String? get userEmail => _userEmail;
-  set userEmail(String? userEmail) => _userEmail = userEmail;
+  String? get userName => _userName;
+  set userName(String? userName) => _userName = userName;
   String? get selectedGym => _selectedGym;
   set selectedGym(String? selectedGym) => _selectedGym = selectedGym;
   List<ClimbingHistory>? get climbingHistory => _climbingHistory;
@@ -69,7 +69,7 @@ class ProfileData {
     _friendIds = json['friend_Ids'].cast<String>();
     _savedExercises = json['saved_Exercises'].cast<String>();
     _savedWorkouts = json['saved_Workouts'].cast<String>();
-    _userEmail = json['user_Email'];
+    _userName = json['username'];
     _selectedGym = json['selected_Gym'];
     if (json['climbing_History'] != null) {
       _climbingHistory = <ClimbingHistory>[];
@@ -86,7 +86,7 @@ class ProfileData {
     data['friend_Ids'] = this._friendIds;
     data['saved_Exercises'] = this._savedExercises;
     data['saved_Workouts'] = this._savedWorkouts;
-    data['user_Email'] = this._userEmail;
+    data['username'] = this._userName;
     data['selected_Gym'] = this._selectedGym;
     if (this._climbingHistory != null) {
       data['climbing_History'] =

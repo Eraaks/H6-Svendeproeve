@@ -56,9 +56,10 @@ class APIService {
       await storage.write(key: 'Token', value: request.body);
       var moderatorCode = await storage.read(key: 'ModeratorCode');
       var profileExists = await profileDataExists(user.uid);
+      var username = await storage.read(key: 'Username');
 
       if (profileExists == false) {
-        await createProfileData(user.uid, user.email!, moderatorCode);
+        await createProfileData(user.uid, username, moderatorCode);
       }
       var profile = await getProfileData(user.uid);
       var isModerator =
@@ -351,7 +352,7 @@ class APIService {
   }
 
   Future<void> createProfileData(
-      String userUID, String email, String moderatorCode) async {
+      String userUID, String username, String moderatorCode) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -360,7 +361,7 @@ class APIService {
 
       await http.post(
           Uri.parse(
-              '${_baseUrlLocal}NewProfileDataAsync/$userUID&$email?moderatorCode=$moderatorCode'),
+              '${_baseUrlLocal}NewProfileDataAsync/$userUID&$username?moderatorCode=$moderatorCode'),
           headers: headers);
     } catch (e) {
       log(e.toString());
