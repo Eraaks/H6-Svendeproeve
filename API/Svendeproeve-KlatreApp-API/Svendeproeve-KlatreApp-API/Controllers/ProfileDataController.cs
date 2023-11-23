@@ -23,8 +23,8 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             _fireStoreService = firestoreService;
         }
 
-        [HttpPost("/NewProfileDataAsync/{userUID}&{email}")]
-        public async Task<StatusCode> NewProfileDataAsync(string userUID, string email, string moderatorCode = "Empty")
+        [HttpPost("/NewProfileDataAsync/{userUID}&{username}")]
+        public async Task<StatusCode> NewProfileDataAsync(string userUID, string username, string moderatorCode = "Empty")
         {
             Send_Collection send_CollectionSouth = new Send_Collection()
             {
@@ -53,7 +53,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Friend_Ids = new List<string>() { "" },
                 Saved_Exercises = new List<string>() { },
                 Saved_Workouts = new List<string>() { },
-                User_Email = email,
+                Username = username,
                 Selected_Gym = "BetaBouldersSouth",
                 Climbing_History = new List<Climbing_History>() { historySouth }
             });

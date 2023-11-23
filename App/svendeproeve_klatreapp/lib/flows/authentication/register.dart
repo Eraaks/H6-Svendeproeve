@@ -27,27 +27,29 @@ class SignUpPage extends StatelessWidget {
             ),
           ],
         ),
-        body: Center(
-            child: isSmallScreen
-                ? const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _Logo(),
-                      SignUpPageContent(),
-                    ],
-                  )
-                : Container(
-                    padding: const EdgeInsets.all(32.0),
-                    constraints: const BoxConstraints(maxWidth: 800),
-                    child: const Row(
+        body: SingleChildScrollView(
+          child: Center(
+              child: isSmallScreen
+                  ? const Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Expanded(child: _Logo()),
-                        Expanded(
-                          child: Center(child: SignUpPageContent()),
-                        ),
+                        _Logo(),
+                        SignUpPageContent(),
                       ],
-                    ),
-                  )));
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(32.0),
+                      constraints: const BoxConstraints(maxWidth: 800),
+                      child: const Row(
+                        children: [
+                          Expanded(child: _Logo()),
+                          Expanded(
+                            child: Center(child: SignUpPageContent()),
+                          ),
+                        ],
+                      ),
+                    )),
+        ));
   }
 }
 
@@ -95,13 +97,14 @@ class _SignUpPageContentState extends State<SignUpPageContent> {
 
   String email = '';
   String password = '';
+  String username = '';
   String moderatorCode = '';
   String error = '';
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 300),
+      constraints: const BoxConstraints(maxWidth: 300, maxHeight: 600),
       child: Form(
         key: _formKey,
         child: Column(
@@ -172,6 +175,28 @@ class _SignUpPageContentState extends State<SignUpPageContent> {
             ),
             _gap(),
             TextFormField(
+              validator: (value) {
+                // add email validation
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+
+                return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'Username',
+                hintText: 'Enter your username',
+                prefixIcon: Icon(Icons.supervised_user_circle),
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  username = value;
+                });
+              },
+            ),
+            _gap(),
+            TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Moderator Code',
                 hintText: 'Enter a Moderator Code if you have one',
@@ -201,6 +226,9 @@ class _SignUpPageContentState extends State<SignUpPageContent> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
+                    if (username != '') {
+                      await storage.write(key: 'Username', value: username);
+                    }
                     if (moderatorCode == '') {
                       await storage.write(key: 'ModeratorCode', value: 'Empty');
                     } else {

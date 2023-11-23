@@ -189,7 +189,7 @@ namespace Svendeproeve_KlatreApp_API.Services.SubServices
                 {
                     UserUID = profile.ID,
                     Rank = 0,
-                    Name = profile.User_Email,
+                    Name = profile.Username,
                     Center_Name = Regex.Replace(climbingCenter, "([a-z])([A-Z])", "$1 $2"),
                     Grade = historyData.Estimated_Grade,
                     Score = historyData.Total_Points
