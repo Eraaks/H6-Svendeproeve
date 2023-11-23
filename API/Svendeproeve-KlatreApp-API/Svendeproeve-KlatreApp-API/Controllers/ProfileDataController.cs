@@ -1,5 +1,6 @@
 ﻿using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
@@ -23,7 +24,7 @@ namespace Svendeproeve_KlatreApp_API.Controllers
         }
 
         [HttpPost("/NewProfileDataAsync/{userUID}&{email}")]
-        public async Task NewProfileDataAsync(string userUID, string email, string moderatorCode = "Empty")
+        public async Task<StatusCode> NewProfileDataAsync(string userUID, string email, string moderatorCode = "Empty")
         {
             Send_Collection send_CollectionSouth = new Send_Collection()
             {
@@ -42,7 +43,10 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Total_Points = 200,
                 Send_Collections = new List<Send_Collection>() { send_CollectionSouth }
             };
-            await _fireStoreService.AddProfileData(new ProfileDataDocument
+
+            if (moderatorCode != null && moderatorCode != "Empty") await _fireStoreService.CheckModeratorCodeAndAddToCenter(moderatorCode, userUID);
+
+            return await _fireStoreService.AddProfileData(new ProfileDataDocument
             {
                 ID = userUID,
                 Follows_Me = new List<string>() { "" },
@@ -53,8 +57,6 @@ namespace Svendeproeve_KlatreApp_API.Controllers
                 Selected_Gym = "BetaBouldersSouth",
                 Climbing_History = new List<Climbing_History>() { historySouth }
             });
-
-            if (moderatorCode != null && moderatorCode != "Empty") await _fireStoreService.CheckModeratorCodeAndAddToCenter(moderatorCode, userUID);
         }
 
         [HttpGet("/GetProfileData/{userUID}")]

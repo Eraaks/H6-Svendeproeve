@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 
@@ -198,6 +200,15 @@ class __SignInPageContentState extends State<_SignInPageContent> {
               ),
             ),
             _gap(),
+            FloatingActionButton.extended(
+              onPressed: () async {
+                await _auth.resetPassword(email: email);
+                setState(() {
+                  error = 'Password reset email sent';
+                });
+              },
+              label: const Text('Forgot Password'),
+            ),
             const SizedBox(height: 12.0),
             Text(
               error,

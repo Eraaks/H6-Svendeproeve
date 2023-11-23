@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 using Svendeproeve_KlatreApp_API.Services;
@@ -16,34 +17,34 @@ namespace Svendeproeve_KlatreApp_API.Controllers
             _firebaseService = firebaseService;
         }
 
-        [HttpPost("/WorkoutController/CreateNewWorkout/")]
-        public async Task CreateNewWorkout(WorkoutDocument workout)
+        [HttpPost("/CreateNewWorkout/")]
+        public async Task CreateNewWorkout(WorkoutDocument workoutDocument)
         {
-            await _firebaseService.CreateNewWorkout(workout);
+            await _firebaseService.CreateNewWorkout(workoutDocument);
         }
 
-        [HttpGet("/WorkoutController/GetWorkout/{workoutID}")]
-        public async Task<WorkoutDocument> GetWorkout(string workoutID)
+        [HttpGet("/GetWorkout/{workoutName}")]
+        public async Task<WorkoutDocument> GetWorkout(string workoutName)
         {
-            return await _firebaseService.GetWorkout(workoutID);
+            return await _firebaseService.GetWorkout(workoutName);
         }
 
-        [HttpGet("/WorkoutController/GetWorkouts/")]
+        [HttpGet("/GetWorkouts/")]
         public async Task<List<WorkoutDocument>> GetWorkouts()
         {
             return await _firebaseService.GetWorkouts();
         }
 
-        [HttpPatch("/WorkoutController/UpdateWorkout/{workoutID}")]
+        [HttpPatch("/UpdateWorkout/{workoutID}")]
         public async Task UpdateWorkout(WorkoutDocument newWorkout, string workoutID)
         {
             await _firebaseService.UpdateWorkout(newWorkout, workoutID);
         }
 
-        [HttpDelete("/WorkoutController/DeleteWorkout/{workoutID}")]
-        public async Task DeleteWorkout(string workoutID)
+        [HttpDelete("/DeleteWorkout/{workoutName}")]
+        public async Task DeleteWorkout(string workoutName)
         {
-            await _firebaseService.DeleteWorkout(workoutID);
+            await _firebaseService.DeleteWorkout(workoutName);
         }
     }
 }

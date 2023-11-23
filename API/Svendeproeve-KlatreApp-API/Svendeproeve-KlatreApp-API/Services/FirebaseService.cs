@@ -1,9 +1,11 @@
 ﻿using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
+using Grpc.Core;
 using Octokit;
 using Svendeproeve_KlatreApp_API.FirebaseDocuments;
 using Svendeproeve_KlatreApp_API.Services.SubServices;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Svendeproeve_KlatreApp_API.Services
@@ -37,9 +39,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             _reportService = reportService;
         }
 
-        public async Task AddProfileData(ProfileDataDocument profileData)
+        public async Task<StatusCode> AddProfileData(ProfileDataDocument profileData)
         {
-            await _profileDataService.AddProfileData(profileData);
+            return await _profileDataService.AddProfileData(profileData);
         }
 
         public async Task<ProfileDataDocument?> GetProfileData(string userUID)
@@ -92,14 +94,14 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _klatrecentreService.AddClimbingCenter(climbingCenter, climbingCenterName);
         }
 
-        public async Task AddAreaToClimbingCenter(string climbingCenterName, Areas area)
+        public async Task AddClimbingAreas(string climbingCenterName, List<Areas> areas)
         {
-            await _klatrecentreService.AddAreaToClimbingCenter(climbingCenterName, area);
+            await _klatrecentreService.AddClimbingAreas(climbingCenterName, areas);
         }
 
-        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger)
+        public async Task AddClimbingRoutes(string climbingCenterName, string climbingArea, List<AreaRoutes> areaRoutes, string changerUserUID, bool systemChanger, bool routesDirectly)
         {
-            await _klatrecentreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID, systemChanger);
+            await _klatrecentreService.AddClimbingRoutes(climbingCenterName, climbingArea, areaRoutes, changerUserUID, systemChanger, routesDirectly);
         }
 
         public async Task<List<ClimbingCenterDocument>> GetClimbingCentre()
@@ -203,9 +205,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _workoutService.CreateNewWorkout(workoutDocument);
         }
 
-        public async Task<WorkoutDocument> GetWorkout(string workoutID)
+        public async Task<WorkoutDocument> GetWorkout(string workoutName)
         {
-            return await _workoutService.GetWorkout(workoutID);
+            return await _workoutService.GetWorkout(workoutName);
         }
 
         public async Task<List<WorkoutDocument>> GetWorkouts()
@@ -218,9 +220,9 @@ namespace Svendeproeve_KlatreApp_API.Services
             await _workoutService.UpdateWorkout(newWorkout, workoutID);
         }
 
-        public async Task DeleteWorkout(string workoutID)
+        public async Task DeleteWorkout(string workoutName)
         {
-            await _workoutService.DeleteWorkout(workoutID);
+            await _workoutService.DeleteWorkout(workoutName);
         }
 
         public async Task<Issue> CreateIssue(string title, string description, bool isBug)
@@ -233,23 +235,28 @@ namespace Svendeproeve_KlatreApp_API.Services
             return await _reportService.GetIssues();
         }
 
-        public async Task DeleteClimbingRoute(string centerName, string areaName, string problemId, string changerUserUID)
+        public async Task DeleteClimbingRoute(string centerName, string areaName, string problemId, string changerUserUID, bool systemChanger)
         {
-            await _klatrecentreService.DeleteClimbingRoute(centerName, areaName, problemId, changerUserUID);
+            await _klatrecentreService.DeleteClimbingRoute(centerName, areaName, problemId, changerUserUID, systemChanger);
         }
-        public async Task DeleteClimbingArea(string centerName, string areaName, string changerUserUID)
+        public async Task DeleteClimbingArea(string centerName, string areaName, string changerUserUID, bool systemChanger)
         {
-            await _klatrecentreService.DeleteClimbingArea(centerName, areaName , changerUserUID);
-        }
-
-        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID)
-        {
-            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea,  problemId, changerUserUID);
+            await _klatrecentreService.DeleteClimbingArea(centerName, areaName , changerUserUID, systemChanger);
         }
 
-        public async Task UpdateClimbingArea(string centerName, string climbingArea, string fieldToChange, string newValue, string changerUserUID)
+        public async Task DeleteClimbingCenter(string climbingCenterName)
         {
-            await _klatrecentreService.UpdateClimbingArea(centerName, climbingArea, fieldToChange, newValue, changerUserUID);
+            await _klatrecentreService.DeleteClimbingCenter(climbingCenterName);
+        }
+
+        public async Task UpdateClimbingRoutes(AreaRoutes areaRoutes, string climbingCenterName, string climbingArea, string problemId, string changerUserUID, bool systemChanger)
+        {
+            await _klatrecentreService.UpdateClimbingRoutes(areaRoutes, climbingCenterName, climbingArea,  problemId, changerUserUID, systemChanger);
+        }
+
+        public async Task UpdateClimbingArea(string centerName, string climbingArea, string newValue, string changerUserUID, bool systemChanger)
+        {
+            await _klatrecentreService.UpdateClimbingArea(centerName, climbingArea, newValue, changerUserUID, systemChanger);
         }
 
         public async Task<ClimbingCenterDocument> GetSelectedClimbingCenter(string climbingCenterName)
