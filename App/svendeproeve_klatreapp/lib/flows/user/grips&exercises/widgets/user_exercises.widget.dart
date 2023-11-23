@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
-import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/widgets/user_selected_exercise_widget.dart';
+import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/widgets/user_selected_exercise_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';

@@ -11,7 +11,7 @@ import 'package:svendeproeve_klatreapp/flows/settings/settings_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/overview/user_overview_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/personal/user_personal_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/rankings/user_rankings_page.dart';
-import 'package:svendeproeve_klatreapp/flows/user/tips&tricks/user_tips_tricks_page.dart';
+import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/user_grips_exercises_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
