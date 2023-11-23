@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
@@ -12,42 +13,46 @@ class SignInPage extends StatelessWidget {
     final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return Scaffold(
-        backgroundColor: Colors.brown[100],
-        appBar: AppBar(
-          backgroundColor: Colors.brown[400],
-          elevation: 0.0,
-          title: const Text('Sign In for Climbing App'),
-          actions: <Widget>[
-            TextButton.icon(
-              icon: const Icon(Icons.person),
-              label: const Text('Sign Up'),
-              onPressed: () {
-                toggleView();
-              },
-            ),
-          ],
-        ),
-        body: Center(
-            child: isSmallScreen
-                ? const Column(
-                    mainAxisSize: MainAxisSize.min,
+      backgroundColor: mainBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: topBackgroundColor,
+        elevation: 0.0,
+        title: const Text('Sign In for Climbing App'),
+        actions: <Widget>[
+          TextButton.icon(
+            icon: const Icon(Icons.person),
+            label: const Text('Sign Up'),
+            onPressed: () {
+              toggleView();
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: isSmallScreen
+              ? const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _Logo(),
+                    _SignInPageContent(),
+                  ],
+                )
+              : Container(
+                  padding: const EdgeInsets.all(32.0),
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: const Row(
                     children: [
-                      _Logo(),
-                      _SignInPageContent(),
+                      Expanded(child: _Logo()),
+                      Expanded(
+                        child: Center(child: _SignInPageContent()),
+                      ),
                     ],
-                  )
-                : Container(
-                    padding: const EdgeInsets.all(32.0),
-                    constraints: const BoxConstraints(maxWidth: 800),
-                    child: const Row(
-                      children: [
-                        Expanded(child: _Logo()),
-                        Expanded(
-                          child: Center(child: _SignInPageContent()),
-                        ),
-                      ],
-                    ),
-                  )));
+                  ),
+                ),
+        ),
+      ),
+    );
   }
 }
 
@@ -61,11 +66,11 @@ class _Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        FlutterLogo(size: isSmallScreen ? 100 : 200),
+        Container(child: Image.asset('assets/ic_launcher.png')),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Welcome to Flutter!",
+            "Welcome to ClimbIT!",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headlineSmall

@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:svendeproeve_klatreapp/flows/reusable/restart_app.dart';
 import 'package:svendeproeve_klatreapp/flows/settings/widgets/feedback_widget.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
+import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class SettingsWidgets extends StatefulWidget {
   const SettingsWidgets({Key? key}) : super(key: key);
@@ -13,8 +16,15 @@ class SettingsWidgets extends StatefulWidget {
 class _SettingsWidgetsState extends State<SettingsWidgets> {
   final controller = TextEditingController();
   final AuthService _auth = AuthService();
+  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final APIService _apiService = APIService();
   List<String> items = ['Select Report Type', 'Feedback', 'Bug Report'];
   String? selectedValue = 'Select Report Type';
+
+  @override
+  Future<void> _deleteProfile() async {
+    await _apiService.deleteProfileData(_firebaseAuth.currentUser!.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +109,10 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                           TextButton(
                             onPressed: () async {
                               print('Confirmed deleting');
-                              await _auth.signOut();
-                              Navigator.pop(context); // Close the AlertDialog
+                              await _deleteProfile();
+                              _firebaseAuth.currentUser!.delete();
+                              RestartWidget.restartApp(context);
+                              Navigator.pop(context);
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.black,
