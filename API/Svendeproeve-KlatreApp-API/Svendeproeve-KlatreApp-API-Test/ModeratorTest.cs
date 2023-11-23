@@ -38,6 +38,20 @@ namespace Svendeproeve_KlatreApp_API_Test
         }
 
         [Fact]
+        public async Task CheckIfUserModeratorForCenter()
+        {
+            // Arrange
+            var moderatorUID = "KRYhQhBVh0a1myYi8kkekREE9Y03";
+            var climbingCenterName = "BetaBouldersSouth";
+
+            // Act
+            var result = await _moderatorService.CheckIfUserModeratorForCenter(moderatorUID, climbingCenterName);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
         public async Task RequestModeratorCode()
         {
             // Arrange
