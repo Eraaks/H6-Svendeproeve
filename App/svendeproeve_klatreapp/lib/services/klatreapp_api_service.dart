@@ -604,12 +604,10 @@ class APIService {
 
       var request = await http.get(
           Uri.parse(
-              '${_baseUrlLocal}CheckIfUserModerator/$userUID&$climbingCenterName'),
+              '${_baseUrlLocal}CheckIfUserModeratorForCenter/$userUID&$climbingCenterName'),
           headers: headers);
-      if (request.statusCode == 200 && json.decode(request.body) == true) {
-        return true;
-      } else {
-        return false;
+      if (request.statusCode == 200) {
+        return json.decode(request.body);
       }
     } catch (e) {
       log(e.toString());
