@@ -38,15 +38,15 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           );
         } else if (snapshot.data!.success == true) {
           String selectedGym = snapshot.data!.selectedGym;
-          print('Moderator?');
-          print(snapshot.data!.isModerator);
-          return snapshot.data!.isModerator
-              ? ModOverviewPage(
-                  selectedGym: selectedGym,
-                  profileData: snapshot.data!.profileData)
-              : NavBarPage(
-                  selectedGym: selectedGym,
-                  profileData: snapshot.data!.profileData);
+
+          // return snapshot.data!.isModerator
+          //     ? ModOverviewPage(
+          //         selectedGym: selectedGym,
+          //         profileData: snapshot.data!.profileData):
+          return NavBarPage(
+              selectedGym: selectedGym,
+              profileData: snapshot.data!.profileData,
+              isModerator: snapshot.data!.isModerator);
         } else {
           return const Center(
             child: Text('Something went wrong'),
