@@ -16,7 +16,7 @@ class _TopbarState extends State<Topbar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('Climbing App'),
+      title: const Text('Climb-IT'),
       backgroundColor: topBackgroundColor,
       elevation: 0.0,
       actions: <Widget>[

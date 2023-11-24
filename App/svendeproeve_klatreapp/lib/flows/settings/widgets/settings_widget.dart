@@ -30,7 +30,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: const Text('Climbing App'),
+        title: const Text('Climb-IT'),
         backgroundColor: topBackgroundColor,
         elevation: 0.0,
         leading: IconButton(
