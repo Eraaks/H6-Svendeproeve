@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:svendeproeve_klatreapp/flows/reusable/restart_app.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
@@ -11,7 +12,7 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
   // ignore: no_leading_underscores_for_local_identifiers
   Future<void> _editArea(centerName, climbingArea, userUID, newValue) async {
     await _apiService.updateClimbingArea(
-        centerName, climbingArea, userUID.id, newValue);
+        centerName, climbingArea, userUID, newValue);
   }
 
   // ignore: no_leading_underscores_for_local_identifiers
@@ -41,7 +42,7 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (edit == true) {
                 _editArea(centerName, area, userUID, areaController.text);
               } else {
@@ -69,6 +70,24 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
                   newAreas,
                 );
               }
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return const AlertDialog(
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 10),
+                        Text("Loading..."),
+                      ],
+                    ),
+                  );
+                },
+              );
+              await Future.delayed(const Duration(seconds: 5));
+              RestartWidget.restartApp(context);
               Navigator.pop(context, areaController.text);
             },
             style: TextButton.styleFrom(
@@ -195,6 +214,7 @@ Widget problemDialog(
                 route.add(areaRoutes);
                 _addProblem(selectedGym, climbingArea, userUID, route);
               }
+              RestartWidget.restartApp(context);
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
@@ -234,7 +254,7 @@ Widget deleteProblemDialog(climbingArea, selectedGym, problem, userUID) {
           TextButton(
             onPressed: () {
               _deleteProblem(problem);
-
+              RestartWidget.restartApp(context);
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
