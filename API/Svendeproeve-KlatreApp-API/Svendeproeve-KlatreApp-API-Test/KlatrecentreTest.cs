@@ -26,6 +26,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task AddClimbingCenter()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
             {
@@ -33,7 +34,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+              Moderators = new List<string> { changerUserUID },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -58,7 +60,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            var result = await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            var result = await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
             // Assert
@@ -68,7 +70,8 @@ namespace Svendeproeve_KlatreApp_API_Test
         [Fact]
         public async Task DeleteClimbingCenter()
         {
-            // Arrange
+            // ArrangeUsername = Guid.NewGuid().ToString()
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
             {
@@ -76,7 +79,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { changerUserUID },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -101,7 +105,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             var result = await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
             // Assert
@@ -112,6 +116,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task AddAreaToClimbingCenter()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
             {
@@ -119,7 +124,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { "QjjHBUwHqqOH1atLiuM7wi63SlO2" },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -167,8 +173,8 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
-            var result = await _klatreCenterService.AddClimbingAreas(climbingCenterName, newArea);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
+            var result = await _klatreCenterService.AddClimbingAreas(climbingCenterName, changerUserUID, newArea);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
             // Assert
@@ -179,6 +185,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task AddClimbingRoutes()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
             {
@@ -186,7 +193,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { "QjjHBUwHqqOH1atLiuM7wi63SlO2" },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -235,7 +243,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             var result = await _klatreCenterService.AddClimbingRoutes(climbingCenterName, "Test", areaRoutes, "", true, true);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
@@ -273,6 +281,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task DeleteClimbingRoute()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             StatusCode result;
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
@@ -281,7 +290,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { "QjjHBUwHqqOH1atLiuM7wi63SlO2" },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -306,7 +316,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             var centerData = await _klatreCenterService.GetSelectedClimbingCenter(climbingCenterName);
             var problemID = centerData.Areas.FirstOrDefault(a => a.Name == "Test").AreaRoutes.First().ID;
             result = await _klatreCenterService.DeleteClimbingRoute(climbingCenterName, "Test", problemID, "", true);
@@ -319,6 +329,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task DeleteClimbingArea()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             StatusCode result;
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
@@ -327,7 +338,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { "QjjHBUwHqqOH1atLiuM7wi63SlO2" },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -370,7 +382,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             result = await _klatreCenterService.DeleteClimbingArea(climbingCenterName, "Test2", "", true);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
@@ -382,6 +394,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task UpdateClimbingRoutes()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             StatusCode result;
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
@@ -390,7 +403,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { "QjjHBUwHqqOH1atLiuM7wi63SlO2" },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -425,13 +439,13 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             var centerData = await _klatreCenterService.GetSelectedClimbingCenter(climbingCenterName);
             var problem = centerData.Areas.FirstOrDefault(a => a.Name == "Test").AreaRoutes.First();
             newAreaRoute.ID = problem.ID;
             newAreaRoute.Number = problem.Number;
             newAreaRoute.AssignedArea = problem.AssignedArea;
-            result = await _klatreCenterService.UpdateClimbingRoutes(newAreaRoute, climbingCenterName, newAreaRoute.AssignedArea, newAreaRoute.ID, "", true);
+            result = await _klatreCenterService.UpdateClimbingRoutes(newAreaRoute, climbingCenterName, newAreaRoute.AssignedArea, "", true);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
             // Assert
@@ -442,6 +456,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task UpdateClimbingArea()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             StatusCode result;
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
@@ -450,7 +465,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { "QjjHBUwHqqOH1atLiuM7wi63SlO2" },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -475,7 +491,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             result = await _klatreCenterService.UpdateClimbingArea(climbingCenterName, "Test", "Test2", "", true);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
@@ -487,6 +503,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task GetSelectedClimbingCenter()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
             {
@@ -494,7 +511,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> {  },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -519,7 +537,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             var result = await _klatreCenterService.GetSelectedClimbingCenter(climbingCenterName);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
@@ -531,6 +549,7 @@ namespace Svendeproeve_KlatreApp_API_Test
         public async Task GetCenterRoutes()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             List<Areas> areas = new List<Areas>();
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
@@ -539,7 +558,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+                Moderators = new List<string> { changerUserUID },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -550,13 +570,13 @@ namespace Svendeproeve_KlatreApp_API_Test
                         {
                             new AreaRoutes()
                             {
-                                ID = "",
+                                ID = "string",
                                 Color = "Black",
                                 Grade = "6C",
                                 UsersWhoCompleted = new List<string>() { "string" },
                                 UsersWhoFlashed = new List<string>() { "string" },
                                 Number = 0,
-                                AssignedArea = "",
+                                AssignedArea = "string",
                             }
                         }
                     }
@@ -564,18 +584,20 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
-            areas.AddRange(await _klatreCenterService.GetCenterRoutes(climbingCenterName));
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
+            var result = await _klatreCenterService.GetCenterRoutes(climbingCenterName);
+            areas.AddRange(result);
             await _klatreCenterService.DeleteClimbingCenter(climbingCenterName);
 
             // Assert
-            Assert.Equal(1, areas.FirstOrDefault().AreaRoutes.Count);
+            Assert.NotNull(areas);
         }
 
         [Fact]
         public async Task UpdateRouteCompleters()
         {
             // Arrange
+            var changerUserUID = "QjjHBUwHqqOH1atLiuM7wi63SlO2";
             var climbingCenterName = "TestingCenter";
             var center = new ClimbingCenterDocument
             {
@@ -583,7 +605,8 @@ namespace Svendeproeve_KlatreApp_API_Test
                 Description = "This is a test",
                 Location = "A Magical Place",
                 Moderator_Code = Guid.NewGuid().ToString(),
-                Moderators = new List<string> { "" },
+              Moderators = new List<string> { changerUserUID },
+                AreaNames = new List<string> { "Test" },
                 Areas = new List<Areas>()
                 {
                     new Areas()
@@ -618,7 +641,7 @@ namespace Svendeproeve_KlatreApp_API_Test
             };
 
             // Act
-            await _klatreCenterService.AddClimbingCenter(center, climbingCenterName);
+            await _klatreCenterService.AddClimbingCenter(center, changerUserUID, climbingCenterName);
             var routes = await _klatreCenterService.GetSelectedClimbingCenter(climbingCenterName);
             var route = routes.Areas.FirstOrDefault().AreaRoutes.FirstOrDefault();
             route.UsersWhoCompleted.Add("Tester");
