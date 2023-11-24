@@ -145,7 +145,6 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                     children: [
                       const Text('Add Area:'),
                       //Add Area
-                      //areaDialog(edit, context, centerName, area, userUID)
                       IconButton(
                         icon: const Icon(Icons.add),
                         onPressed: () {
