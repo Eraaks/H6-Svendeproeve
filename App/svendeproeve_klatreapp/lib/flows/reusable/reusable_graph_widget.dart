@@ -1,27 +1,23 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-class Reusable_Graph_Widget extends StatefulWidget {
+class ReusableGraphWidget extends StatefulWidget {
   final String userUID;
   final String selectedGym;
-  const Reusable_Graph_Widget(
+  const ReusableGraphWidget(
       {super.key, required this.userUID, required this.selectedGym});
 
   @override
-  State<Reusable_Graph_Widget> createState() =>
-      _Reusable_Graph_WidgetState(userUID: userUID, selectedGym: selectedGym);
+  State<ReusableGraphWidget> createState() =>
+      _ReusableGraphWidgetState(userUID: userUID, selectedGym: selectedGym);
 }
 
-class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
+class _ReusableGraphWidgetState extends State<ReusableGraphWidget> {
   final String userUID;
   final String selectedGym;
   static final APIService _apiService = APIService();
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<ProfileData?>? profileData;
 
   final DateTime now = DateTime.now();
@@ -29,8 +25,7 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
       DateTime.now().subtract(const Duration(days: 60)).millisecondsSinceEpoch;
   late List<SendCollections> data;
 
-  _Reusable_Graph_WidgetState(
-      {required this.userUID, required this.selectedGym});
+  _ReusableGraphWidgetState({required this.userUID, required this.selectedGym});
   @override
   void initState() {
     super.initState();
@@ -83,10 +78,7 @@ class _Reusable_Graph_WidgetState extends State<Reusable_Graph_Widget> {
                 SplineSeries<SendCollections, String>(
                     dataSource: data,
                     xValueMapper: (SendCollections sales, _) =>
-                        'Day ' +
-                        DateTime.fromMicrosecondsSinceEpoch(sales.sendDate!)
-                            .day
-                            .toString(),
+                        'Day ${DateTime.fromMicrosecondsSinceEpoch(sales.sendDate!).day}',
                     yValueMapper: (SendCollections sales, _) => sales.points,
                     // name: 'Grade Progression',
                     // Enable data label

@@ -13,30 +13,6 @@ class SelectedExercisePage extends StatefulWidget {
 }
 
 class _SelectedExercisePageState extends State<SelectedExercisePage> {
-  void _setsIncrementCounter() {
-    setState(() {
-      widget.exercise.sets++;
-    });
-  }
-
-  void _setsDecrementCounter() {
-    setState(() {
-      widget.exercise.sets--;
-    });
-  }
-
-  void _repsIncrementCounter() {
-    setState(() {
-      widget.exercise.reps++;
-    });
-  }
-
-  void _repsDecrementCounter() {
-    setState(() {
-      widget.exercise.reps--;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +36,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
           ),
           Text(
             widget.exercise.name,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
           SizedBox(
@@ -74,9 +50,7 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
               },
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    print(widget.exercise.name);
-                  },
+                  onTap: () {},
                   child: Column(
                     children: [
                       Padding(
@@ -122,20 +96,20 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
     return FittedBox(
       child: Row(
         children: [
-          Text('Sets: '),
+          const Text('Sets: '),
           IconButton(
-            icon: Icon(Icons.remove),
+            icon: const Icon(Icons.remove),
             onPressed: () => setState(() => widget.exercise.sets != 0
                 ? widget.exercise.sets--
                 : widget.exercise.sets),
           ),
           Text('${widget.exercise.sets}'),
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => setState(() => widget.exercise.sets++),
           ),
           IconButton(
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
             onPressed: () => setState(() => widget.exercise.sets = 0),
           )
         ],
@@ -147,20 +121,20 @@ class _SelectedExercisePageState extends State<SelectedExercisePage> {
     return FittedBox(
       child: Row(
         children: [
-          Text('Reps:'),
+          const Text('Reps:'),
           IconButton(
-            icon: Icon(Icons.remove),
+            icon: const Icon(Icons.remove),
             onPressed: () => setState(() => widget.exercise.reps != 0
                 ? widget.exercise.reps--
                 : widget.exercise.reps),
           ),
           Text('${widget.exercise.reps}'),
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => setState(() => widget.exercise.reps++),
           ),
           IconButton(
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
             onPressed: () => setState(() => widget.exercise.reps = 0),
           )
         ],

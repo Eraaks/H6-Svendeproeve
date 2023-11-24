@@ -21,7 +21,6 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   List<String> items = ['Select Report Type', 'Feedback', 'Bug Report'];
   String? selectedValue = 'Select Report Type';
 
-  @override
   Future<void> _deleteProfile() async {
     await _apiService.deleteProfileData(_firebaseAuth.currentUser!.uid);
   }
@@ -108,11 +107,9 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                         actions: [
                           TextButton(
                             onPressed: () async {
-                              print('Confirmed deleting');
                               await _deleteProfile();
                               _firebaseAuth.currentUser!.delete();
                               RestartWidget.restartApp(context);
-                              Navigator.pop(context);
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.black,
@@ -121,7 +118,6 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
                           ),
                           TextButton(
                             onPressed: () {
-                              print('Cancel deleting');
                               Navigator.pop(context);
                             },
                             style: TextButton.styleFrom(

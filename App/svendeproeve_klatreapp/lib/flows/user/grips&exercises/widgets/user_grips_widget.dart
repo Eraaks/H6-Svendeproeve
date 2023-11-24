@@ -7,7 +7,7 @@ import 'package:svendeproeve_klatreapp/models/grips_model.dart';
 class GripPage extends StatelessWidget {
   final GripsModel grip;
 
-  GripPage({Key? key, required this.grip}) : super(key: key);
+  const GripPage({Key? key, required this.grip}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class GripPage extends StatelessWidget {
           ),
           Text(
             grip.gripName,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
           SizedBox(
@@ -46,9 +46,7 @@ class GripPage extends StatelessWidget {
               },
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    print(grip.gripName);
-                  },
+                  onTap: () {},
                   child: Column(
                     children: [
                       Padding(

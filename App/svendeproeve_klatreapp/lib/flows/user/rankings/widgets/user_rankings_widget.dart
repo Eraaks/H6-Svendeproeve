@@ -4,8 +4,6 @@ import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/user/rankings/person_page.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_score.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
-import 'package:svendeproeve_klatreapp/services/database_service.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class RankingsWidgets extends StatefulWidget {
@@ -30,7 +28,6 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
   @override
   void initState() {
     super.initState();
-    print('Rankings Page');
     _initClimbingscore();
     _initFollowList();
   }
@@ -58,7 +55,7 @@ class _RankingsWidgetsState extends State<RankingsWidgets> {
       body: Column(
         children: [
           Text('Rankings for $selectedGym',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               )),

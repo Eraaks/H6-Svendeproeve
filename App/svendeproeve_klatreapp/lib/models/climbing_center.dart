@@ -16,25 +16,25 @@ class ClimbingCenter {
       List<String>? areaNames,
       List<Areas>? areas}) {
     if (centerName != null) {
-      this._centerName = centerName;
+      _centerName = centerName;
     }
     if (description != null) {
-      this._description = description;
+      _description = description;
     }
     if (location != null) {
-      this._location = location;
+      _location = location;
     }
     if (moderatorCode != null) {
-      this._moderatorCode = moderatorCode;
+      _moderatorCode = moderatorCode;
     }
     if (moderators != null) {
-      this._moderators = moderators;
+      _moderators = moderators;
     }
     if (areaNames != null) {
-      this._areaNames = areaNames;
+      _areaNames = areaNames;
     }
     if (areas != null) {
-      this._areas = areas;
+      _areas = areas;
     }
   }
 
@@ -70,14 +70,14 @@ class ClimbingCenter {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['centerName'] = this._centerName;
-    data['description'] = this._description;
-    data['location'] = this._location;
-    data['moderator_Code'] = this._moderatorCode;
-    data['moderators'] = this._moderators;
-    data['areaNames'] = this._areaNames;
-    if (this._areas != null) {
-      data['areas'] = this._areas!.map((v) => v.toJson()).toList();
+    data['centerName'] = _centerName;
+    data['description'] = _description;
+    data['location'] = _location;
+    data['moderator_Code'] = _moderatorCode;
+    data['moderators'] = _moderators;
+    data['areaNames'] = _areaNames;
+    if (_areas != null) {
+      data['areas'] = _areas!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -90,13 +90,13 @@ class Areas {
 
   Areas({String? name, String? description, List<AreaRoutes>? areaRoutes}) {
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (description != null) {
-      this._description = description;
+      _description = description;
     }
     if (areaRoutes != null) {
-      this._areaRoutes = areaRoutes;
+      _areaRoutes = areaRoutes;
     }
   }
 
@@ -120,10 +120,10 @@ class Areas {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this._name;
-    data['description'] = this._description;
-    if (this._areaRoutes != null) {
-      data['areaRoutes'] = this._areaRoutes!.map((v) => v.toJson()).toList();
+    data['name'] = _name;
+    data['description'] = _description;
+    if (_areaRoutes != null) {
+      data['areaRoutes'] = _areaRoutes!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -147,25 +147,25 @@ class AreaRoutes {
       int? number,
       String? assignedArea}) {
     if (id != null) {
-      this._id = id;
+      _id = id;
     }
     if (color != null) {
-      this._color = color;
+      _color = color;
     }
     if (grade != null) {
-      this._grade = grade;
+      _grade = grade;
     }
     if (usersWhoCompleted != null) {
-      this._usersWhoCompleted = usersWhoCompleted;
+      _usersWhoCompleted = usersWhoCompleted;
     }
     if (usersWhoFlashed != null) {
-      this._usersWhoFlashed = usersWhoFlashed;
+      _usersWhoFlashed = usersWhoFlashed;
     }
     if (number != null) {
-      this._number = number;
+      _number = number;
     }
     if (assignedArea != null) {
-      this._assignedArea = assignedArea;
+      _assignedArea = assignedArea;
     }
   }
 
@@ -198,13 +198,13 @@ class AreaRoutes {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this._id;
-    data['color'] = this._color;
-    data['grade'] = this._grade;
-    data['usersWhoCompleted'] = this._usersWhoCompleted;
-    data['usersWhoFlashed'] = this._usersWhoFlashed;
-    data['number'] = this._number;
-    data['assignedArea'] = this._assignedArea;
+    data['id'] = _id;
+    data['color'] = _color;
+    data['grade'] = _grade;
+    data['usersWhoCompleted'] = _usersWhoCompleted;
+    data['usersWhoFlashed'] = _usersWhoFlashed;
+    data['number'] = _number;
+    data['assignedArea'] = _assignedArea;
     return data;
   }
 }

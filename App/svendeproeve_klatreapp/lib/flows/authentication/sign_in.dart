@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
@@ -66,7 +64,7 @@ class _Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(child: Image.asset('assets/ic_launcher.png')),
+        Image.asset('assets/ic_launcher.png'),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(

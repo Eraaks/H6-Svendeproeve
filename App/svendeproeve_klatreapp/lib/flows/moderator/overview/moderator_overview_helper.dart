@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
-import 'package:svendeproeve_klatreapp/models/problems_model.dart';
-import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 Widget areaDialog(edit, context, centerName, area, userUID) {
   TextEditingController areaController = TextEditingController();
+  // ignore: no_leading_underscores_for_local_identifiers
   final APIService _apiService = APIService();
 
+  // ignore: no_leading_underscores_for_local_identifiers
   Future<void> _editArea(centerName, climbingArea, userUID, newValue) async {
     await _apiService.updateClimbingArea(
         centerName, climbingArea, userUID.id, newValue);
   }
 
+  // ignore: no_leading_underscores_for_local_identifiers
   Future<void> _addArea(centerName, userUID, newArea) async {
     await _apiService.addClimbingAreas(centerName, userUID.id, newArea);
   }
@@ -41,11 +42,8 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
         actions: [
           TextButton(
             onPressed: () {
-              print('Confirmed editing');
-              print(areaController.text);
               if (edit == true) {
                 _editArea(centerName, area, userUID, areaController.text);
-                print('edit area');
               } else {
                 AreaRoutes areaRoutes = AreaRoutes(
                   id: 'string',
@@ -58,7 +56,6 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
                 );
                 List<AreaRoutes> route = [];
                 route.add(areaRoutes);
-
                 Areas newArea = Areas(
                   name: areaController.text,
                   description: '',
@@ -71,7 +68,6 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
                   userUID,
                   newAreas,
                 );
-                print('add area');
               }
               Navigator.pop(context, areaController.text);
             },
@@ -82,7 +78,6 @@ Widget areaDialog(edit, context, centerName, area, userUID) {
           ),
           TextButton(
             onPressed: () {
-              print('Cancel editing');
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
@@ -155,14 +150,15 @@ Widget problemDialog(
                       child: Container(
                         color: colorMap[value],
                         child: Center(
-                            child: Text(
-                          value,
-                          style: TextStyle(
-                            color: colorMap[value] == Colors.black
-                                ? Colors.white
-                                : null,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: colorMap[value] == Colors.black
+                                  ? Colors.white
+                                  : null,
+                            ),
                           ),
-                        )),
+                        ),
                       ),
                     );
                   },
@@ -198,7 +194,6 @@ Widget problemDialog(
                 List<AreaRoutes> route = [];
                 route.add(areaRoutes);
                 _addProblem(selectedGym, climbingArea, userUID, route);
-                print('Add problem');
               }
               Navigator.pop(context);
             },
@@ -209,8 +204,7 @@ Widget problemDialog(
           ),
           TextButton(
             onPressed: () {
-              // Implement logic when Cancel is pressed
-              print('Cancel editing');
+              // Cancel pops alertdialog
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
@@ -239,7 +233,6 @@ Widget deleteProblemDialog(climbingArea, selectedGym, problem, userUID) {
         actions: [
           TextButton(
             onPressed: () {
-              print('Confirmed deleting');
               _deleteProblem(problem);
 
               Navigator.pop(context);
@@ -251,7 +244,6 @@ Widget deleteProblemDialog(climbingArea, selectedGym, problem, userUID) {
           ),
           TextButton(
             onPressed: () {
-              print('Cancel deleting');
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(

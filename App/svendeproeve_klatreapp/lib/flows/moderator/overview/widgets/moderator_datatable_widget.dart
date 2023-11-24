@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_helper.dart';
-import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
-import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 
 class DataTableBuilder extends StatefulWidget {
@@ -12,8 +10,9 @@ class DataTableBuilder extends StatefulWidget {
   final String selectedGym;
   final ProfileData profileData;
 
-  DataTableBuilder(
-      {required this.area,
+  const DataTableBuilder(
+      {super.key,
+      required this.area,
       required this.problems,
       required this.updateState,
       required this.selectedGym,
@@ -29,7 +28,7 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
   @override
   void initState() {
     super.initState();
-    selectedValue = 'Red'; // Set an initial value for the dropdown
+    selectedValue = 'Red'; // Sets an initial value for the dropdown
   }
 
   @override
@@ -77,8 +76,7 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
         return DataRow(
           cells: <DataCell>[
             DataCell(
-              //Edit Problem
-
+              //Edit problem/route
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
@@ -97,7 +95,7 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
               ),
             ),
             DataCell(
-              //Delete Problem
+              //Delete problem/route
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {

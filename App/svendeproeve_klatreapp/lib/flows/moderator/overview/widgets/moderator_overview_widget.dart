@@ -34,7 +34,7 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
   void initState() {
     super.initState();
     getCenterRoutes(selectedGym);
-    selectedValue = 'Red'; // Set an initial value for the dropdown
+    selectedValue = 'Red'; // Sets an initial value for the dropdown
   }
 
   Future<void> getCenterRoutes(String centerName) async {
@@ -130,7 +130,6 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                                           selectedValue,
                                           profileData.id),
                                     );
-                                    print('add problem');
                                   },
                                 ),
                               ],
@@ -156,7 +155,6 @@ class _ModOverviewWidgetsState extends State<ModOverviewWidgets> {
                             builder: (_) => areaDialog(edit, context,
                                 selectedGym, selectedValue, profileData),
                           );
-                          print('add area');
                         },
                       ),
                     ],

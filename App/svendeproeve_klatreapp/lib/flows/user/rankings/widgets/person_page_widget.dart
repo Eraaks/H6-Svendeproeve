@@ -3,8 +3,6 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
-import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/reusable/reusable_graph_widget.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
@@ -98,7 +96,7 @@ class _PersonPageWidgetState extends State<PersonPageWidget> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Reusable_Graph_Widget(
+                ReusableGraphWidget(
                   userUID: userUID,
                   selectedGym: selectedGym,
                 ),

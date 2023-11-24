@@ -5,7 +5,6 @@ import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/reusable/restart_app.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
-import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class OverviewWidgets extends StatefulWidget {
@@ -93,22 +92,18 @@ class _OverviewWidgetsState extends State<OverviewWidgets> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Submit:'),
+                        const Text('Submit:'),
                         IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () async {
-                            print('Submitting');
                             await _apiService.updateRouteCompleters(
                                 routesAffected,
                                 selectedGym,
                                 _auth.currentUser!.uid);
-
                             await _apiService.submitUserClimb(routesAffected,
                                 _auth.currentUser!.uid, selectedGym);
-
                             // Restart Appen
                             RestartWidget.restartApp(context);
-                            //addRoute(grade);
                           },
                         ),
                       ],
@@ -292,49 +287,15 @@ class _DataTableBuilderState extends State<DataTableBuilder> {
               ),
             ),
             DataCell(
-              Container(
-                child: Center(
-                  child: Text(
-                    problem.number.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
+              Center(
+                child: Text(
+                  problem.number.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
                   ),
                 ),
               ),
             ),
-            // DataCell(
-            //   Container(
-            //     child: Center(
-            //       child: IconButton(
-            //         icon: const Icon(Icons.add),
-            //         onPressed: () async {
-            //           print('Submitting');
-            //           if (problem.usersWhoCompleted!.contains(userUID) ||
-            //               problem.usersWhoFlashed!.contains(userUID)) {
-            //             await _apiService.updateRouteCompleters(
-            //                 climbingCenterName,
-            //                 areaName,
-            //                 problem.id!,
-            //                 userUID,
-            //                 problem.usersWhoFlashed!.contains(userUID));
-
-            //             await _apiService.submitUserClimb(
-            //                 userUID,
-            //                 climbingCenterName,
-            //                 areaName,
-            //                 problem.grade!.replaceAll('+', 'Plus'),
-            //                 problem.usersWhoFlashed!.contains(userUID),
-            //                 problem.id!);
-
-            //             // Restart Appen
-            //             RestartWidget.restartApp(context);
-            //           }
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // )
           ],
         );
       }).toList(),

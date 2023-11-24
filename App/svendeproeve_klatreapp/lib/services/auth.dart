@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:svendeproeve_klatreapp/models/user.dart';
 
@@ -21,11 +22,10 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-
       User? user = result.user;
       return _userFromFirebaseUser(user!);
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
       return null;
     }
   }
@@ -35,12 +35,10 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-
       User? user = result.user;
-
       return _userFromFirebaseUser(user!);
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
       return null;
     }
   }
@@ -50,8 +48,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print('ERROR');
-      print(e.toString());
+      log(e.toString());
       return null;
     }
   }
@@ -60,8 +57,7 @@ class AuthService {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      print('ERROR');
-      print(e.toString());
+      log(e.toString());
       return null;
     }
   }

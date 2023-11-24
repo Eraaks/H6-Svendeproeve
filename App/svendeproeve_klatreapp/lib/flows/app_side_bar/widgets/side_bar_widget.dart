@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:svendeproeve_klatreapp/flows/user/overview/user_overview_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
@@ -16,12 +15,10 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
   final clearController = TextEditingController();
   static final APIService _apiService = APIService();
   late Future<List<ClimbingCenter>?> centers;
-  // int centersLength = centers.length;
 
   @override
   void initState() {
     super.initState();
-
     // initial load
     centers = _apiService.getAllClimbingCenters();
   }
@@ -78,15 +75,6 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                   Icons.search,
                   color: topBackgroundColor,
                 ),
-                //TODO: Needed for clearing SearchBar.
-                // suffixIcon: IconButton(
-                //   onPressed: () {
-                //     controller.clear();
-                //     _getAllClimbingCenters();
-                //   },
-                //   icon: Icon(Icons.clear),
-                //   color: topBackgroundColor,
-                // ),
                 hintText: 'Search for place',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
@@ -97,9 +85,7 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                   borderSide: const BorderSide(color: topBackgroundColor),
                 ),
               ),
-              // onChanged: searchCenter,
             ),
-            // const Center(child: CircularProgressIndicator()),
             FutureBuilder(
                 future: centers,
                 builder: (BuildContext context,
@@ -114,6 +100,7 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                     var items = snapshot.data ??
                         <ClimbingCenter>[]; // handle the case that data is null
                     return RefreshIndicator(
+                      onRefresh: refreshList,
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -127,22 +114,10 @@ class _SidebarWidgetsState extends State<SidebarWidgets> {
                                   Navigator.of(context).pop(center.location);
                                 });
                           }),
-                      onRefresh: refreshList,
                     );
                   }
                 }),
           ],
         ),
       );
-
-  // void searchCenter(String query) {
-  //   final suggestions = _getAllClimbingCenters(_apiService).where((center) {
-  //     final centerPlace = center.place.toLowerCase();
-  //     final input = query.toLowerCase();
-
-  //     return centerPlace.contains(input);
-  //   }).toList();
-
-  //   setState(() => centers = suggestions);
-  // }
 }
