@@ -1,18 +1,14 @@
 import 'dart:convert';
-
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:svendeproeve_klatreapp/models/climbing_center.dart';
+import 'package:svendeproeve_klatreapp/models/climbing_score.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/models/grips_model.dart';
-import 'package:svendeproeve_klatreapp/models/problems_model.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
-import '../models/climbing_score.dart';
 
 class TokenResult {
   final bool success;
@@ -35,14 +31,187 @@ extension StringExtensions on String {
 
 class APIService {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
+  //Connection string to Swagger
   //static const String _baseUrlLocal = 'https://10.0.2.2:44380/';
   static const String _baseUrlLocal = 'https://10.0.2.2:7239/';
   List<GripsModel> grips = [];
   List<ClimbingCenter> climbingCenters = [];
   List<ExerciseModel> exercises = [];
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<TokenResult> GetAPIToken(storage, User user) async {
+//Exercises:
+  Future<List<ExerciseModel>?> getAllExercises() async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      var request = await http.get(
+          Uri.parse('${_baseUrlLocal}ExerciseController/GetExercises'),
+          headers: headers);
+
+      if (request.statusCode == 200) {
+        var encodedString = json.decode(request.body);
+        for (var i = 0; i < encodedString.length; i++) {
+          exercises.add(
+              ExerciseModel.fromJson(encodedString[i] as Map<String, dynamic>));
+        }
+      }
+      return exercises;
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
+  Future<List<ExerciseModel>?> getIncludedInExercises(musclegroup) async {
+    try {
+      exercises = [];
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      var request = await http.get(
+          Uri.parse(
+              '${_baseUrlLocal}ExerciseController/GetExercisesIncludedIn/$musclegroup'),
+          headers: headers);
+
+      if (request.statusCode == 200) {
+        var encodedString = json.decode(request.body);
+        for (var i = 0; i < encodedString.length; i++) {
+          exercises.add(
+              ExerciseModel.fromJson(encodedString[i] as Map<String, dynamic>));
+        }
+      }
+      return exercises;
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
+  //Grips
+  Future<List<GripsModel>?> getAllGrips() async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      var request = await http.get(Uri.parse('${_baseUrlLocal}Grips/GetGrips'),
+          headers: headers);
+
+      if (request.statusCode == 200) {
+        var encodedString = json.decode(request.body);
+        for (var i = 0; i < encodedString.length; i++) {
+          grips.add(
+              GripsModel.fromJson(encodedString[i] as Map<String, dynamic>));
+        }
+      }
+      return grips;
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
+  //Klatrecentre
+  Future<List<String>?> getClimbingCentreNames() async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+
+      var request = await http.get(
+          Uri.parse('${_baseUrlLocal}GetClimbingCentreNames'),
+          headers: headers);
+
+      if (request.statusCode == 200) {
+        var encodedString = json.decode(request.body);
+        List<String> climbingCentreNames = [];
+        for (var i = 0; i < encodedString.length; i++) {
+          climbingCentreNames.add(encodedString[i]);
+        }
+        return climbingCentreNames;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
+  Future<List<ClimbingCenter>?> getAllClimbingCenters() async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+
+      var request = await http.get(
+          Uri.parse('${_baseUrlLocal}GetClimbingCentre'),
+          headers: headers);
+
+      if (request.statusCode == 200) {
+        var encodedString = json.decode(request.body);
+        for (var i = 0; i < encodedString.length; i++) {
+          climbingCenters.add(ClimbingCenter.fromJson(
+              encodedString[i] as Map<String, dynamic>));
+        }
+      }
+      return climbingCenters;
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
+  Future<List<Areas>?> getCenterRoutes(String centerName) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      var request = await http.get(
+          Uri.parse('${_baseUrlLocal}GetCenterRoutes/$centerName'),
+          headers: headers);
+
+      if (request.statusCode == 200) {
+        var encodedString = json.decode(request.body);
+        List<Areas> areas = [];
+        for (var i = 0; i < encodedString.length; i++) {
+          areas.add(Areas.fromJson(encodedString[i] as Map<String, dynamic>));
+        }
+        return areas;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
+  Future<void> updateRouteCompleters(List<AreaRoutes> routes,
+      String climbingCenterName, String userUID) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+
+      await http.patch(
+          Uri.parse(
+              '${_baseUrlLocal}UpdateRouteCompleters/$climbingCenterName&$userUID'),
+          headers: headers,
+          body: jsonEncode(routes));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  //Login
+  Future<TokenResult> getAPIToken(storage, User user) async {
     String secret = await storage.read(key: 'Secret');
 
     secret = Uri.encodeComponent(secret)
@@ -99,9 +268,9 @@ class APIService {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final User? user = auth.currentUser;
       if (await storage.read(key: 'Secret') != null) {
-        return GetAPIToken(storage, user!);
+        return getAPIToken(storage, user!);
       } else {
-        return GetAPIToken(storage, user!);
+        return getAPIToken(storage, user!);
       }
     } catch (e) {
       log(e.toString());
@@ -109,104 +278,144 @@ class APIService {
     return null;
   }
 
-  Future<List<ClimbingCenter>?> getAllClimbingCenters() async {
+  //Moderator
+  Future<void> updateClimbingArea(String climbingCenterName,
+      String climbingArea, String userUID, String newValue) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      await http.patch(
+          Uri.parse(
+              '${_baseUrlLocal}UpdateClimbingArea/$climbingCenterName&$climbingArea&$newValue&$userUID'),
+          headers: headers);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> updateClimbingRoute(String climbingCenterName,
+      String climbingArea, String userUID, AreaRoutes route) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      await http.patch(
+          Uri.parse(
+              '${_baseUrlLocal}UpdateClimbingRoutes/$climbingCenterName&$climbingArea&$userUID'),
+          headers: headers,
+          body: jsonEncode(route));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> createClimbingRoute(
+      String climbingCenterName,
+      String climbingArea,
+      String userUID,
+      List<AreaRoutes> routes,
+      bool routesDirectly) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      await http.post(
+          Uri.parse(
+              '${_baseUrlLocal}AddRoutesToArea/$climbingCenterName&$climbingArea&$userUID?routesDirectly=$routesDirectly'),
+          headers: headers,
+          body: jsonEncode(routes));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<bool?> deleteClimbingArea(
+      String userUID, String climbingCenterName, String climbingArea) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
       };
 
-      var request = await http.get(
-          Uri.parse('${_baseUrlLocal}GetClimbingCentre'),
+      var request = await http.delete(
+          Uri.parse(
+              '${_baseUrlLocal}DeleteClimbingArea/$climbingCenterName&$climbingArea&$userUID'),
           headers: headers);
 
       if (request.statusCode == 200) {
-        var encodedString = json.decode(request.body);
-        for (var i = 0; i < encodedString.length; i++) {
-          climbingCenters.add(ClimbingCenter.fromJson(
-              encodedString[i] as Map<String, dynamic>));
-        }
+        return true;
       }
-      return climbingCenters;
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return false;
   }
 
-  Future<List<GripsModel>?> getAllGrips() async {
+  Future<bool?> deleteClimbingRoute(String userUID, String climbingCenterName,
+      String climbingArea, String problemID) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
       };
-      var request = await http.get(Uri.parse('${_baseUrlLocal}Grips/GetGrips'),
+
+      var request = await http.delete(
+          Uri.parse(
+              '${_baseUrlLocal}DeleteClimbingRoute/$climbingCenterName&$climbingArea&$problemID&$userUID'),
           headers: headers);
 
       if (request.statusCode == 200) {
-        var encodedString = json.decode(request.body);
-        for (var i = 0; i < encodedString.length; i++) {
-          grips.add(
-              GripsModel.fromJson(encodedString[i] as Map<String, dynamic>));
-        }
+        return true;
       }
-      return grips;
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return false;
   }
 
-  Future<List<ExerciseModel>?> getAllExercises() async {
+  Future<bool?> checkIfUserModerator(
+      String userUID, String climbingCenterName) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
       };
-      var request = await http.get(
-          Uri.parse('${_baseUrlLocal}ExerciseController/GetExercises'),
-          headers: headers);
 
-      if (request.statusCode == 200) {
-        var encodedString = json.decode(request.body);
-        for (var i = 0; i < encodedString.length; i++) {
-          exercises.add(
-              ExerciseModel.fromJson(encodedString[i] as Map<String, dynamic>));
-        }
-      }
-      return exercises;
-    } catch (e) {
-      log(e.toString());
-    }
-    return null;
-  }
-
-  Future<List<ExerciseModel>?> getIncludedInExercises(musclegroup) async {
-    try {
-      exercises = [];
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
       var request = await http.get(
           Uri.parse(
-              '${_baseUrlLocal}ExerciseController/GetExercisesIncludedIn/$musclegroup'),
+              '${_baseUrlLocal}CheckIfUserModeratorForCenter/$userUID&$climbingCenterName'),
           headers: headers);
-
       if (request.statusCode == 200) {
-        var encodedString = json.decode(request.body);
-        for (var i = 0; i < encodedString.length; i++) {
-          exercises.add(
-              ExerciseModel.fromJson(encodedString[i] as Map<String, dynamic>));
-        }
+        return json.decode(request.body);
       }
-      return exercises;
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return false;
   }
 
+  Future<void> addClimbingAreas(
+      String climbingCenterName, String userUID, List<Areas> newArea) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
+      };
+      await http.post(
+          Uri.parse(
+              '${_baseUrlLocal}AddClimbingAreas/$climbingCenterName&$userUID'),
+          headers: headers,
+          body: jsonEncode(newArea));
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  //ProfileData
   Future<List<ClimbingScore>?> getClimbingScore(String centerName) async {
     try {
       final headers = {
@@ -388,64 +597,6 @@ class APIService {
     }
   }
 
-  Future<void> createIssue(String title, String description, bool isBug) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-      await http.post(
-          Uri.parse('${_baseUrlLocal}CreateIssue/$title&$description&$isBug'),
-          headers: headers);
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<List<Areas>?> getCenterRoutes(String centerName) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-      var request = await http.get(
-          Uri.parse('${_baseUrlLocal}GetCenterRoutes/$centerName'),
-          headers: headers);
-
-      if (request.statusCode == 200) {
-        var encodedString = json.decode(request.body);
-        List<Areas> areas = [];
-        for (var i = 0; i < encodedString.length; i++) {
-          areas.add(Areas.fromJson(encodedString[i] as Map<String, dynamic>));
-        }
-        return areas;
-      } else {
-        return [];
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return null;
-  }
-
-  Future<void> updateRouteCompleters(List<AreaRoutes> routes,
-      String climbingCenterName, String userUID) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-
-      await http.patch(
-          Uri.parse(
-              '${_baseUrlLocal}UpdateRouteCompleters/$climbingCenterName&$userUID'),
-          headers: headers,
-          body: jsonEncode(routes));
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
   Future<void> submitUserClimb(List<AreaRoutes> routes, String userUID,
       String climbingCenterName) async {
     try {
@@ -480,166 +631,20 @@ class APIService {
     }
   }
 
-  Future<List<String>?> getClimbingCentreNames() async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-
-      var request = await http.get(
-          Uri.parse('${_baseUrlLocal}GetClimbingCentreNames'),
-          headers: headers);
-
-      if (request.statusCode == 200) {
-        var encodedString = json.decode(request.body);
-        List<String> climbingCentreNames = [];
-        for (var i = 0; i < encodedString.length; i++) {
-          climbingCentreNames.add(encodedString[i]);
-        }
-        return climbingCentreNames;
-      } else {
-        return [];
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return null;
-  }
-
-  Future<void> updateClimbingArea(String climbingCenterName,
-      String climbingArea, String userUID, String newValue) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-      await http.patch(
-          Uri.parse(
-              '${_baseUrlLocal}UpdateClimbingArea/$climbingCenterName&$climbingArea&$newValue&$userUID'),
-          headers: headers);
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<void> updateClimbingRoute(String climbingCenterName,
-      String climbingArea, String userUID, AreaRoutes route) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-      await http.patch(
-          Uri.parse(
-              '${_baseUrlLocal}UpdateClimbingRoutes/$climbingCenterName&$climbingArea&$userUID'),
-          headers: headers,
-          body: jsonEncode(route));
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<void> createClimbingRoute(
-      String climbingCenterName,
-      String climbingArea,
-      String userUID,
-      List<AreaRoutes> routes,
-      bool routesDirectly) async {
+  //Feedback
+  Future<void> createIssue(String title, String description, bool isBug) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
       };
       await http.post(
-          Uri.parse(
-              '${_baseUrlLocal}AddRoutesToArea/$climbingCenterName&$climbingArea&$userUID?routesDirectly=$routesDirectly'),
-          headers: headers,
-          body: jsonEncode(routes));
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<bool?> deleteClimbingArea(
-      String userUID, String climbingCenterName, String climbingArea) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-
-      var request = await http.delete(
-          Uri.parse(
-              '${_baseUrlLocal}DeleteClimbingArea/$climbingCenterName&$climbingArea&$userUID'),
+          Uri.parse('${_baseUrlLocal}CreateIssue/$title&$description&$isBug'),
           headers: headers);
-
-      if (request.statusCode == 200) {
-        return true;
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return false;
-  }
-
-  Future<bool?> deleteClimbingRoute(String userUID, String climbingCenterName,
-      String climbingArea, String problemID) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-
-      var request = await http.delete(
-          Uri.parse(
-              '${_baseUrlLocal}DeleteClimbingRoute/$climbingCenterName&$climbingArea&$problemID&$userUID'),
-          headers: headers);
-
-      if (request.statusCode == 200) {
-        return true;
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return false;
-  }
-
-  Future<bool?> checkIfUserModerator(
-      String userUID, String climbingCenterName) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-
-      var request = await http.get(
-          Uri.parse(
-              '${_baseUrlLocal}CheckIfUserModeratorForCenter/$userUID&$climbingCenterName'),
-          headers: headers);
-      if (request.statusCode == 200) {
-        return json.decode(request.body);
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return false;
-  }
-
-  Future<void> addClimbingAreas(
-      String climbingCenterName, String userUID, List<Areas> newArea) async {
-    try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${await storage.read(key: 'Token')}'
-      };
-      await http.post(
-          Uri.parse(
-              '${_baseUrlLocal}AddClimbingAreas/$climbingCenterName&$userUID'),
-          headers: headers,
-          body: jsonEncode(newArea));
     } catch (e) {
       log(e.toString());
     }
   }
+
+  //Workout
 }

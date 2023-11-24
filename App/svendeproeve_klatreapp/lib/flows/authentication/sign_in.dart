@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/services/auth.dart';
@@ -17,7 +15,7 @@ class SignInPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: topBackgroundColor,
         elevation: 0.0,
-        title: const Text('Sign In for Climbing App'),
+        title: const Text('Sign In for Climb-IT'),
         actions: <Widget>[
           TextButton.icon(
             icon: const Icon(Icons.person),
@@ -25,6 +23,9 @@ class SignInPage extends StatelessWidget {
             onPressed: () {
               toggleView();
             },
+            style: TextButton.styleFrom(
+              foregroundColor: mainBackgroundColor,
+            ),
           ),
         ],
       ),
@@ -66,11 +67,11 @@ class _Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(child: Image.asset('assets/ic_launcher.png')),
+        Image.asset('assets/ic_launcher.png'),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Welcome to ClimbIT!",
+            "Welcome to Climb-IT!",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headlineSmall
@@ -180,7 +181,9 @@ class __SignInPageContentState extends State<_SignInPageContent> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4)),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  backgroundColor: topBackgroundColor,
                 ),
                 child: const Padding(
                   padding: EdgeInsets.all(10.0),
@@ -191,7 +194,6 @@ class __SignInPageContentState extends State<_SignInPageContent> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
-                    /// do something
                     dynamic result =
                         await _auth.signInWithEmailAndPassword(email, password);
 
@@ -213,6 +215,7 @@ class __SignInPageContentState extends State<_SignInPageContent> {
                 });
               },
               label: const Text('Forgot Password'),
+              backgroundColor: topBackgroundColor,
             ),
             const SizedBox(height: 12.0),
             Text(

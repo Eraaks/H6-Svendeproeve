@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:svendeproeve_klatreapp/flows/home/widgets/home_widget.dart';
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/widgets/moderator_overview_widget.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
 

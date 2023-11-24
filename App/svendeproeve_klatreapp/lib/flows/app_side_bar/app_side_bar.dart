@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/widgets/side_bar_widget.dart';
 
 class Sidebar extends StatefulWidget {
@@ -11,5 +10,5 @@ class Sidebar extends StatefulWidget {
 
 class _SidebarState extends State<Sidebar> {
   @override
-  Widget build(BuildContext context) => Scaffold(body: SidebarWidgets());
+  Widget build(BuildContext context) => const Scaffold(body: SidebarWidgets());
 }

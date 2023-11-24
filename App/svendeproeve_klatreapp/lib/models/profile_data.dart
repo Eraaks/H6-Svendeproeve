@@ -18,28 +18,28 @@ class ProfileData {
       String? selectedGym,
       List<ClimbingHistory>? climbingHistory}) {
     if (id != null) {
-      this._id = id;
+      _id = id;
     }
     if (followsMe != null) {
-      this._followsMe = followsMe;
+      _followsMe = followsMe;
     }
     if (friendIds != null) {
-      this._friendIds = friendIds;
+      _friendIds = friendIds;
     }
     if (savedExercises != null) {
-      this._savedExercises = savedExercises;
+      _savedExercises = savedExercises;
     }
     if (savedWorkouts != null) {
-      this._savedWorkouts = savedWorkouts;
+      _savedWorkouts = savedWorkouts;
     }
     if (userName != null) {
-      this._userName = userName;
+      _userName = userName;
     }
     if (selectedGym != null) {
-      this._selectedGym = selectedGym;
+      _selectedGym = selectedGym;
     }
     if (climbingHistory != null) {
-      this._climbingHistory = climbingHistory;
+      _climbingHistory = climbingHistory;
     }
   }
 
@@ -81,16 +81,16 @@ class ProfileData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this._id;
-    data['follows_Me'] = this._followsMe;
-    data['friend_Ids'] = this._friendIds;
-    data['saved_Exercises'] = this._savedExercises;
-    data['saved_Workouts'] = this._savedWorkouts;
-    data['username'] = this._userName;
-    data['selected_Gym'] = this._selectedGym;
-    if (this._climbingHistory != null) {
+    data['id'] = _id;
+    data['follows_Me'] = _followsMe;
+    data['friend_Ids'] = _friendIds;
+    data['saved_Exercises'] = _savedExercises;
+    data['saved_Workouts'] = _savedWorkouts;
+    data['username'] = _userName;
+    data['selected_Gym'] = _selectedGym;
+    if (_climbingHistory != null) {
       data['climbing_History'] =
-          this._climbingHistory!.map((v) => v.toJson()).toList();
+          _climbingHistory!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -110,19 +110,19 @@ class ClimbingHistory {
       int? totalPoints,
       List<SendCollections>? sendCollections}) {
     if (id != null) {
-      this._id = id;
+      _id = id;
     }
     if (estimatedGrade != null) {
-      this._estimatedGrade = estimatedGrade;
+      _estimatedGrade = estimatedGrade;
     }
     if (location != null) {
-      this._location = location;
+      _location = location;
     }
     if (totalPoints != null) {
-      this._totalPoints = totalPoints;
+      _totalPoints = totalPoints;
     }
     if (sendCollections != null) {
-      this._sendCollections = sendCollections;
+      _sendCollections = sendCollections;
     }
   }
 
@@ -154,13 +154,13 @@ class ClimbingHistory {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this._id;
-    data['estimated_Grade'] = this._estimatedGrade;
-    data['location'] = this._location;
-    data['total_Points'] = this._totalPoints;
-    if (this._sendCollections != null) {
+    data['id'] = _id;
+    data['estimated_Grade'] = _estimatedGrade;
+    data['location'] = _location;
+    data['total_Points'] = _totalPoints;
+    if (_sendCollections != null) {
       data['send_Collections'] =
-          this._sendCollections!.map((v) => v.toJson()).toList();
+          _sendCollections!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -182,22 +182,22 @@ class SendCollections {
       int? tries,
       int? sendDate}) {
     if (id != null) {
-      this._id = id;
+      _id = id;
     }
     if (area != null) {
-      this._area = area;
+      _area = area;
     }
     if (grade != null) {
-      this._grade = grade;
+      _grade = grade;
     }
     if (points != null) {
-      this._points = points;
+      _points = points;
     }
     if (tries != null) {
-      this._tries = tries;
+      _tries = tries;
     }
     if (sendDate != null) {
-      this._sendDate = sendDate;
+      _sendDate = sendDate;
     }
   }
 
@@ -225,12 +225,12 @@ class SendCollections {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this._id;
-    data['area'] = this._area;
-    data['grade'] = this._grade;
-    data['points'] = this._points;
-    data['tries'] = this._tries;
-    data['sendDate'] = this._sendDate;
+    data['id'] = _id;
+    data['area'] = _area;
+    data['grade'] = _grade;
+    data['points'] = _points;
+    data['tries'] = _tries;
+    data['sendDate'] = _sendDate;
     return data;
   }
 }

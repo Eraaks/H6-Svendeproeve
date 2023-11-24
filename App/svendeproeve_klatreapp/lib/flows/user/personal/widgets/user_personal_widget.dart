@@ -4,10 +4,6 @@ import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/reusable/reusable_graph_widget.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
-import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
-
-final Sidebar _Sidebar = Sidebar();
 
 class PersonalWidgets extends StatefulWidget {
   final String selectedGym;
@@ -47,35 +43,32 @@ class _PersonalWidgetsState extends State<PersonalWidgets> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: const Topbar(),
-      drawer: _Sidebar,
+      drawer: const Sidebar(),
       body: Center(
           child: Column(
         children: [
           Text('Overview for $selectedGym'),
           Text('Username: ${profileData.userName}'),
-          Reusable_Graph_Widget(
+          ReusableGraphWidget(
             userUID: FirebaseAuth.instance.currentUser!.uid,
             selectedGym: selectedGym,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text('Estimated Grade: $estimatedGrade'),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           DataTable(
             columnSpacing: 20,
-            columns: <DataColumn>[
+            columns: const <DataColumn>[
               DataColumn(
-                label: Text('Area',
-                    style: const TextStyle(fontStyle: FontStyle.italic)),
+                label:
+                    Text('Area', style: TextStyle(fontStyle: FontStyle.italic)),
               ),
               DataColumn(label: Text('Grade')),
               DataColumn(label: Text('Type Send')),
-              // const DataColumn(
-              //     label:
-              //         Text('Submit', style: TextStyle(fontStyle: FontStyle.italic))),
             ],
             rows: sendCollections.map((sends) {
               return DataRow(

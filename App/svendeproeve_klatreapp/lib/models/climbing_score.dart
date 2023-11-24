@@ -14,22 +14,22 @@ class ClimbingScore {
       int? score,
       String? grade}) {
     if (userUID != null) {
-      this._userUID = userUID;
+      _userUID = userUID;
     }
     if (rank != null) {
-      this._rank = rank;
+      _rank = rank;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (centerName != null) {
-      this._centerName = centerName;
+      _centerName = centerName;
     }
     if (score != null) {
-      this._score = score;
+      _score = score;
     }
     if (grade != null) {
-      this._grade = grade;
+      _grade = grade;
     }
   }
 
@@ -57,12 +57,12 @@ class ClimbingScore {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userUID'] = this._userUID;
-    data['rank'] = this._rank;
-    data['name'] = this._name;
-    data['center_Name'] = this._centerName;
-    data['score'] = this._score;
-    data['grade'] = this._grade;
+    data['userUID'] = _userUID;
+    data['rank'] = _rank;
+    data['name'] = _name;
+    data['center_Name'] = _centerName;
+    data['score'] = _score;
+    data['grade'] = _grade;
     return data;
   }
 }

@@ -16,7 +16,7 @@ class SignUpPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: topBackgroundColor,
           elevation: 0.0,
-          title: const Text('Sign Up for Climbing App'),
+          title: const Text('Sign Up for Climb-IT'),
           actions: <Widget>[
             TextButton.icon(
               icon: const Icon(Icons.person),
@@ -24,6 +24,9 @@ class SignUpPage extends StatelessWidget {
               onPressed: () {
                 toggleView();
               },
+              style: TextButton.styleFrom(
+                foregroundColor: mainBackgroundColor,
+              ),
             ),
           ],
         ),
@@ -63,11 +66,11 @@ class _Logo extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(child: Image.asset('assets/ic_launcher.png')),
+        Image.asset('assets/ic_launcher.png'),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Register for ClimbIT!",
+            "Register for Climb-IT!",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headlineSmall
@@ -215,7 +218,9 @@ class _SignUpPageContentState extends State<SignUpPageContent> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4)),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  backgroundColor: topBackgroundColor,
                 ),
                 child: const Padding(
                   padding: EdgeInsets.all(10.0),

@@ -1,26 +1,13 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/home/home_page.dart';
 import 'package:svendeproeve_klatreapp/flows/moderator/overview/moderator_overview_page.dart';
-import 'package:svendeproeve_klatreapp/flows/settings/settings_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/overview/user_overview_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/personal/user_personal_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/rankings/user_rankings_page.dart';
 import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/user_grips_exercises_page.dart';
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/profile_data.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
-import 'package:http/http.dart' as http;
-
-final AuthService _auth = AuthService();
 
 class NavBarWidgets extends StatefulWidget {
   final String selectedGym;
@@ -34,6 +21,7 @@ class NavBarWidgets extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   State<NavBarWidgets> createState() => _NavBarWidgetsState(
       selectedGym: selectedGym,
       profileData: profileData,
@@ -51,7 +39,7 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
 
   int currentIndex = 2;
   late List<StatefulWidget> screens = [
-    TipsTricksPage(),
+    const TipsTricksPage(),
     OverviewPage(selectedGym: selectedGym),
     HomePage(selectedGym: selectedGym),
     RankingsPage(selectedGym: selectedGym),
@@ -77,7 +65,7 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
           : buildBottomNavigationBar());
 
   Widget buildBottomNavigationBar() {
-    final inactiveColor = Colors.grey;
+    const inactiveColor = Colors.grey;
     return BottomNavyBar(
         showElevation: true,
         itemCornerRadius: 16,
@@ -123,7 +111,7 @@ class _NavBarWidgetsState extends State<NavBarWidgets> {
   }
 
   Widget buildModeratorBottomNavigationBar() {
-    final inactiveColor = Colors.grey;
+    const inactiveColor = Colors.grey;
     return BottomNavyBar(
         showElevation: true,
         itemCornerRadius: 16,

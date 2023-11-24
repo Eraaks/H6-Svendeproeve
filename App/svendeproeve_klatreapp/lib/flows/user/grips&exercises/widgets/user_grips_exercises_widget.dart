@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:svendeproeve_klatreapp/flows/app_side_bar/app_side_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/app_top_bar/app_top_bar.dart';
 import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/widgets/user_exercises.widget.dart';
@@ -7,7 +6,6 @@ import 'package:svendeproeve_klatreapp/flows/user/grips&exercises/widgets/user_g
 import 'package:svendeproeve_klatreapp/global/constants.dart';
 import 'package:svendeproeve_klatreapp/models/exercise_model.dart';
 import 'package:svendeproeve_klatreapp/models/grips_model.dart';
-import 'package:svendeproeve_klatreapp/services/auth.dart';
 import 'package:svendeproeve_klatreapp/services/klatreapp_api_service.dart';
 
 class TipsTricksWidgets extends StatefulWidget {
@@ -20,8 +18,6 @@ class TipsTricksWidgets extends StatefulWidget {
 class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
   static final APIService _apiService = APIService();
   late Future<List<ExerciseModel>?> exercises;
-
-  //TODO: Needed for API: List<ExerciseModel> exercises = getAllExercises();
   late Future<List<GripsModel>?> grips;
 
   @override
@@ -48,7 +44,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             future: exercises,
             builder: (context, exerciseSnapshot) {
               if (exerciseSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (exerciseSnapshot.hasError) {
@@ -110,7 +106,7 @@ class _TipsTricksWidgetsState extends State<TipsTricksWidgets> {
             future: grips,
             builder: (context, gripSnapshot) {
               if (gripSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (gripSnapshot.hasError) {
                 return Center(child: Text('Error: ${gripSnapshot.error}'));
               } else {
